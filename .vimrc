@@ -1,12 +1,7 @@
-set nocompatible		" be iMproved, required
-
-so ~/.vim/plugins.vim
-
-syntax enable
-
+"--------General--------"
+set nocompatible		            " be iMproved, required
 "let mapleader = ','		        " The default leader is '\', but a comma is much better
-" Open help in a separate tab.
-":cabbrev help tab help              
+":cabbrev help tab help             " Open help in a separate tab.      
 set number			                " Let's activate line numbers
 set relativenumber                  " Set relative nubmers
 set ruler
@@ -14,11 +9,12 @@ set backspace=indent,eol,start      " Make backspace behave like every other edi
 set noerrorbells visualbell t_vb=   " No dump bells!
 set autowriteall                    " Automatically write the file when switching buffers
 set autowrite                       " Write any changes
-set undofile
+set undofile                        " Save changes in the undofile. Even after reopen a file you can do undo things
 set undodir=~/.vim/undo
 set wildmode=list:longest,full      " Show suggestions while hit <tab> in a command mode
 set path=.,,**                      " Find a file in the directory of the current file or the current directory, recursively
-set directory^=~/.vim/swaps
+set directory^=~/.vim/swaps         " Set the directory where all swaps filesliv
+
 
 "--------Visuals--------"
 syntax enable
@@ -27,14 +23,14 @@ let g:solarized_termtrans=1     " Terminal setting for color
 set background=dark
 set t_CO=256			        " Use 256 colors. This is useful for Terminal Vim.
 
-
 let &t_SI = "\e[6 q"    " set cursore shape
 let &t_EI = "\e[2 q"    " set cursore shape
 
 highlight VertSplit ctermbg=NONE guibg=NONE     " color of vertical split color
 set fillchars+=vert:│                           " shape of vertical split
 
-highlight LineNr ctermfg=11 ctermbg=8
+highlight LineNr ctermfg=11 ctermbg=8      " Set a color of a left colunm
+
 
 "--------Search--------"
 set hlsearch
@@ -45,20 +41,20 @@ set incsearch
 :set tabstop=4
 :set softtabstop=4
 :set shiftwidth=4
-:set expandtab      " expand tab to spaces
+:set expandtab      " Expand tab to spaces
 
 
 "--------Windows--------"
 set splitright
 set splitbelow
 
+
 "--------Mappings--------"
 " Make it easy to edit the Vimrc file.
 nmap <Leader>ev :tabedit $MYVIMRC<CR>
 nmap <Leader>es :e ~/.vim/snippets<CR>
 
-" Add simple highlight removal.
-nmap <Leader><space> :nohlsearch<CR>
+nmap <Leader><space> :nohlsearch<CR> " Add simple highlight removal.
 
 " Make NERDTree easier to toggle.
 nmap <Leader>b :NERDTreeToggle<CR>
@@ -71,7 +67,7 @@ nmap <Leader>b :NERDTreeToggle<CR>
 inoremap <Leader>k <Esc>:m .-2<CR>==gi
 inoremap <Leader>j <Esc>:m .+1<CR>==gi
 
-" Scroll screen
+" Scroll screen with a cursor
 nnoremap <Leader>j jzz
 nnoremap <Leader>k kzz
 
@@ -106,13 +102,6 @@ let NERDTreeHijackNetrw = 0
 
 
 "/
-"/ Greaplace
-"/
-set grepprg=ag
-let g:grep_cmd_opts = '--line-numbers --noheading'
-
-
-"/
 "/ vim-xkbswitch
 "/
 let g:XkbSwitchEnabled = 1
@@ -127,6 +116,7 @@ autocmd FileType go nmap <leader>p  :cprevious<CR>
 autocmd FileType go nmap <leader>n  :cnext<CR>
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
+
 
 "--------Auto-Commands--------"
 "Automatically source the Vimrc file on save.
@@ -152,8 +142,8 @@ function! HelpInNewTab ()
             return "foo"
             }
         
-            return foo()
-            }elp' 
+        return foo()
+        }elp' 
         "Convert the help window to a tab...
         "execute "normal \<C-W>T"
     endif
