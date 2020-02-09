@@ -2,7 +2,7 @@
 
 DOTFILES_DIR="$HOME/.dotfiles"
 
-git submodule update --remote --merge
+submodule update --init --recursive
 
 #TODO
 #Preinstall packages:
