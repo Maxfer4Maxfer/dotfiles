@@ -35,7 +35,7 @@ highlight LineNr ctermfg=11 ctermbg=8      " Set a color of a left colunm
 "--------Search--------"
 set hlsearch
 set incsearch
-
+set ignorecase
 
 "--------Tabs--------"
 :set tabstop=4
