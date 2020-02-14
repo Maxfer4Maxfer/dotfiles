@@ -1,4 +1,4 @@
-"--------General--------"
+"-------General--------"
 set nocompatible		            " be iMproved, required
 "let mapleader = ','		        " The default leader is '\', but a comma is much better
 ":cabbrev help tab help             " Open help in a separate tab.      
@@ -14,17 +14,17 @@ set undodir=~/.vim/undo
 set wildmode=list:longest,full      " Show suggestions while hit <tab> in a command mode
 set path=.,,**                      " Find a file in the directory of the current file or the current directory, recursively
 set directory^=~/.vim/swaps         " Set the directory where all swaps filesliv
+set textwidth=0                   " Stop wrapping text
+:filetype plugin on                 " Enable file type detection
 
 
 "--------Visuals--------"
 syntax enable
-colorscheme solarized
-let g:solarized_termtrans=1     " Terminal setting for color
-set background=dark
 set t_CO=256			        " Use 256 colors. This is useful for Terminal Vim.
-
-let &t_SI = "\e[6 q"    " set cursore shape
-let &t_EI = "\e[2 q"    " set cursore shape
+let g:solarized_termtrans=1     " Terminal setting for color
+colorscheme solarized
+let &t_SI = "\e[6 q"            " Set cursore shape
+let &t_EI = "\e[2 q"            " Set cursore shape
 
 highlight VertSplit ctermbg=NONE guibg=NONE     " color of vertical split color
 set fillchars+=vert:│                           " shape of vertical split
@@ -89,16 +89,29 @@ let g:netrw_liststyle = 3       " Tree style
 "/
 "/ CtrlP
 "/
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|\.git'
-
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|vendor|node_modules|DS_Store|idea|vscode)$',
+  \ 'file': '\v\.()$',
+  \ }
+let g:ctrlp_show_hidden = 1
+"set wildignore+=.git
 "nmap <c-R> :CtrlPBufTag<cr>
-nmap <c-P> :CtrlP<cr>
 
 
 "/
-"/ NERDTree
+"/ fzf.vim
 "/
-let NERDTreeHijackNetrw = 0
+set rtp+=/usr/local/opt/fzf
+let g:fzf_command_prefix = "Fzf"            " Add namespace for fzf.vim exported commands
+
+nnoremap <silent> <leader>ff :FzfFiles<CR>
+nnoremap <silent> <leader>fF :FzfFiles!<CR>
+nnoremap <silent> <leader>fb :FzfBuffers<CR>
+nnoremap <silent> <leader>fch :FzfHistory:<CR>
+nnoremap <silent> <leader>fcc :FzfCommands:<CR>
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
 
 
 "/
@@ -112,11 +125,43 @@ let g:XkbSwitchEnabled = 1
 "/ vim-go
 "/
 let g:go_fmt_command = "goimports"
-autocmd FileType go nmap <leader>p  :cprevious<CR>
-autocmd FileType go nmap <leader>n  :cnext<CR>
-autocmd FileType go nmap <leader>b  <Plug>(go-build)
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
+let g:go_mod_fmt_autosave = 1                               " Apply fmt to the current file and go.mod
+let g:go_decls_mode = 'fzf'
+let g:go_list_type = "quickfix"
+let g:go_auto_type_info = 1                                 " Show info of the object under the curson in status bar
+let g:go_auto_sameids = 0                                   " Highlighting the same objects
+let g:go_snippet_case_type = "camelcase"                    " Set the camelcase output for snippets
+let g:go_updatetime=100                                     " Set update interval to 100ms
 
+" Metalinter
+"let g:go_debug = ["shell-commands", "debugger-state"]
+"let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
+"let g:syntastic_go_gometalinter_args = ['--enable-all', '--enable=errcheck']
+let g:go_metalinter_enabled = ['wsl']
+let g:go_metalinter_autosave = 1
+
+" Syntax
+let g:go_highlight_extra_types = 1                          " Highlight commonly used library types (`io.Reader`, etc.). >
+let g:go_highlight_operators = 1                            " Highlight operators such as `:=` , `==`, `-=`, etc.
+let g:go_highlight_functions = 1                            " Highlight function and method declarations.
+let g:go_highlight_function_parameters = 1                  " Highlight the variable names in parameters (including named return parameters) in function declarations.
+let g:go_highlight_function_calls = 1                       " Highlight function and method calls.
+let g:go_highlight_types = 1                                " Highlight struct and interface names.
+let g:go_highlight_fields = 1                               " Highlight struct field names.
+let g:go_highlight_build_constraints = 1                    " Highlights build constraints.
+let g:go_highlight_generate_tags = 1                        " Highlight go:generate directives.
+let g:go_highlight_variable_declarations = 1                " Highlight variable names in variable declarations (`x` in ` x :=`).
+let g:go_highlight_variable_assignments = 1                 " Highlight variable names in variable assignments (`x` in `x =`).
+
+" Mapping
+autocmd FileType go nmap <leader>gp  :cprevious<CR>
+autocmd FileType go nmap <leader>gn  :cnext<CR>
+autocmd FileType go nmap <leader>gb  <Plug>(go-build)
+autocmd FileType go nmap <leader>gr  <Plug>(go-run)
+autocmd FileType go nmap <leader>gd  <Plug>(go-debug)
+autocmd FileType go nmap <leader>gi  <Plug>(go-info)
+autocmd FileType go nmap <leader>gt  :GoDecls<CR>
+autocmd FileType go nmap <leader>gs  :GoSameIdsAutoToggle<CR>
 
 "--------Auto-Commands--------"
 "Automatically source the Vimrc file on save.
@@ -124,31 +169,6 @@ augroup autosourcing
 	autocmd!
 	autocmd BufWritePost .vimrc source %
 augroup END
-
-"Only apply to .txt files...
-augroup HelpInTabs
-    autocmd!
-    autocmd BufEnter  *.txt   call HelpInNewTab()
-augroup END
-
-"Only apply to help files...
-" Elso can be done by this line:
-":cabbrev help tab help              
-function! HelpInNewTab ()
-    if &buftype == 'bar() string {
-        fmt.Println("calling bar")
-    
-        foo := func() string {
-            return "foo"
-            }
-        
-        return foo()
-        }elp' 
-        "Convert the help window to a tab...
-        "execute "normal \<C-W>T"
-    endif
-endfunction
-
 
 
 " Notes and Tips
