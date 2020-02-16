@@ -28,6 +28,3 @@
 [submodule "zsh/oh-my-zsh/custom/themes/powerlevel10k"]
 	path = zsh/oh-my-zsh/custom/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
-[submodule "zsh/pure"]
-	path = zsh/pure
-	url = https://github.com/romkatv/powerlevel10k.git
