@@ -2,15 +2,19 @@
 
 APPS=(
     bash
+    bat
+    docker
     ffmpeg
     fzf
     git
-    go
     graphviz
+    jq
     htop
     kubernetes-cli
     kubectx
+    lazygit
     lynx
+    modd
     moreutils
     nmap
     openssh
@@ -21,6 +25,8 @@ APPS=(
     tmux
     tree
     vim -- --with-override-system-vi
+    vegeta
+    watch
     wget
     youtube-dl
 )
@@ -47,8 +53,11 @@ echo 'PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"' >> ~/.zshrc
 brew install git-lfs
 git lfs install
 git lfs install --system
-brew install gnu-sed
 
+brew install go
+echo "PATH=\"$HOME/go/bin:\$PATH\"" >> ~/.zshrc
+
+brew install gnu-sed
 echo 'PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"' >> ~/.zshrc
 
 brew install gnu-tar
