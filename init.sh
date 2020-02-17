@@ -11,17 +11,19 @@ git submodule update --init --recursive
 #       https://github.com/ierton/xkb-switch
 
 ######## brew ######## 
-"$DOTFILES_DIR/brew/brew.sh"
-
+if [ ! -x "brew" ]; then
+	"$DOTFILES_DIR/brew/brew.sh"
+fi
 
 ######## zsh ######## 
 "$DOTFILES_DIR/brew/zsh.sh"
 "$DOTFILES_DIR/zsh/oh-my-zsh.sh"
 
 if [ -f ~/.zshrc ]; then
-    rm ~/.zshrc
+     rm ~/.zshrc
 fi
-ln -s $DOTFILES_DIR/zsh/zshrc ~/.zshrc
+# ln -s $DOTFILES_DIR/zsh/zshrc ~/.zshrc
+echo "source $DOTFILES_DIR/zsh/oh-my-zshrc" > ~/.zshrc
 
 if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
     rm -fr ~/.oh-my-zsh/custom/themes/powerlevel10k
