@@ -65,6 +65,9 @@ if [ -d ~/.vim/colors ]; then
 fi
 ln -s $DOTFILES_DIR/vim/colors ~/.vim/colors
 
+######## tmux ######## 
+"$DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR"
+
 ######## .config ######## 
 if [ -d ~/.config ]; then
     rm -rf ~/.config

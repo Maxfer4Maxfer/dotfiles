@@ -9,6 +9,8 @@ set backspace=indent,eol,start      " Make backspace behave like every other edi
 set noerrorbells visualbell t_vb=   " No dump bells!
 set autowriteall                    " Automatically write the file when switching buffers
 set autowrite                       " Write any changes
+autocmd CursorHold * update         " Write any changes when the user hasn't pressed a key for 'updatetime' milliseconds
+set updatetime=100                  " Update each 100 milliseconds
 set undofile                        " Save changes in the undofile. Even after reopen a file you can do undo things
 set undodir=~/.vim/undo
 set wildmode=list:longest,full      " Show suggestions while hit <tab> in a command mode
