@@ -14,7 +14,8 @@ set undodir=~/.vim/undo
 set wildmode=list:longest,full      " Show suggestions while hit <tab> in a command mode
 set path=.,,**                      " Find a file in the directory of the current file or the current directory, recursively
 set directory^=~/.vim/swaps         " Set the directory where all swaps filesliv
-set textwidth=0                   " Stop wrapping text
+set textwidth=0                     " Stop wrapping text
+set wrap!                           " Unset wrapping lines
 :filetype plugin on                 " Enable file type detection
 
 
@@ -72,7 +73,6 @@ nnoremap <Leader>j jzz
 nnoremap <Leader>k kzz
 
 " Go project specifig mappings
-nmap <Leader><Leader>c :CtrlP<CR>config/config.go
 nmap <Leader><Leader>s :e configs<CR>
 
 " Write automaticaly when exit the insert mode
@@ -85,18 +85,6 @@ inoremap <Esc> <Esc>:w<CR>
 "/
 let g:netrw_banner = 0          " No header spam in directory mode
 let g:netrw_liststyle = 3       " Tree style
-
-"/
-"/ CtrlP
-"/
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|vendor|node_modules|DS_Store|idea|vscode)$',
-  \ 'file': '\v\.()$',
-  \ }
-let g:ctrlp_show_hidden = 1
-"set wildignore+=.git
-"nmap <c-R> :CtrlPBufTag<cr>
-
 
 "/
 "/ fzf.vim
@@ -154,14 +142,20 @@ let g:go_highlight_variable_declarations = 1                " Highlight variable
 let g:go_highlight_variable_assignments = 1                 " Highlight variable names in variable assignments (`x` in `x =`).
 
 " Mapping
-autocmd FileType go nmap <leader>gp  :cprevious<CR>
-autocmd FileType go nmap <leader>gn  :cnext<CR>
-autocmd FileType go nmap <leader>gb  <Plug>(go-build)
-autocmd FileType go nmap <leader>gr  <Plug>(go-run)
-autocmd FileType go nmap <leader>gd  <Plug>(go-debug)
-autocmd FileType go nmap <leader>gi  <Plug>(go-info)
+let g:go_def_mapping_enabled = 1                             " Enable the default mapping
+autocmd FileType go nmap <leader>gcp  :cprevious<CR>
+autocmd FileType go nmap <leader>gcn  :cnext<CR>
+autocmd FileType go nmap <leader>gcc  :cclose<CR>
+autocmd FileType go nmap <leader>gb  <Plug>(go-build)<CR>
+autocmd FileType go nmap <leader>gr  <Plug>(go-run)<CR>
+autocmd FileType go nmap <leader>gde <Plug>(go-debug)<CR>
+autocmd FileType go nmap <leader>gdv <Plug>(go-def-vertical)<CR>
+autocmd FileType go nmap <leader>gdt <Plug>(go-def-type)<CR>
+autocmd FileType go nmap <leader>gdi <Plug>(go-implements)<CR>
+autocmd FileType go nmap <leader>gdd :GoDoc<CR>
 autocmd FileType go nmap <leader>gt  :GoDecls<CR>
-autocmd FileType go nmap <leader>gs  :GoSameIdsAutoToggle<CR>
+autocmd FileType go nmap <leader>gss  :GoSameIdsClear<CR>:GoSameIds<CR>
+autocmd FileType go nmap <leader>gsc  :GoSameIdsClear<CR>
 
 "--------Auto-Commands--------"
 "Automatically source the Vimrc file on save.

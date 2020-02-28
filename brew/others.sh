@@ -28,6 +28,7 @@ APPS=(
     vegeta
     watch
     wget
+    wrk
     youtube-dl
 )
 
@@ -56,6 +57,7 @@ git lfs install --system
 
 brew install go
 echo "PATH=\"$HOME/go/bin:\$PATH\"" >> ~/.zshrc
+echo "export GOPRIVATE=git.wildberries.ru" >> ~/.zshrc
 
 brew install gnu-sed
 echo 'PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"' >> ~/.zshrc
