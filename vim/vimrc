@@ -23,7 +23,7 @@ set wrap!                           " Unset wrapping lines
 
 "--------Visuals--------"
 syntax enable
-set t_CO=256			        " Use 256 colors. This is useful for Terminal Vim.
+"set t_CO=256			        " Use 256 colors. This is useful for Terminal Vim.
 let g:solarized_termtrans=1     " Terminal setting for color
 colorscheme solarized
 let &t_SI = "\e[6 q"            " Set cursore shape
