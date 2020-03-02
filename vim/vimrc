@@ -145,9 +145,9 @@ let g:go_highlight_variable_assignments = 1                 " Highlight variable
 
 " Mapping
 let g:go_def_mapping_enabled = 1                             " Enable the default mapping
-autocmd FileType go nmap <leader>gcp  :cprevious<CR>
-autocmd FileType go nmap <leader>gcn  :cnext<CR>
-autocmd FileType go nmap <leader>gcc  :cclose<CR>
+autocmd FileType go nmap <leader>gcp :cprevious<CR>
+autocmd FileType go nmap <leader>gcn :cnext<CR>
+autocmd FileType go nmap <leader>gcc :cclose<CR>
 autocmd FileType go nmap <leader>gb  <Plug>(go-build)<CR>
 autocmd FileType go nmap <leader>gr  <Plug>(go-run)<CR>
 autocmd FileType go nmap <leader>gde <Plug>(go-debug)<CR>
@@ -156,8 +156,8 @@ autocmd FileType go nmap <leader>gdt <Plug>(go-def-type)<CR>
 autocmd FileType go nmap <leader>gdi <Plug>(go-implements)<CR>
 autocmd FileType go nmap <leader>gdd :GoDoc<CR>
 autocmd FileType go nmap <leader>gt  :GoDecls<CR>
-autocmd FileType go nmap <leader>gss  :GoSameIdsClear<CR>:GoSameIds<CR>
-autocmd FileType go nmap <leader>gsc  :GoSameIdsClear<CR>
+autocmd FileType go nmap <leader>gss :GoSameIdsClear<CR>:GoSameIds<CR>
+autocmd FileType go nmap <leader>gsc :GoSameIdsClear<CR>
 
 "--------Auto-Commands--------"
 "Automatically source the Vimrc file on save.
