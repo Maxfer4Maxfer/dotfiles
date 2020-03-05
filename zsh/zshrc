@@ -79,6 +79,7 @@ plugins=(
 	kubectl
 	osx
 	tmux
+    vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh
