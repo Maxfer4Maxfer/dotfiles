@@ -12,12 +12,12 @@ git submodule update --init --recursive
 
 ######## brew ######## 
 if [ ! -x "brew" ]; then
-	"$DOTFILES_DIR/brew/brew.sh"
+	$DOTFILES_DIR/brew/brew.sh
 fi
 
 ######## zsh ######## 
-"$DOTFILES_DIR/brew/zsh.sh"
-"$DOTFILES_DIR/zsh/oh-my-zsh.sh"
+$DOTFILES_DIR/brew/zsh.sh
+$DOTFILES_DIR/zsh/oh-my-zsh.sh
 
 if [ -f ~/.zshrc ]; then
      rm ~/.zshrc
@@ -37,7 +37,7 @@ ln -s $DOTFILES_DIR/zsh/p10k.zsh ~/.p10k.zsh
 
 
 ######## brew: others ######## 
-"$DOTFILES_DIR/brew/others.sh"
+$DOTFeLES_DIR/brew/others.sh
 
 
 ######## Vim ######## 
@@ -66,7 +66,7 @@ fi
 ln -s $DOTFILES_DIR/vim/colors ~/.vim/colors
 
 ######## tmux ######## 
-"$DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR"
+$DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR
 
 ######## .config ######## 
 if [ -d ~/.config ]; then

@@ -1,5 +1,6 @@
 "-------General--------"
 set nocompatible		            " be iMproved, required
+set mouse=a                         " Enable mouse support
 "let mapleader = ','		        " The default leader is '\', but a comma is much better
 ":cabbrev help tab help             " Open help in a separate tab.      
 set number			                " Let's activate line numbers
@@ -9,7 +10,7 @@ set backspace=indent,eol,start      " Make backspace behave like every other edi
 set noerrorbells visualbell t_vb=   " No dump bells!
 set autowriteall                    " Automatically write the file when switching buffers
 set autowrite                       " Write any changes
-autocmd CursorHold * update         " Write any changes when the user hasn't pressed a key for 'updatetime' milliseconds
+""autocmd CursorHold * update         " Write any changes when the user hasn't pressed a key for 'updatetime' milliseconds
 set updatetime=100                  " Update each 100 milliseconds
 set undofile                        " Save changes in the undofile. Even after reopen a file you can do undo things
 set undodir=~/.vim/undo
@@ -34,6 +35,9 @@ set fillchars+=vert:│                           " shape of vertical split
 
 highlight LineNr ctermfg=11 ctermbg=8           " Set a color of a left colunm
 highlight SignColumn ctermfg=11 ctermbg=8       " Set a color of a sign colunm
+
+highlight StatusLineTerm cterm=reverse ctermfg=14 ctermbg=0             " Status line of a terminal window
+highlight StatusLineTermNC cterm=reverse ctermfg=11 ctermbg=0            " Status line of a terminal window
 
 "--------Search--------"
 set hlsearch
@@ -97,8 +101,8 @@ let g:fzf_command_prefix = "Fzf"            " Add namespace for fzf.vim exported
 nnoremap <silent> <leader>ff :FzfFiles<CR>
 nnoremap <silent> <leader>fF :FzfFiles!<CR>
 nnoremap <silent> <leader>fb :FzfBuffers<CR>
-nnoremap <silent> <leader>fch :FzfHistory:<CR>
-nnoremap <silent> <leader>fcc :FzfCommands:<CR>
+nnoremap <silent> <leader>fg :FzfGFiles<CR>
+nnoremap <silent> <leader>fc :FzfCommands<CR>
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
