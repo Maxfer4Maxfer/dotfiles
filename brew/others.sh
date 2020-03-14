@@ -8,10 +8,10 @@ APPS=(
     fzf
     git
     graphviz
-    jq
     htop
-    kubernetes-cli
+    jq
     kubectx
+    kubernetes-cli
     lazygit
     lynx
     modd
@@ -24,15 +24,49 @@ APPS=(
     telnet
     tmux
     tree
-    vim -- --with-override-system-vi
     vegeta
+    vim -- --with-override-system-vi
     watch
     wget
     wrk
     youtube-dl
 )
 
+CASKS=(
+    appcleaner
+    apppolice
+    balenaetcher
+    caffeine
+    dbeaver-community
+    drawio
+    dropbox
+    forticlient
+    google-backup-and-sync
+    google-chrome
+    insomnia
+    iterm2
+    keyboard-cleaner
+    logmein-hamachi
+    macpass
+    opera
+    private-eye
+    skype
+    teamviewer
+    telegram
+    telegram-desktop
+    the-unarchiver
+    transmission
+    vlc
+    whatsapp
+    xquartz
+)
+
 brew install "${APPS[@]}"
+
+for cask in "${CASKS[@]}"
+do
+    brew cask install $cask
+done
 
 echo '' >> ~/.zshrc
 echo '# dotfiles & brew lines' >> ~/.zshrc

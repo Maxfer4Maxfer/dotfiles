@@ -37,7 +37,7 @@ ln -s $DOTFILES_DIR/zsh/p10k.zsh ~/.p10k.zsh
 
 
 ######## brew: others ######## 
-$DOTFeLES_DIR/brew/others.sh
+$DOTFILES_DIR/brew/others.sh
 
 
 ######## Vim ######## 
