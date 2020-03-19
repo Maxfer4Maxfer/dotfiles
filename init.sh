@@ -60,11 +60,6 @@ if [ -d ~/.vim/pack/plugins ]; then
 fi
 ln -s $DOTFILES_DIR/vim/pack/plugins ~/.vim/pack/plugins
 
-if [ -d ~/.vim/colors ]; then
-    rm -rf ~/.vim/colors
-fi
-ln -s $DOTFILES_DIR/vim/colors ~/.vim/colors
-
 ######## tmux ######## 
 $DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR
 

@@ -3,7 +3,6 @@
 APPS=(
     bash
     bat
-    docker
     ffmpeg
     fzf
     git
@@ -38,6 +37,7 @@ CASKS=(
     balenaetcher
     caffeine
     dbeaver-community
+    docker
     drawio
     dropbox
     forticlient
