@@ -40,7 +40,6 @@ CASKS=(
     docker
     drawio
     dropbox
-    forticlient
     google-backup-and-sync
     google-chrome
     insomnia
