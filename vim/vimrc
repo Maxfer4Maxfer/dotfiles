@@ -11,7 +11,8 @@ set noerrorbells visualbell t_vb=   " No dump bells!
 set autowriteall                    " Automatically write the file when switching buffers
 set autowrite                       " Write any changes
 " Write any changes when the user hasn't pressed a key for 'updatetime' milliseconds
-autocmd CursorHold * update         
+autocmd CursorHold * silent! update         " Autosave
+autocmd FocusGained,BufEnter * :silent! !   " Autoread 
 set updatetime=100                  " Update each 100 milliseconds
 set undofile                        " Save changes in the undofile. Even after reopen a file you can do undo things
 set undodir=~/.vim/undo
@@ -23,6 +24,17 @@ set wrapmargin=0                    " Stop wrapping text
 set wrap!                           " Unset wrapping lines
 :filetype plugin on                 " Enable file type detection
 
+"--------Plugins--------"
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-commentary'
+Plug 'chrisbra/csv.vim'
+Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'altercation/vim-colors-solarized'
+Plug 'airblade/vim-gitgutter'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'lyokha/vim-xkbswitch'
+call plug#end()
 
 "--------Color theme--------"
 " Setup an initial color theme
@@ -37,8 +49,20 @@ endif
 map <F5> :set background=light<CR>:let g:solarized_termtrans=0<CR>:colorscheme solarized<CR>:source ~/.vimrc<CR>
 map <F6> :set background=dark<CR>:let g:solarized_termtrans=1<CR>:colorscheme solarized<CR>:source ~/.vimrc<CR>
 
-let &t_SI = "\e[6 q"            " Set cursore shape
-let &t_EI = "\e[2 q"            " Set cursore shape
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\e[6 q\<Esc>\\" "SI = INSERT mode
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\e[4 q\<Esc>\\" "SR = REPLACE mode
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\" "EI = NORMAL mode (ELSE)
+
+    let &t_SI = "\e[6 q" "SI = INSERT mode
+    let &t_SR = "\e[4 q" "SR = REPLACE mode
+    let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
+else
+    let &t_SI = "\e[6 q" "SI = INSERT mode
+    let &t_SR = "\e[4 q" "SR = REPLACE mode
+    let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
+endif
+
 
 highlight VertSplit ctermbg=NONE                " Color of vertical split color
 set fillchars+=vert:│                           " Shape of vertical split
@@ -77,32 +101,18 @@ set splitbelow
 " Make it easy to edit the Vimrc file.
 nmap <Leader>ev :tabedit $MYVIMRC<CR>
 nmap <Leader>es :e ~/.vim/snippets<CR>
+nmap <Leader>ep :e ~/.vim/plugins<CR>
 
 nmap <Leader><space> :nohlsearch<CR> " Add simple highlight removal.
 
-" Make NERDTree easier to toggle.
-nmap <Leader>b :NERDTreeToggle<CR>
-
-" Move lines
-"nnoremap <S-k> :m .-2<CR>==
-"nnoremap <S-j> :m .+1<CR>==
-"vnoremap <S-k> :m '<-2<CR>gv=gv
-"vnoremap <S-j> :m '>+1<CR>gv=gv
-inoremap <Leader>k <Esc>:m .-2<CR>==gi
-inoremap <Leader>j <Esc>:m .+1<CR>==gi
-
-" Scroll screen with a cursor
-nnoremap <Leader>j jzz
-nnoremap <Leader>k kzz
-
-" Go project specifig mappings
-nmap <Leader><Leader>s :e configs<CR>
-
-" Write automaticaly when exit the insert mode
-inoremap <Esc> <Esc>:w<CR>
 
 
 "--------Plugins--------"
+"/
+"/ vim-auto-save
+"/
+let g:auto_save = 1         " Enable AutoSave on Vim startup
+let g:auto_save_silent = 1  " Do not display the auto-save notification
 "/
 "/ netrw
 "/
@@ -114,6 +124,7 @@ let g:netrw_liststyle = 3       " Tree style
 "/
 set rtp+=/usr/local/opt/fzf
 let g:fzf_command_prefix = "Fzf"            " Add namespace for fzf.vim exported commands
+let g:fzf_preview_window = ''               " Empty value to disable preview window altogether
 
 nnoremap <silent> <leader>ff :FzfFiles<CR>
 nnoremap <silent> <leader>fF :FzfFiles!<CR>
@@ -150,7 +161,7 @@ let g:go_debug_log_output = 'debugger'                      " Set debugger outpu
 "let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
 "let g:syntastic_go_gometalinter_args = ['--enable-all', '--enable=errcheck']
 let g:go_metalinter_enabled = ['wsl']
-let g:go_metalinter_autosave = 1
+let g:go_metalinter_autosave = 0
 
 " Syntax
 let g:go_highlight_extra_types = 1                          " Highlight commonly used library types (`io.Reader`, etc.). >

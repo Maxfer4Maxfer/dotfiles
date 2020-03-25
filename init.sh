@@ -60,6 +60,10 @@ if [ -d ~/.vim/pack/plugins ]; then
 fi
 ln -s $DOTFILES_DIR/vim/pack/plugins ~/.vim/pack/plugins
 
+curl -fLo /usr/local/lib/libxkbswitch.dylib https://raw.githubusercontent.com/myshov/libxkbswitch-macosx/master/bin/libxkbswitch.dylib
+curl -fLo /usr/local/bin/xkbswitch https://raw.githubusercontent.com/myshov/xkbswitch-macosx/master/bin/xkbswitch
+chmod +x /usr/local/bin/xkbswitch
+
 ######## tmux ######## 
 $DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR
 

@@ -1,39 +1,18 @@
-[submodule "vim/pack/plugins/start/vim-go"]
-	path = vim/pack/plugins/start/vim-go
-	url = https://github.com/fatih/vim-go
 [submodule "vim/pack/plugins/start/vim-surround"]
 	path = vim/pack/plugins/start/vim-surround
 	url = https://github.com/tpope/vim-surround
 [submodule "vim/pack/plugins/start/vim-vinegar"]
 	path = vim/pack/plugins/start/vim-vinegar
 	url = https://github.com/tpope/vim-vinegar
-[submodule "vim/pack/plugins/start/vim-xkbswitch"]
-	path = vim/pack/plugins/start/vim-xkbswitch
-	url = https://github.com/lyokha/vim-xkbswitch
 [submodule "vim/pack/plugins/start/vim-fugitive"]
 	path = vim/pack/plugins/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
-[submodule "vim/pack/plugins/start/csv"]
-	path = vim/pack/plugins/start/csv
-	url = https://github.com/chrisbra/csv.vim
 [submodule "vim/pack/plugins/start/splitjoin.vim"]
 	path = vim/pack/plugins/start/splitjoin.vim
 	url = https://github.com/AndrewRadev/splitjoin.vim
-[submodule "vim/pack/plugins/start/fzf.vim"]
-	path = vim/pack/plugins/start/fzf.vim
-	url = https://github.com/junegunn/fzf.vim
-[submodule "vim/pack/plugins/start/python-mode"]
-	path = vim/pack/plugins/start/python-mode
-	url = https://github.com/python-mode/python-mode.git
 [submodule "zsh/oh-my-zsh/custom/themes/powerlevel10k"]
 	path = zsh/oh-my-zsh/custom/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
 [submodule "tmux/tpm"]
 	path = tmux/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "vim/pack/plugins/start/vim-gitgutter"]
-	path = vim/pack/plugins/start/vim-gitgutter
-	url = https://github.com/airblade/vim-gitgutter
-[submodule "vim/pack/plugins/start/vim-colors-solarized"]
-	path = vim/pack/plugins/start/vim-colors-solarized
-	url = https://github.com/altercation/vim-colors-solarized
