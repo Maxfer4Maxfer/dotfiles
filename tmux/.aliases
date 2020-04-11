@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+function ntfsmount() {
+    $dir
+    sudo mkdir /Volumes/$dir
+    sudo /usr/local/bin/ntfs-3g /dev/disk1s1 /Volumes/$dir -olocal -oallow_other -o auto_xattr
+}
+
+
+alias usb="ntfsmount usb"

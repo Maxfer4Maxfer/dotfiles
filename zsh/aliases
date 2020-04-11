@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+function ntfsmount() {
+    sudo mkdir /Volumes/NTFS
+    sudo /usr/local/bin/ntfs-3g /dev/disk2s2 /Volumes/NTFS -olocal -oallow_other -o auto_xattr
+}
+
+
+alias usb="ntfsmount"

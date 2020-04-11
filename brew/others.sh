@@ -3,6 +3,7 @@
 APPS=(
     bash
     bat
+    ctags
     ffmpeg
     fzf
     git
@@ -16,6 +17,7 @@ APPS=(
     modd
     moreutils
     nmap
+    ntfs-3g
     openssh
     openssl
     python
@@ -40,6 +42,7 @@ CASKS=(
     docker
     drawio
     dropbox
+    osxfuse
     google-backup-and-sync
     google-chrome
     insomnia
@@ -48,13 +51,12 @@ CASKS=(
     logmein-hamachi
     macpass
     opera
-    private-eye
     skype
     teamviewer
-    telegram
     telegram-desktop
     the-unarchiver
     transmission
+    virtualbox
     vlc
     whatsapp
     xquartz
@@ -103,5 +105,6 @@ echo 'PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
 
 brew install qt
 echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
+
 
 brew upgrade

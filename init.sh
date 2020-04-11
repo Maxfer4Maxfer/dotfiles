@@ -19,10 +19,15 @@ fi
 $DOTFILES_DIR/brew/zsh.sh
 $DOTFILES_DIR/zsh/oh-my-zsh.sh
 
+if [ -f ~/.aliases ]; then
+     rm ~/.aliases
+fi
+ln -s $DOTFILES_DIR/zsh/aliases ~/.aliases
+
 if [ -f ~/.zshrc ]; then
      rm ~/.zshrc
 fi
-# ln -s $DOTFILES_DIR/zsh/zshrc ~/.zshrc
+ln -s $DOTFILES_DIR/zsh/zshrc ~/.zshrc
 echo "source $DOTFILES_DIR/zsh/oh-my-zshrc" > ~/.zshrc
 
 if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then

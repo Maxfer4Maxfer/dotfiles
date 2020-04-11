@@ -12,7 +12,8 @@ set autowriteall                    " Automatically write the file when switchin
 set autowrite                       " Write any changes
 " Write any changes when the user hasn't pressed a key for 'updatetime' milliseconds
 autocmd CursorHold * silent! update         " Autosave
-autocmd FocusGained,BufEnter * :silent! !   " Autoread 
+autocmd TextChanged,TextChangedI <buffer> silent write
+" autocmd FocusGained,BufEnter * :silent! !   " Autoread 
 set updatetime=100                  " Update each 100 milliseconds
 set undofile                        " Save changes in the undofile. Even after reopen a file you can do undo things
 set undodir=~/.vim/undo
@@ -54,9 +55,9 @@ if exists('$TMUX')
     let &t_EI = "\<Esc>Ptmux;\<Esc>\e[4 q\<Esc>\\" "SR = REPLACE mode
     let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\" "EI = NORMAL mode (ELSE)
 
-    let &t_SI = "\e[6 q" "SI = INSERT mode
-    let &t_SR = "\e[4 q" "SR = REPLACE mode
-    let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
+    " let &t_SI = "\e[6 q" "SI = INSERT mode
+    " let &t_SR = "\e[4 q" "SR = REPLACE mode
+    " let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
 else
     let &t_SI = "\e[6 q" "SI = INSERT mode
     let &t_SR = "\e[4 q" "SR = REPLACE mode
@@ -95,6 +96,12 @@ set ignorecase
 "--------Windows--------"
 set splitright
 set splitbelow
+" Position the (global) quickfix window at the very bottom of the window
+" (useful for making sure that it appears underneath splits)
+" 
+" NOTE: Using a check here to make sure that window-specific location-lists
+" aren't effected, as they use the same `FileType` as quickfix-lists.
+ autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
 
 
 "--------Mappings--------"
@@ -147,6 +154,7 @@ let g:XkbSwitchEnabled = 1
 "/ vim-go
 "/
 let g:go_fmt_command = "goimports"
+let g:go_fmt_autosave = 1                                   " Apply fmt to the current file and go.mod
 let g:go_mod_fmt_autosave = 1                               " Apply fmt to the current file and go.mod
 let g:go_decls_mode = 'fzf'
 let g:go_list_type = "quickfix"
@@ -155,9 +163,9 @@ let g:go_auto_sameids = 0                                   " Highlighting the s
 let g:go_snippet_case_type = "camelcase"                    " Set the camelcase output for snippets
 let g:go_updatetime=100                                     " Set update interval to 100ms
 let g:go_debug_log_output = 'debugger'                      " Set debugger output
+" let g:go_debug = ["shell-commands", "debugger-state"]
 
 " Metalinter
-"let g:go_debug = ["shell-commands", "debugger-state"]
 "let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
 "let g:syntastic_go_gometalinter_args = ['--enable-all', '--enable=errcheck']
 let g:go_metalinter_enabled = ['wsl']
