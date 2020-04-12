@@ -2,6 +2,7 @@
 set -x
 
 DOTFILES_DIR="$HOME/.dotfiles"
+OS=$(uname -s)
 
 git submodule update --init --recursive
 
@@ -11,12 +12,21 @@ git submodule update --init --recursive
 #       https://github.com/ierton/xkb-switch
 
 ######## brew ######## 
-if [ ! -x "brew" ]; then
-	$DOTFILES_DIR/brew/brew.sh
+if [[ $OS == "Darwin" ]]; then
+	if [ ! -x "brew" ]; then
+		$DOTFILES_DIR/brew/brew.sh
+	fi
 fi
 
 ######## zsh ######## 
-$DOTFILES_DIR/brew/zsh.sh
+if [[ $OS == "Darwin" ]]; then
+	$DOTFILES_DIR/brew/zsh.sh
+fi
+
+if [[ $OS == "Linux" ]]; then
+	$DOTFILES_DIR/apt/zsh.sh
+fi
+
 $DOTFILES_DIR/zsh/oh-my-zsh.sh
 
 if [ -f ~/.aliases ]; then
@@ -42,7 +52,13 @@ ln -s $DOTFILES_DIR/zsh/p10k.zsh ~/.p10k.zsh
 
 
 ######## brew: others ######## 
-$DOTFILES_DIR/brew/others.sh
+if [[ $OS == "Darwin" ]]; then
+	$DOTFILES_DIR/brew/others.sh
+fi
+
+if [[ $OS == "Linux" ]]; then
+	$DOTFILES_DIR/apt/others.sh
+fi
 
 
 ######## Vim ######## 
