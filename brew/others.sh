@@ -7,6 +7,7 @@ APPS=(
     ffmpeg
     fzf
     git
+    gnu-time
     graphviz
     htop
     jq
@@ -99,6 +100,9 @@ echo 'PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"' >> ~/.zshrc
 
 brew install gnu-tar
 echo 'PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"' >> ~/.zshrc
+
+brew install gnu-time
+echo 'PATH="/usr/local/opt/gnu-time/libexec/gnubin:$PATH"' >> ~/.zshrc
 
 brew install grep
 echo 'PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
