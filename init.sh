@@ -6,86 +6,50 @@ OS=$(uname -s)
 
 git submodule update --init --recursive
 
-#TODO
-#Preinstall packages:
-#   Rasbian: 
-#       https://github.com/ierton/xkb-switch
+######## initial ######## 
+case $OS in
+    "Darwin")
+        echo "----------------brew----------------"
+        if [ ! -x "brew" ]; then
+            $DOTFILES_DIR/brew/brew.sh
+        fi
+        ;;
+esac
 
-######## brew ######## 
-if [[ $OS == "Darwin" ]]; then
-	if [ ! -x "brew" ]; then
-		$DOTFILES_DIR/brew/brew.sh
-	fi
-fi
+echo "----------------zsh----------------"
+case $OS in
+    "Darwin")
+        $DOTFILES_DIR/brew/zsh.sh
+        chsh -s /usr/bin/zsh root
+        ;;
+    "Linux")
+        $DOTFILES_DIR/apt/zsh.sh
+        chsh -s /usr/local/bin/zsh root
+        ;;
+esac
 
-######## zsh ######## 
-if [[ $OS == "Darwin" ]]; then
-	$DOTFILES_DIR/brew/zsh.sh
-fi
+echo "----------------zsh----------------"
+$DOTFILES_DIR/zsh/zsh.sh $DOTFILES_DIR
 
-if [[ $OS == "Linux" ]]; then
-	$DOTFILES_DIR/apt/zsh.sh
-fi
-
-$DOTFILES_DIR/zsh/oh-my-zsh.sh
-
+echo "----------------aliases----------------"
 if [ -f ~/.aliases ]; then
      rm ~/.aliases
 fi
 ln -s $DOTFILES_DIR/zsh/aliases ~/.aliases
 
-if [ -f ~/.zshrc ]; then
-     rm ~/.zshrc
-fi
-ln -s $DOTFILES_DIR/zsh/zshrc ~/.zshrc
-echo "source $DOTFILES_DIR/zsh/oh-my-zshrc" > ~/.zshrc
+echo "----------------software----------------"
+case $OS in
+    "Darwin")
+        $DOTFILES_DIR/brew/others.sh
+        ;;
+    "Linux")
+        $DOTFILES_DIR/apt/others.sh
+        ;;
+esac
 
-if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
-    rm -fr ~/.oh-my-zsh/custom/themes/powerlevel10k
-fi
-ln -s $DOTFILES_DIR/zsh/oh-my-zsh/custom/themes/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k
-
-if [ -f ~/.p10k.zsh ]; then
-    rm ~/.p10k.zsh
-fi
-ln -s $DOTFILES_DIR/zsh/p10k.zsh ~/.p10k.zsh
-
-
-######## brew: others ######## 
-if [[ $OS == "Darwin" ]]; then
-	$DOTFILES_DIR/brew/others.sh
-fi
-
-if [[ $OS == "Linux" ]]; then
-	$DOTFILES_DIR/apt/others.sh
-fi
-
-
-######## Vim ######## 
-if [ -f ~/.vimrc ]; then
-    rm ~/.vimrc
-fi
-ln -s $DOTFILES_DIR/vim/vimrc ~/.vimrc
-
-if [ ! -d ~/.vim ]; then
-    mkdir -p ~/.vim/swaps
-    mkdir -p ~/.vim/undo
-fi
-
-if [ ! -d ~/.vim/pack ]; then
-    mkdir -p ~/.vim/pack
-fi
-
-if [ -d ~/.vim/pack/plugins ]; then
-    rm -rf ~/.vim/pack/plugins
-fi
-ln -s $DOTFILES_DIR/vim/pack/plugins ~/.vim/pack/plugins
-
-curl -fLo /usr/local/lib/libxkbswitch.dylib https://raw.githubusercontent.com/myshov/libxkbswitch-macosx/master/bin/libxkbswitch.dylib
-curl -fLo /usr/local/bin/xkbswitch https://raw.githubusercontent.com/myshov/xkbswitch-macosx/master/bin/xkbswitch
-chmod +x /usr/local/bin/xkbswitch
-
-######## tmux ######## 
+echo "----------------vim----------------"
+$DOTFILES_DIR/vim/vim.sh $DOTFILES_DIR
+echo "----------------tmux----------------"
 $DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR
 
 ######## .config ######## 
