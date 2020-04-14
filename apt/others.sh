@@ -13,7 +13,9 @@ APPS=(
     htop
     jq
     kubectx
+    locales
     lynx
+    man
     moreutils
     nmap
     ntfs-3g
