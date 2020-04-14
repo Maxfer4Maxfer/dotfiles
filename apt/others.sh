@@ -33,6 +33,9 @@ APPS=(
 
 sudo apt-get install -y "${APPS[@]}"
 
+sudo locale-gen en_US.UTF-8
+sudo update-locale LANG=en_US.UTF-8 LANGUAGE
+
 # https://docs.docker.com/engine/install/debian/
 sudo apt-get install -y apt-transport-https ca-certificates gnupg-agent software-properties-common
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -

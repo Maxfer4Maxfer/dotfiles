@@ -20,11 +20,11 @@ echo "----------------zsh----------------"
 case $OS in
     "Darwin")
         $DOTFILES_DIR/brew/zsh.sh
-        chsh -s /usr/bin/zsh root
+        chsh -s /usr/bin/zsh 
         ;;
     "Linux")
         $DOTFILES_DIR/apt/zsh.sh
-        chsh -s /usr/local/bin/zsh root
+        chsh -s /usr/local/bin/zsh 
         ;;
 esac
 

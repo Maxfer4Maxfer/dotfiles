@@ -16,12 +16,8 @@ file(){
 ######## zsh ########
 wget -O - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash
 
-if [ -f ~/.zshrc ]; then
-     rm ~/.zshrc
-fi
-ln -s $DOTFILES_DIR/zsh/zshrc ~/.zshrc
-
 echo "source $DOTFILES_DIR/zsh/oh-my-zshrc" > ~/.zshrc
+echo "export TERM=xterm-256color" >> ~/.zshrc
 
 if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
     rm -fr ~/.oh-my-zsh/custom/themes/powerlevel10k
