@@ -1,1 +1,1 @@
-source /home/maxim/.dotfiles/zsh/oh-my-zshrc
+source $HOME/.dotfiles/zsh/oh-my-zshrc
