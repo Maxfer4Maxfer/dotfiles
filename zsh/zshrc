@@ -1,0 +1,2 @@
+source $HOME/.dotfiles/zsh/oh-my-zshrc
+export TERM=xterm-256color 
