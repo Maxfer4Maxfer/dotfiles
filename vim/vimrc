@@ -34,15 +34,16 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'tpope/vim-commentary'
+Plug 'airblade/vim-gitgutter'
+Plug 'altercation/vim-colors-solarized'
+Plug 'cespare/vim-toml'
 Plug 'chrisbra/csv.vim'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-Plug 'altercation/vim-colors-solarized'
-Plug 'airblade/vim-gitgutter'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'lyokha/vim-xkbswitch'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'tpope/vim-commentary'
 call plug#end()
 
 "--------Color theme--------"
@@ -173,9 +174,8 @@ let g:go_debug_log_output = 'debugger'                      " Set debugger outpu
 " let g:go_debug = ["shell-commands", "debugger-state"]
 
 " Metalinter
-"let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
-"let g:syntastic_go_gometalinter_args = ['--enable-all', '--enable=errcheck']
-let g:go_metalinter_enabled = ['wsl']
+let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
+" let g:syntastic_go_gometalinter_args = ['--enable-all']
 let g:go_metalinter_autosave = 0
 
 " Syntax

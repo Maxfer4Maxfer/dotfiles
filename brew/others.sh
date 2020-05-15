@@ -110,5 +110,6 @@ echo 'PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
 brew install qt
 echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
 
-
 brew upgrade
+
+go get -u github.com/jnewmano/grpc-json-prox

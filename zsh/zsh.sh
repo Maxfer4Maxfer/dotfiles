@@ -18,6 +18,7 @@ wget -O - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install
 
 echo "source $DOTFILES_DIR/zsh/oh-my-zshrc" > ~/.zshrc
 echo "export TERM=xterm-256color" >> ~/.zshrc
+echo "source $HOME/.aliases" >> ~/.zshrc
 
 if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]; then
     rm -fr ~/.oh-my-zsh/custom/themes/powerlevel10k

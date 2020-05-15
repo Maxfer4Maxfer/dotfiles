@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 
 DOTFILES_DIR="$HOME/.dotfiles"
 OS=$(uname -s)

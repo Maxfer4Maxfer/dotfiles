@@ -51,7 +51,8 @@ echo 'path=($HOME/go/bin $path)' >> ~/.zshrc
 
 echo 'export PATH' >> ~/.zshrc
 
-go get github.com/jesseduffield/lazygit
-go get github.com/tsenart/vegeta
+go get -u github.com/jnewmano/grpc-json-prox
+go get -u github.com/jesseduffield/lazygit
+go get -u github.com/tsenart/vegeta
 env GO111MODULE=on go get github.com/cortesi/modd/cmd/modd
 
