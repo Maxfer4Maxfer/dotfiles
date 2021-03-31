@@ -1,5 +1,5 @@
 "-------General--------"
-set nocompatible		            " be iMproved, required
+set nocompatible		            " Be improved, required
 set mouse=a                         " Enable mouse support
 "let mapleader = ','		        " The default leader is '\', but a comma is much better
 ":cabbrev help tab help             " Open help in a separate tab.      
@@ -24,6 +24,9 @@ set textwidth=0                     " Stop wrapping text
 set wrapmargin=0                    " Stop wrapping text
 set wrap!                           " Unset wrapping lines
 :filetype plugin on                 " Enable file type detection
+set clipboard^=unnamed              " Sync the system clipboard with the default register
+set foldmethod=syntax
+set nofoldenable
 
 "--------Plugins--------"
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
@@ -43,7 +46,13 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
 Plug 'lyokha/vim-xkbswitch'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'python-rope/ropevim'
 Plug 'tpope/vim-commentary'
+Plug 'uarun/vim-protobuf'
+Plug 'jez/vim-better-sml'
+Plug 'benmills/vimux'
+Plug 'dense-analysis/ale'
+Plug 'vim-ruby/vim-ruby'
 call plug#end()
 
 "--------Color theme--------"
@@ -134,12 +143,14 @@ let g:auto_save_silent = 1  " Do not display the auto-save notification
 "/
 let g:netrw_banner = 0          " No header spam in directory mode
 let g:netrw_liststyle = 3       " Tree style
-
 "/
 "/ fzf.vim
 "/
 let g:fzf_command_prefix = "Fzf"            " Add namespace for fzf.vim exported commands
 let g:fzf_preview_window = ''               " Empty value to disable preview window altogether
+let g:fzf_layout = { 'down': '33%' }
+" let g:fzf_layout = { 'window': '10new' }
+
 
 nnoremap <silent> <leader>ff :FzfFiles<CR>
 nnoremap <silent> <leader>fF :FzfFiles!<CR>
@@ -161,7 +172,7 @@ let g:XkbSwitchEnabled = 1
 "/
 "/ vim-go
 "/
-let g:go_fmt_command = "goimports"
+let g:go_fmt_command = "gofumports"
 let g:go_fmt_autosave = 1                                   " Apply fmt to the current file and go.mod
 let g:go_mod_fmt_autosave = 1                               " Apply fmt to the current file and go.mod
 let g:go_decls_mode = 'fzf'
@@ -172,6 +183,13 @@ let g:go_snippet_case_type = "camelcase"                    " Set the camelcase 
 let g:go_updatetime=100                                     " Set update interval to 100ms
 let g:go_debug_log_output = 'debugger'                      " Set debugger output
 " let g:go_debug = ["shell-commands", "debugger-state"]
+let g:go_debug_windows = {
+        \ 'vars':       'leftabove 50vnew',
+        \ 'stack':      'wincmd l | 20vnew',
+        \ 'goroutines': '10new',
+        \ 'out':        'botright 5new',
+  \ }
+let g:go_debug_breakpoint_sign_text = '•'
 
 " Metalinter
 let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
@@ -206,6 +224,26 @@ autocmd FileType go nmap <leader>gdd :GoDoc<CR>
 autocmd FileType go nmap <leader>gt  :GoDecls<CR>
 autocmd FileType go nmap <leader>gss :GoSameIdsClear<CR>:GoSameIds<CR>
 autocmd FileType go nmap <leader>gsc :GoSameIdsClear<CR>
+autocmd FileType go nmap <F7> :GoDebugPrint<CR>
+" :GoDebugContinue <F5>
+" :GoDebugPrint <F6>
+" :GoDebugBreakpoint <F9>
+" :GoDebugNext <F10>
+" :GoDebugStep <F11>
+"
+
+"/
+"/ vim-better-sml
+"/
+let g:sml_repl_backend = 'vimux'
+let g:sml_repl_options = ''
+
+"/
+"/ python-mode
+"/
+let g:pymode_rope_goto_definition_bind = '<C-j>g'
+autocmd FileType py nmap <leader>wl :PymodeLintAuto<CR>
+
 
 "--------Auto-Commands--------"
 "Automatically source the Vimrc file on save.

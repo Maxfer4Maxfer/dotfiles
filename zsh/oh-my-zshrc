@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/smlnj/bin:$PATH
 export LC_ALL=en_US.UTF-8
 
 # Path to your oh-my-zsh installation.
@@ -71,10 +72,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-        colored-man-pages
+    colored-man-pages
 	command-not-found
 	git
-	go
 	golang
 	kubectl
 	osx
@@ -111,3 +111,4 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

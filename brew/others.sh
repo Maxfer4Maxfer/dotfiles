@@ -4,8 +4,9 @@ APPS=(
     bash
     bat
     ctags
+    diffutils
+    fd
     ffmpeg
-    fzf
     git
     gnu-time
     graphviz
@@ -18,12 +19,16 @@ APPS=(
     modd
     moreutils
     nmap
+    npm
     ntfs-3g
     openssh
     openssl
+    protobuf
+    protoc-gen-go
     python
     sqlmap
     telnet
+    tldr
     tmux
     tree
     vegeta
@@ -32,6 +37,7 @@ APPS=(
     wget
     wrk
     youtube-dl
+    zsh-syntax-highlighting
 )
 
 CASKS=(
@@ -67,7 +73,7 @@ brew install "${APPS[@]}"
 
 for cask in "${CASKS[@]}"
 do
-    brew cask install $cask
+    brew install --cask $cask
 done
 
 echo '' >> ~/.zshrc
@@ -106,6 +112,10 @@ echo 'PATH="/usr/local/opt/gnu-time/libexec/gnubin:$PATH"' >> ~/.zshrc
 
 brew install grep
 echo 'PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"' >> ~/.zshrc
+
+brew install fzf
+$(brew --prefix)/opt/fzf/install --key-bindings --completion  --update-rc    
+echo 'export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git --exclude __pycache__ --exclude .ropeproject --exclude .pytest_cache"' >> ~/.zshrc
 
 brew install qt
 echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc

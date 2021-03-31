@@ -5,5 +5,5 @@ function ntfsmount() {
     sudo /usr/local/bin/ntfs-3g /dev/disk2s2 /Volumes/NTFS -olocal -oallow_other -o auto_xattr
 }
 
-
 alias usb="ntfsmount"
+alias s3='aws --endpoint-url="https://s3-svc-dl.wildberries.ru" s3'
