@@ -49,6 +49,7 @@ esac
 
 echo "----------------vim----------------"
 $DOTFILES_DIR/vim/vim.sh $DOTFILES_DIR
+
 echo "----------------tmux----------------"
 $DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR
 
