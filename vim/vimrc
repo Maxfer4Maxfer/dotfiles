@@ -28,6 +28,9 @@ set clipboard^=unnamed              " Sync the system clipboard with the default
 set foldmethod=syntax
 set nofoldenable
 
+set mouse+=a                        " Enable a mouse 
+set ttymouse=xterm2                 " Support a mouse under a tmux sesstion
+
 "--------Plugins--------"
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -51,8 +54,10 @@ Plug 'tpope/vim-commentary'
 Plug 'uarun/vim-protobuf'
 Plug 'jez/vim-better-sml'
 Plug 'benmills/vimux'
-Plug 'dense-analysis/ale'
 Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-vinegar'
+Plug 'scrooloose/vim-slumlord'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 call plug#end()
 
 "--------Color theme--------"
@@ -127,6 +132,7 @@ set splitbelow
 nmap <Leader>ev :tabedit $MYVIMRC<CR>
 nmap <Leader>es :e ~/.vim/snippets<CR>
 nmap <Leader>ep :e ~/.vim/plugins<CR>
+nmap <Leader>w :set wrap!<CR>
 
 nmap <Leader><space> :nohlsearch<CR> " Add simple highlight removal.
 
@@ -147,10 +153,8 @@ let g:netrw_liststyle = 3       " Tree style
 "/ fzf.vim
 "/
 let g:fzf_command_prefix = "Fzf"            " Add namespace for fzf.vim exported commands
-let g:fzf_preview_window = ''               " Empty value to disable preview window altogether
+let g:fzf_preview_window = ['right:50%:hidden', 'ctrl-/']
 let g:fzf_layout = { 'down': '33%' }
-" let g:fzf_layout = { 'window': '10new' }
-
 
 nnoremap <silent> <leader>ff :FzfFiles<CR>
 nnoremap <silent> <leader>fF :FzfFiles!<CR>
@@ -192,8 +196,9 @@ let g:go_debug_windows = {
 let g:go_debug_breakpoint_sign_text = '•'
 
 " Metalinter
-let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
-" let g:syntastic_go_gometalinter_args = ['--enable-all']
+" let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
+" let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
+" let g:go_metalinter_command = "golangci-lint"
 let g:go_metalinter_autosave = 0
 
 " Syntax
@@ -222,8 +227,7 @@ autocmd FileType go nmap <leader>gdt <Plug>(go-def-type)<CR>
 autocmd FileType go nmap <leader>gdi <Plug>(go-implements)<CR>
 autocmd FileType go nmap <leader>gdd :GoDoc<CR>
 autocmd FileType go nmap <leader>gt  :GoDecls<CR>
-autocmd FileType go nmap <leader>gss :GoSameIdsClear<CR>:GoSameIds<CR>
-autocmd FileType go nmap <leader>gsc :GoSameIdsClear<CR>
+autocmd FileType go nmap <leader>gsi :GoSameIdsAutoToggle<CR>
 autocmd FileType go nmap <F7> :GoDebugPrint<CR>
 " :GoDebugContinue <F5>
 " :GoDebugPrint <F6>
