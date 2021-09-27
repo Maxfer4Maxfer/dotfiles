@@ -56,7 +56,10 @@ Plug 'jez/vim-better-sml'
 Plug 'benmills/vimux'
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-vinegar'
-Plug 'scrooloose/vim-slumlord'
+Plug 'tpope/vim-fugitive'
+Plug 'tyru/open-browser.vim'
+Plug 'aklt/plantuml-syntax'
+Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 call plug#end()
 
@@ -184,16 +187,32 @@ let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1                                 " Show info of the object under the curson in status bar
 let g:go_auto_sameids = 0                                   " Highlighting the same objects
 let g:go_snippet_case_type = "camelcase"                    " Set the camelcase output for snippets
+" debug
 let g:go_updatetime=100                                     " Set update interval to 100ms
 let g:go_debug_log_output = 'debugger'                      " Set debugger output
 " let g:go_debug = ["shell-commands", "debugger-state"]
-let g:go_debug_windows = {
-        \ 'vars':       'leftabove 50vnew',
-        \ 'stack':      'wincmd l | 20vnew',
-        \ 'goroutines': '10new',
-        \ 'out':        'botright 5new',
-  \ }
+" let g:go_debug_windows = {
+"         \ 'vars':       'leftabove 50vnew',
+"         \ 'stack':      'wincmd l | 20vnew',
+"         \ 'goroutines': '10new',
+"         \ 'out':        'botright 5new',
+"   \ }
 let g:go_debug_breakpoint_sign_text = '•'
+
+autocmd FileType go nmap g2 :GoDebugStop<CR>
+autocmd FileType go nmap <leader>g3 :GoDebugRestart<CR>
+autocmd FileType go nmap <leader>g9 :GoDebugBreakpoint<CR>
+
+let g:go_debug_mappings = {
+            \ '(go-debug-continue)':   {'key': '5'},
+            \ '(go-debug-print)':      {'key': '6'},
+            \ '(go-debug-stop)':       {'key': '2'},
+            \ '(go-debug-halt)':       {'key': '8'},
+            \ '(go-debug-breakpoint)': {'key': '9'},
+            \ '(go-debug-next)':       {'key': '0'},
+            \ '(go-debug-step)':       {'key': '-'},
+            \ '(go-debug-stepout)':    {'key': '_'},
+            \ }
 
 " Metalinter
 " let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
@@ -221,20 +240,13 @@ autocmd FileType go nmap <leader>gcn :cnext<CR>
 autocmd FileType go nmap <leader>gcc :cclose<CR>
 autocmd FileType go nmap <leader>gb  <Plug>(go-build)<CR>
 autocmd FileType go nmap <leader>gr  <Plug>(go-run)<CR>
-autocmd FileType go nmap <leader>gde <Plug>(go-debug)<CR>
+autocmd FileType go nmap <leader>gds <Plug>(go-debug)<CR>
 autocmd FileType go nmap <leader>gdv <Plug>(go-def-vertical)<CR>
 autocmd FileType go nmap <leader>gdt <Plug>(go-def-type)<CR>
 autocmd FileType go nmap <leader>gdi <Plug>(go-implements)<CR>
 autocmd FileType go nmap <leader>gdd :GoDoc<CR>
 autocmd FileType go nmap <leader>gt  :GoDecls<CR>
 autocmd FileType go nmap <leader>gsi :GoSameIdsAutoToggle<CR>
-autocmd FileType go nmap <F7> :GoDebugPrint<CR>
-" :GoDebugContinue <F5>
-" :GoDebugPrint <F6>
-" :GoDebugBreakpoint <F9>
-" :GoDebugNext <F10>
-" :GoDebugStep <F11>
-"
 
 "/
 "/ vim-better-sml
@@ -252,8 +264,8 @@ autocmd FileType py nmap <leader>wl :PymodeLintAuto<CR>
 "--------Auto-Commands--------"
 "Automatically source the Vimrc file on save.
 augroup autosourcing
-	autocmd!
-	autocmd BufWritePost .vimrc source %
+    autocmd!
+    autocmd BufWritePost .vimrc source %
 augroup END
 
 
