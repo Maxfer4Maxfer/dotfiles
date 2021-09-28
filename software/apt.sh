@@ -3,16 +3,15 @@ set -x
 
 #    wrk
 #    bat
+#    kubectx 
 
 sudo apt-get update
 
 APPS=(
     curl
-    fzf
     graphviz
     htop
     jq
-    kubectx
     locales
     lynx
     man
@@ -51,8 +50,8 @@ echo 'path=($HOME/go/bin $path)' >> ~/.zshrc
 
 echo 'export PATH' >> ~/.zshrc
 
-go get -u github.com/jnewmano/grpc-json-prox
-go get -u github.com/jesseduffield/lazygit
-go get -u github.com/tsenart/vegeta
-env GO111MODULE=on go get github.com/cortesi/modd/cmd/modd
+#fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
 

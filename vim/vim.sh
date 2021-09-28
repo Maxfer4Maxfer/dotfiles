@@ -33,6 +33,8 @@ if [ -d ~/.vim/pack/plugins ]; then
 fi
 ln -s $DOTFILES_DIR/vim/pack/plugins ~/.vim/pack/plugins
 
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 if [[ $OS == "Darwin" ]]; then
     curl -fLo /usr/local/lib/libxkbswitch.dylib https://raw.githubusercontent.com/myshov/libxkbswitch-macosx/master/bin/libxkbswitch.dylib
     curl -fLo /usr/local/bin/xkbswitch https://raw.githubusercontent.com/myshov/xkbswitch-macosx/master/bin/xkbswitch

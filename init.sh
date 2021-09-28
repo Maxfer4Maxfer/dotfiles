@@ -6,25 +6,14 @@ OS=$(uname -s)
 
 git submodule update --init --recursive
 
-######## initial ######## 
+######## package manager ######## 
 case $OS in
     "Darwin")
         echo "----------------brew----------------"
         if [ ! -x "brew" ]; then
-            $DOTFILES_DIR/brew/brew.sh
+            /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            brew update && brew upgrade
         fi
-        ;;
-esac
-
-echo "----------------zsh----------------"
-case $OS in
-    "Darwin")
-        $DOTFILES_DIR/brew/zsh.sh
-        chsh -s /usr/bin/zsh 
-        ;;
-    "Linux")
-        $DOTFILES_DIR/apt/zsh.sh
-        chsh -s /usr/local/bin/zsh 
         ;;
 esac
 
@@ -40,12 +29,14 @@ ln -s $DOTFILES_DIR/zsh/aliases ~/.aliases
 echo "----------------software----------------"
 case $OS in
     "Darwin")
-        $DOTFILES_DIR/brew/others.sh
+        $DOTFILES_DIR/software/brew.sh
         ;;
     "Linux")
-        $DOTFILES_DIR/apt/others.sh
+        $DOTFILES_DIR/software/apt.sh
         ;;
 esac
+
+$DOTFILES_DIR/software/common.sh
 
 echo "----------------vim----------------"
 $DOTFILES_DIR/vim/vim.sh $DOTFILES_DIR

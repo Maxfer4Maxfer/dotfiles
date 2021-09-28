@@ -122,4 +122,3 @@ echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
 
 brew upgrade
 
-go get -u github.com/jnewmano/grpc-json-prox
