@@ -4,3 +4,5 @@ zsh/oh-my-zsh
 config/systemd/user/default.target.wants/tmux.service
 config/systemd/user/tmux.service
 config/jesseduffield/lazygit/state.yml
+config/google-chrome
+config/Lens

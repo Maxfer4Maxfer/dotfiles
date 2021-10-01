@@ -1,6 +1,12 @@
 #!/bin/sh
 set -x
 
+echo "----------------tldr----------------"
+tldr -u
+
+echo "----------------helm----------------"
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
 echo "----------------krew----------------"
 (
   set -x; cd "$(mktemp -d)" &&
