@@ -27,6 +27,7 @@ set wrap!                           " Unset wrapping lines
 set clipboard^=unnamed              " Sync the system clipboard with the default register
 set foldmethod=syntax
 set nofoldenable
+set laststatus=2                    " Always show a status line on the bottom
 
 set mouse+=a                        " Enable a mouse 
 set ttymouse=xterm2                 " Support a mouse under a tmux sesstion
@@ -62,6 +63,7 @@ Plug 'aklt/plantuml-syntax'
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'greymd/oscyank.vim'
+Plug 'sheerun/vim-polyglot'
 call plug#end()
 
 "--------Color theme--------"
@@ -154,6 +156,7 @@ let g:auto_save_silent = 1  " Do not display the auto-save notification
 "/ oscyank
 "/
 noremap <leader>y :OscyankRegister<cr>
+noremap gy :OscyankRegister<cr>
 "/
 "/ netrw
 "/
@@ -186,10 +189,11 @@ let g:XkbSwitchEnabled = 1
 "/
 "/ vim-go
 "/
-let g:go_fmt_command = "gofumports"
+let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1                                   " Apply fmt to the current file and go.mod
 let g:go_mod_fmt_autosave = 1                               " Apply fmt to the current file and go.mod
 let g:go_decls_mode = 'fzf'
+" let g:go_decls_includes = 'func,type'
 let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1                                 " Show info of the object under the curson in status bar
 let g:go_auto_sameids = 0                                   " Highlighting the same objects
@@ -253,6 +257,7 @@ autocmd FileType go nmap <leader>gdt <Plug>(go-def-type)<CR>
 autocmd FileType go nmap <leader>gdi <Plug>(go-implements)<CR>
 autocmd FileType go nmap <leader>gdd :GoDoc<CR>
 autocmd FileType go nmap <leader>gt  :GoDecls<CR>
+autocmd FileType go nmap <leader>gsd :GoDeclsDir<CR>
 autocmd FileType go nmap <leader>gsi :GoSameIdsAutoToggle<CR>
 
 "/

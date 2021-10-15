@@ -6,3 +6,15 @@ config/systemd/user/tmux.service
 config/jesseduffield/lazygit/state.yml
 config/google-chrome
 config/Lens
+config/pulse/
+config/libreoffice/
+config/user-dirs*
+config/monitors*
+config/mimeapps.list
+config/gnome-initial-setup-done
+config/configstore/update-notifier-npm.json
+config/dconf/
+config/evolution/
+config/gtk-3.0/
+config/helm/repositories.lock
+config/ibus/

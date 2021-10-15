@@ -30,6 +30,7 @@ APPS=(
     vim 
     watch
     wget
+    yq
 )
 
 sudo apt-get install -y "${APPS[@]}"
@@ -56,6 +57,7 @@ sudo snap install kubectl --classic
 
 sudo snap install go --classic
 echo 'path=($HOME/go/bin $path)' >> ~/.zshrc
+echo 'export GOPATH=$(go env GOPATH)' >> ~/.zshrc
 
 echo 'export PATH' >> ~/.zshrc
 
