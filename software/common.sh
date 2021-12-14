@@ -19,6 +19,7 @@ echo "----------------krew----------------"
 )
 
 echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.zshrc
+echo 'export KUBECONFIG="$HOME/.kube/config"' >> ~/.zshrc
 
 kubectl krew upgrade
 kubectl krew update 

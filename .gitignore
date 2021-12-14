@@ -18,4 +18,4 @@ config/evolution/
 config/gtk-3.0/
 config/helm/repositories.lock
 config/ibus/
-config/jesseduffield/lazygit/.dotfiles/
+config/jesseduffield/lazygit/

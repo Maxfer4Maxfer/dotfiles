@@ -41,29 +41,33 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
+" Plug 'lyokha/vim-xkbswitch'
 Plug 'airblade/vim-gitgutter'
+Plug 'aklt/plantuml-syntax'
 Plug 'altercation/vim-colors-solarized'
+Plug 'benmills/vimux'
 Plug 'cespare/vim-toml'
 Plug 'chrisbra/csv.vim'
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'dyng/ctrlsf.vim'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'greymd/oscyank.vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'jez/vim-better-sml'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
-Plug 'lyokha/vim-xkbswitch'
+Plug 'mzlogin/vim-markdown-toc'
+Plug 'plasticboy/vim-markdown'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-Plug 'python-rope/ropevim'
-Plug 'tpope/vim-commentary'
-Plug 'uarun/vim-protobuf'
-Plug 'jez/vim-better-sml'
-Plug 'benmills/vimux'
-Plug 'vim-ruby/vim-ruby'
-Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-fugitive'
-Plug 'tyru/open-browser.vim'
-Plug 'aklt/plantuml-syntax'
-Plug 'weirongxu/plantuml-previewer.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'greymd/oscyank.vim'
+Plug 'seeamkhan/robotframework-vim'
 Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
+Plug 'tyru/open-browser.vim'
+Plug 'uarun/vim-protobuf'
+Plug 'vim-ruby/vim-ruby'
+Plug 'weirongxu/plantuml-previewer.vim'
 call plug#end()
 
 "--------Color theme--------"
@@ -109,6 +113,8 @@ highlight StatusLineTermNC cterm=reverse ctermfg=11 ctermbg=0           " Status
 highlight GitGutterAdd ctermbg=NONE ctermfg=2
 highlight GitGutterChange ctermbg=NONE ctermfg=3
 highlight GitGutterDelete ctermbg=NONE ctermfg=9
+
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'yaml', 'go']
 
 "--------Search--------"
 set hlsearch
@@ -178,13 +184,36 @@ nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
-
 "/
 "/ vim-xkbswitch
 "/
 let g:XkbSwitchEnabled = 1
 " keymap=russian-jcukenwin
 
+"/
+"/ CtrlSF
+"/
+nmap     <C-F>f <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+nmap     <C-F>p <Plug>CtrlSFPwordPath
+nnoremap <C-F>o :CtrlSFOpen<CR>
+nnoremap <C-F>t :CtrlSFToggle<CR>
+inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+
+let g:ctrlsf_mapping = {
+            \ "split"   : "<C-H>",
+            \ "vsplit"  : "<C-O>",
+            \ }
+let g:ctrlsf_auto_focus = {
+    \ "at": "start"
+    \ }
+
+"/
+"/ vim-table-mode
+"/
+let g:table_mode_corner='|'
 
 "/
 "/ vim-go
@@ -269,8 +298,10 @@ let g:sml_repl_options = ''
 "/
 "/ python-mode
 "/
-let g:pymode_rope_goto_definition_bind = '<C-j>g'
+let g:pymode_rope = 1
+let g:pymode_options_colorcolumn = 0
 autocmd FileType py nmap <leader>wl :PymodeLintAuto<CR>
+" let g:pymode_rope_goto_definition_bind = '<Leader>gd'
 
 
 "--------Auto-Commands--------"

@@ -20,6 +20,7 @@ APPS=(
     ntfs-3g
     openssl
     python
+    silversearcher-ag
     snapd
     socat
     sqlmap

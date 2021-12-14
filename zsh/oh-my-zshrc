@@ -79,8 +79,8 @@ plugins=(
     golang
     helm
     kubectl
+    macos
     # minikube
-    osx
     tmux
 )
 
