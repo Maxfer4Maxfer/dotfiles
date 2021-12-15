@@ -32,9 +32,6 @@ kubectl krew install images
 kubectl krew install open-svc
 kubectl krew install tree
 
-echo "----------------git----------------"
-git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-
 echo "----------------go----------------"
 echo 'path=($HOME/go/bin $path)' >> ~/.zshrc
 echo 'path=(/usr/local/go/bin $path)' >> ~/.zshrc
