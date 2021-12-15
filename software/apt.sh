@@ -14,12 +14,12 @@ APPS=(
     locales
     lynx
     make
-    man
+    man-db
     moreutils
     nmap
     ntfs-3g
     openssl
-    python
+    python3
     silversearcher-ag
     snapd
     socat
@@ -31,7 +31,7 @@ APPS=(
     vim 
     watch
     wget
-    yq
+    zsh
 )
 
 sudo apt-get install -y "${APPS[@]}"
@@ -44,25 +44,31 @@ sudo ln -s /usr/bin/batcat /usr/local/bin/bat
 # docker
 sudo apt-get remove docker docker-engine docker.io containerd runcv
 sudo apt-get update
-sudo apt-get install apt-transport-https  ca-certificates  curl  gnupg  lsb-release
+sudo apt autoremove
+sudo apt-get install -y apt-transport-https  ca-certificates  curl  gnupg  lsb-release
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo addgroup --system docker
 sudo adduser $USER docker
 newgrp docker
 
+# snap
 echo 'path=(/snap/bin $path)' >> ~/.zshrc
 sudo snap install kubectl --classic
 
+# go
 sudo snap install go --classic
 echo 'path=($HOME/go/bin $path)' >> ~/.zshrc
 echo 'export GOPATH=$(go env GOPATH)' >> ~/.zshrc
 
 echo 'export PATH' >> ~/.zshrc
 
-#fzf
+# yq
+sudo snap install yq
+
+# fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 

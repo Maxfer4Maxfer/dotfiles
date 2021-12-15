@@ -29,3 +29,5 @@ if [ -f ~/.p10k.zsh ]; then
     rm ~/.p10k.zsh
 fi
 ln -s $DOTFILES_DIR/zsh/p10k.zsh ~/.p10k.zsh
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/

@@ -17,9 +17,6 @@ case $OS in
         ;;
 esac
 
-echo "----------------zsh----------------"
-$DOTFILES_DIR/zsh/zsh.sh $DOTFILES_DIR
-
 echo "----------------aliases----------------"
 if [ -f ~/.aliases ]; then
      rm ~/.aliases
@@ -35,6 +32,10 @@ case $OS in
         $DOTFILES_DIR/software/apt.sh
         ;;
 esac
+
+echo "----------------zsh----------------"
+$DOTFILES_DIR/zsh/zsh.sh $DOTFILES_DIR
+chsh -s $(which zsh)
 
 $DOTFILES_DIR/software/common.sh
 

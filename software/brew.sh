@@ -37,6 +37,7 @@ APPS=(
     wget
     wrk
     youtube-dl
+    zsh
     zsh-syntax-highlighting
 )
 
