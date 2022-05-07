@@ -148,6 +148,9 @@ nmap <Leader>w :set wrap!<CR>
 
 nmap <Leader><space> :nohlsearch<CR> " Add simple highlight removal.
 
+" Horizontal scrolling
+map <C-l> zl
+map <C-h> zh
 
 
 "--------Plugins--------"
@@ -275,9 +278,6 @@ let g:go_highlight_variable_assignments = 1                 " Highlight variable
 
 " Mapping
 let g:go_def_mapping_enabled = 1                             " Enable the default mapping
-autocmd FileType go nmap <leader>gcp :cprevious<CR>
-autocmd FileType go nmap <leader>gcn :cnext<CR>
-autocmd FileType go nmap <leader>gcc :cclose<CR>
 autocmd FileType go nmap <leader>gb  <Plug>(go-build)<CR>
 autocmd FileType go nmap <leader>gr  <Plug>(go-run)<CR>
 autocmd FileType go nmap <leader>gds <Plug>(go-debug)<CR>
@@ -288,6 +288,9 @@ autocmd FileType go nmap <leader>gdd :GoDoc<CR>
 autocmd FileType go nmap <leader>gt  :GoDecls<CR>
 autocmd FileType go nmap <leader>gsd :GoDeclsDir<CR>
 autocmd FileType go nmap <leader>gsi :GoSameIdsAutoToggle<CR>
+autocmd FileType go nmap <C-g>si :GoSameIdsAutoToggle<CR>
+autocmd FileType go nmap <leader>] :GoDef<CR>
+autocmd FileType go nmap <leader>[ :GoDefPop<CR>
 
 "/
 "/ vim-better-sml

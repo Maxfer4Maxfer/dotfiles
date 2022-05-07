@@ -11,6 +11,7 @@ APPS=(
     gnu-time
     graphviz
     htop
+    jid
     jq
     kubectx
     kubernetes-cli

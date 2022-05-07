@@ -10,6 +10,7 @@ APPS=(
     curl
     graphviz
     htop
+    jid
     jq
     locales
     lynx

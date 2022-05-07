@@ -40,3 +40,6 @@ if [[ $OS == "Darwin" ]]; then
     curl -fLo /usr/local/bin/xkbswitch https://raw.githubusercontent.com/myshov/xkbswitch-macosx/master/bin/xkbswitch
     chmod +x /usr/local/bin/xkbswitch
 fi
+
+######## go ########
+vim -c "execute 'silent GoUpdateBinaries' | execute 'quit'"
