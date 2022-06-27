@@ -6,13 +6,13 @@ function ntfsmount() {
 }
 
 alias usb="ntfsmount"
-alias s3='aws --endpoint-url="https://s3-svc-dl.wildberries.ru" s3'
 alias kg='kubectl get'
+alias kgy='kubectl get -o yaml'
 alias kd='kubectl describe'
 alias ke='kubectl edit'
 alias kgpv='kubectl get pv'
 alias ktc='export KUBECONFIG=$(find ~/.kube -type f -name "config*" | sort -r | fzf --height 30%)'
 alias kpc='find ~/.kube -type f -name "config*" | sort -r | fzf --height 30% | xargs -I '"'"'{}'"'"' sed -i -E '"'"'s~export KUBECONFIG.*$~export KUBECONFIG={}~g'"'"' ~/.zshrc && source ~/.zshrc'
 alias by='bat --language=yaml --theme="TwoDark" --style=plain --color=always'
+alias lg='lazygit'
 
-alias jctl='java -jar jenkins-cli.jar -noCertificateCheck -s https://asd-ecs-jenkins.isus.emc.com -auth maxim_ferapontov:11145d101e974b073ab5fa0e9178e7fb56'

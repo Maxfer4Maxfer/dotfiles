@@ -25,10 +25,12 @@ set wrapmargin=0                    " Stop wrapping text
 set wrap!                           " Unset wrapping lines
 :filetype plugin on                 " Enable file type detection
 set clipboard^=unnamed              " Sync the system clipboard with the default register
+"" folding
 set foldmethod=syntax
 set nofoldenable
-set laststatus=2                    " Always show a status line on the bottom
+set foldlevelstart=99
 
+set laststatus=2                    " Always show a status line on the bottom
 set mouse+=a                        " Enable a mouse 
 set ttymouse=xterm2                 " Support a mouse under a tmux sesstion
 
@@ -68,6 +70,8 @@ Plug 'tyru/open-browser.vim'
 Plug 'uarun/vim-protobuf'
 Plug 'vim-ruby/vim-ruby'
 Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'jrudess/vim-foldtext'
+Plug 'puremourning/vimspector'
 call plug#end()
 
 "--------Color theme--------"
@@ -225,6 +229,7 @@ let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 1                                   " Apply fmt to the current file and go.mod
 let g:go_mod_fmt_autosave = 1                               " Apply fmt to the current file and go.mod
 let g:go_decls_mode = 'fzf'
+let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment', "comment"]
 " let g:go_decls_includes = 'func,type'
 let g:go_list_type = "quickfix"
 let g:go_auto_type_info = 1                                 " Show info of the object under the curson in status bar
@@ -302,7 +307,11 @@ let g:sml_repl_options = ''
 "/ python-mode
 "/
 let g:pymode_rope = 1
-let g:pymode_options_colorcolumn = 0
+let g:pymode_options_colorcolumn = 1
+let g:pymode_trim_whitespaces = 1
+let g:pymode_options_max_line_length = 79
+let g:pymode_indent = 1
+
 autocmd FileType py nmap <leader>wl :PymodeLintAuto<CR>
 " let g:pymode_rope_goto_definition_bind = '<Leader>gd'
 
