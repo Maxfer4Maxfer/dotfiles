@@ -36,13 +36,15 @@ APPS=(
 sudo apt install -y "${APPS[@]}"
 sudo apt autoremove
 
-sudo locale-gen en_US.UTF-8
-sudo update-locale LANG=en_US.UTF-8 LANGUAGE
-
 if [ -f /usr/local/bin/bat ]; then
      sudo rm /usr/local/bin/bat
 fi
 sudo ln -s /usr/bin/batcat /usr/local/bin/bat
+
+echo "------------Locale & Timezone------------"
+sudo locale-gen en_US.UTF-8
+sudo update-locale LANG=en_US.UTF-8 LANGUAGE
+sudo timedatectl set-timezone Europe/Moscow
 
 echo "----------------docker----------------"
 sudo apt remove docker docker-engine docker.io containerd runc
