@@ -21,7 +21,7 @@ echo "----------------aliases----------------"
 if [ -f ~/.aliases ]; then
      rm ~/.aliases
 fi
-ln -s $DOTFILES_DIR/zsh/aliases ~/.aliases
+ln -s $DOTFILES_DIR/aliases ~/.aliases
 
 echo "----------------software----------------"
 case $OS in
@@ -37,6 +37,7 @@ echo "----------------zsh----------------"
 $DOTFILES_DIR/zsh/zsh.sh $DOTFILES_DIR
 chsh -s $(which zsh)
 
+echo "------------software (cont.)---------"
 $DOTFILES_DIR/software/common.sh
 
 echo "----------------vim----------------"

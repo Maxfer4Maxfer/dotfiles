@@ -7,13 +7,7 @@ if [[ $DOTFILES_DIR == "" ]]; then
     DOTFILES_DIR="$HOME/.dotfiles"
 fi
 
-file(){
-    if [ -e $1 ] || [ -L $1 ]; then
-        rm $1
-    fi
-}
-
-######## zsh ########
+echo "----------------aliases----------------"
 wget -O - https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | bash
 
 echo "source $DOTFILES_DIR/zsh/oh-my-zshrc" > ~/.zshrc
@@ -30,4 +24,4 @@ if [ -f ~/.p10k.zsh ]; then
 fi
 ln -s $DOTFILES_DIR/zsh/p10k.zsh ~/.p10k.zsh
 
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/
+git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/

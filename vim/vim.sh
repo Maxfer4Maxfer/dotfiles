@@ -28,11 +28,7 @@ if [ ! -d ~/.vim/pack ]; then
     mkdir -p ~/.vim/pack
 fi
 
-if [ -d ~/.vim/pack/plugins ]; then
-    rm -rf ~/.vim/pack/plugins
-fi
-ln -s $DOTFILES_DIR/vim/pack/plugins ~/.vim/pack/plugins
-
+######## plug ########
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 if [[ $OS == "Darwin" ]]; then
@@ -41,5 +37,8 @@ if [[ $OS == "Darwin" ]]; then
     chmod +x /usr/local/bin/xkbswitch
 fi
 
-######## go ########
-vim -c "execute 'silent GoUpdateBinaries' | execute 'quit'"
+vim -c "execute 'silent PlugInstall' | execute 'qall'"
+vim -c "execute 'silent PlugUpdate' | execute 'qall'"
+
+######## golang ########
+vim -c "execute 'silent GoUpdateBinaries' | execute 'qall'"

@@ -1,6 +1,10 @@
 #!/bin/sh
 set -x
 
+echo "----------------fzf----------------"
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --key-bindings --completion --update-rc
+
 echo "----------------tldr----------------"
 tldr --update
 
@@ -33,11 +37,8 @@ kubectl krew install open-svc
 kubectl krew install tree
 
 echo "----------------go----------------"
-echo 'path=($HOME/go/bin $path)' >> ~/.zshrc
-echo 'path=(/usr/local/go/bin $path)' >> ~/.zshrc
-# echo 'export GOROOT="/usr/local/go"' >> ~/.zshrc
-go get -u github.com/jnewmano/grpc-json-prox
-go get -u github.com/jesseduffield/lazygit
-go get github.com/jesseduffield/lazydocker
-go get -u github.com/tsenart/vegeta
-env GO111MODULE=on go get github.com/cortesi/modd/cmd/modd
+go install github.com/jnewmano/grpc-json-prox@latest
+go install github.com/jesseduffield/lazygit@latest
+go install github.com/jesseduffield/lazydocker@latest
+go install github.com/tsenart/vegeta@latest
+go install github.com/cortesi/modd/cmd/modd@latest
