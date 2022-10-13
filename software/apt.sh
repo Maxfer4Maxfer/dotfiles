@@ -6,6 +6,7 @@ sudo apt update
 APPS=(
     bat
     curl
+    fzf
     graphviz
     htop
     jid
@@ -16,9 +17,11 @@ APPS=(
     man-db
     moreutils
     nmap
+    nmon
     ntfs-3g
     openssl
     python3
+    python3-pip
     silversearcher-ag
     snapd
     socat
@@ -27,6 +30,7 @@ APPS=(
     tldr
     tmux
     tree
+    universal-ctags
     vim 
     watch
     wget
@@ -74,9 +78,10 @@ sudo snap install yq
 
 echo "----------------golang----------------"
 gopackage="go1.19.linux-amd64.tar.gz"
-curl -sSO https://go.dev/dl/${gopackege}
-rm -rf /usr/local/go && tar -C /usr/local -xzf ${gopackege}
+curl -fsSLO https://go.dev/dl/${gopackage}
+sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf ${gopackage}
 echo 'path=(/usr/local/go/bin $path)' >> ~/.zshrc
+echo 'path=($HOME/go/bin $path)' >> ~/.zshrc
 echo 'export GOPATH=$(go env GOPATH)' >> ~/.zshrc
 rm -f ${gopackage}
 

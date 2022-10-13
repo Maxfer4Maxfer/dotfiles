@@ -34,7 +34,6 @@ ln -s $DOTFILES_DIR/tmux/my.tmuxtheme ~/.tmux/plugins/tmux-themepack/my.tmuxthem
 rm -fR  /tmp/tmux-1000
 
 echo '' >> ~/.zshrc
-echo '"source $HOME/.aliases"' >> ~/.zshrc
 echo 'if [[ $SSH_CONNECTION != "" && $TMUX == "" ]]' >> ~/.zshrc
 echo 'then' >> ~/.zshrc
 echo '    tmux' >> ~/.zshrc

@@ -1,6 +1,8 @@
 #!/bin/sh
 set -x
 
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+
 echo "----------------fzf----------------"
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --key-bindings --completion --update-rc

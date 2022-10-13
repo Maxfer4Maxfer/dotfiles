@@ -58,6 +58,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'jez/vim-better-sml'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
+Plug 'junegunn/goyo.vim'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'plasticboy/vim-markdown'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
@@ -72,6 +73,7 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'jrudess/vim-foldtext'
 Plug 'puremourning/vimspector'
+Plug 'preservim/tagbar'
 call plug#end()
 
 "--------Color theme--------"
@@ -311,6 +313,7 @@ let g:pymode_options_colorcolumn = 1
 let g:pymode_trim_whitespaces = 1
 let g:pymode_options_max_line_length = 79
 let g:pymode_indent = 1
+let g:pymode_python = 'python3'
 
 autocmd FileType py nmap <leader>wl :PymodeLintAuto<CR>
 " let g:pymode_rope_goto_definition_bind = '<Leader>gd'

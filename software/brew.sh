@@ -1,9 +1,6 @@
 #!/bin/sh
 
 APPS=(
-    bash
-    bat
-    ctags
     diffutils
     fd
     ffmpeg
@@ -11,32 +8,23 @@ APPS=(
     gnu-time
     graphviz
     htop
-    jid
     jq
     kubectx
     kubernetes-cli
     lazygit
-    lynx
-    modd
     moreutils
     nmap
-    npm
     ntfs-3g
     openssh
     openssl
-    protobuf
-    protoc-gen-go
     python
-    sqlmap
     telnet
     tldr
     tmux
     tree
-    vegeta
     vim -- --with-override-system-vi
     watch
     wget
-    wrk
     youtube-dl
     zsh
     zsh-syntax-highlighting
