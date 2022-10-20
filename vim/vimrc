@@ -56,12 +56,18 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'greymd/oscyank.vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'jez/vim-better-sml'
+Plug 'jrudess/vim-foldtext'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
 Plug 'junegunn/goyo.vim'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'plasticboy/vim-markdown'
+Plug 'preservim/tagbar'
+Plug 'dense-analysis/ale'
+Plug 'puremourning/vimspector'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'scrooloose/nerdtree' |
+            \ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'seeamkhan/robotframework-vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
@@ -71,9 +77,6 @@ Plug 'tyru/open-browser.vim'
 Plug 'uarun/vim-protobuf'
 Plug 'vim-ruby/vim-ruby'
 Plug 'weirongxu/plantuml-previewer.vim'
-Plug 'jrudess/vim-foldtext'
-Plug 'puremourning/vimspector'
-Plug 'preservim/tagbar'
 call plug#end()
 
 "--------Color theme--------"
