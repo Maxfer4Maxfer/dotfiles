@@ -4,6 +4,7 @@ set -x
 sudo apt update
 
 APPS=(
+    atop
     bat
     curl
     fzf
@@ -16,10 +17,12 @@ APPS=(
     make
     man-db
     moreutils
+    mysql-client-core-8.0
     nmap
     nmon
     ntfs-3g
     openssl
+    postgresql-client
     python3
     python3-pip
     silversearcher-ag
@@ -28,6 +31,7 @@ APPS=(
     sqlmap
     telnet
     tldr
+    tmate
     tmux
     tree
     universal-ctags
