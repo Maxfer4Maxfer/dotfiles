@@ -1,12 +1,18 @@
 #!/bin/bash
-# set -x
+set -x
 
 DOTFILES_DIR="$HOME/.dotfiles"
 OS=$(uname -s)
 
 git submodule update --init --recursive
 
-######## package manager ######## 
+echo "----------------aliases----------------"
+if [ -f ~/.aliases ]; then
+     rm ~/.aliases
+fi
+ln -s $DOTFILES_DIR/aliases ~/.aliases
+
+echo "----------------general----------------"
 case $OS in
     "Darwin")
         echo "----------------brew----------------"
@@ -15,35 +21,16 @@ case $OS in
             brew update && brew upgrade
         fi
         ;;
-esac
-
-echo "----------------aliases----------------"
-if [ -f ~/.aliases ]; then
-     rm ~/.aliases
-fi
-ln -s $DOTFILES_DIR/aliases ~/.aliases
-
-echo "----------------software----------------"
-case $OS in
-    "Darwin")
-        $DOTFILES_DIR/software/brew.sh
-        ;;
     "Linux")
-        $DOTFILES_DIR/software/apt.sh
+        sudo locale-gen en_US.UTF-8
+        sudo update-locale LANG=en_US.UTF-8 LANGUAGE
+        sudo timedatectl set-timezone Europe/Moscow
         ;;
 esac
 
-echo "----------------zsh----------------"
 $DOTFILES_DIR/zsh/zsh.sh $DOTFILES_DIR
-chsh -s $(which zsh)
-
-echo "------------software (cont.)---------"
-$DOTFILES_DIR/software/common.sh
-
-echo "----------------vim----------------"
+$DOTFILES_DIR/software/software.sh $DOTFILES_DIR
 $DOTFILES_DIR/vim/vim.sh $DOTFILES_DIR
-
-echo "----------------tmux----------------"
 $DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR
 
 echo "---------------config---------------"

@@ -1,0 +1,28 @@
+source /home/maxim/.dotfiles/zsh/oh-my-zshrc
+source /home/maxim/.aliases
+
+
+# golang
+path=(/usr/local/go/bin $path)
+path=($HOME/go/bin $path)
+export GOPATH=$(go env GOPATH)
+
+# snap
+path=(/snap/bin $path)
+
+# tmux
+if [[ $SSH_CONNECTION != "" && $TMUX == "" ]]
+then
+    tmux
+fi
+
+# kubectl
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export KUBECONFIG="$HOME/.kube/config"
+
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+
+export TERM=xterm-256color
+export PATH

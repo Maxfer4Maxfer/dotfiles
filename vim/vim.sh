@@ -13,7 +13,8 @@ file(){
     fi
 }
 
-######## vim ########
+echo "----------------vim----------------"
+
 if [ -f ~/.vimrc ]; then
     rm ~/.vimrc
 fi

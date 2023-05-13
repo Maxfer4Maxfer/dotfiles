@@ -13,7 +13,8 @@ file(){
     fi
 }
 
-######## tmux ########
+echo "----------------tmux----------------"
+
 file ~/.tmux.conf
 ln -s $DOTFILES_DIR/tmux/tmux.conf ~/.tmux.conf
 
@@ -32,9 +33,3 @@ file ~/.tmux/plugins/tmux-themepack/my.tmuxtheme
 ln -s $DOTFILES_DIR/tmux/my.tmuxtheme ~/.tmux/plugins/tmux-themepack/my.tmuxtheme
 
 rm -fR  /tmp/tmux-1000
-
-echo '' >> ~/.zshrc
-echo 'if [[ $SSH_CONNECTION != "" && $TMUX == "" ]]' >> ~/.zshrc
-echo 'then' >> ~/.zshrc
-echo '    tmux' >> ~/.zshrc
-echo 'fi' >> ~/.zshrc
