@@ -5,7 +5,6 @@ sudo apt update
 
 APPS=(
     atop
-    bat
     curl
     fzf
     graphviz
@@ -35,7 +34,6 @@ APPS=(
     tmux
     tree
     universal-ctags
-    vim 
     watch
     wget
     zsh
@@ -44,15 +42,22 @@ APPS=(
 sudo apt install -y "${APPS[@]}"
 sudo apt autoremove
 
+echo "------------Locale & Timezone------------"
+sudo locale-gen en_US.UTF-8
+sudo update-locale LANG=en_US.UTF-8 LANGUAGE
+sudo timedatectl set-timezone Europe/Moscow
+
+echo "------------bat------------"
+sudo apt install -y bat
 if [ -f /usr/local/bin/bat ]; then
      sudo rm /usr/local/bin/bat
 fi
 sudo ln -s /usr/bin/batcat /usr/local/bin/bat
 
-echo "------------Locale & Timezone------------"
-sudo locale-gen en_US.UTF-8
-sudo update-locale LANG=en_US.UTF-8 LANGUAGE
-sudo timedatectl set-timezone Europe/Moscow
+echo "----------------vim----------------"
+sudo add-apt-repository ppa:jonathonf/vim
+sudo apt update
+sudo apt install -y vim
 
 echo "----------------docker----------------"
 sudo apt remove docker docker-engine docker.io containerd runc
@@ -84,7 +89,7 @@ echo "----------------yq----------------"
 sudo snap install yq
 
 echo "----------------golang----------------"
-gopackage="go1.19.linux-amd64.tar.gz"
+gopackage="go1.20.4.linux-amd64.tar.gz"
 curl -fsSLO https://go.dev/dl/${gopackage}
 sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf ${gopackage}
 echo 'path=(/usr/local/go/bin $path)' >> ~/.zshrc

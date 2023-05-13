@@ -1,3 +1,3 @@
 # dotfiles
 cd ~
-git clone --recursive https://github.com/Maxfer4Maxfer/dotfiles.git .dotfiles
+git clone --depth=1 --recursive https://github.com/Maxfer4Maxfer/dotfiles.git .dotfiles
