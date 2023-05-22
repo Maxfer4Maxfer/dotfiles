@@ -22,3 +22,5 @@ config/jesseduffield/lazygit/
 config/Postman
 config/dlv/.dbg_history
 config/gcloud
+tmux/tpm
+config/gedit/accels
