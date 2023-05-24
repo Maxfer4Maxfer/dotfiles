@@ -9,6 +9,7 @@ $DOTFILES_DIR/software/apt/common.sh
 $DOTFILES_DIR/software/apt/bat.sh
 $DOTFILES_DIR/software/apt/docker.sh
 $DOTFILES_DIR/software/apt/golang.sh
+$DOTFILES_DIR/software/apt/helm.sh
 $DOTFILES_DIR/software/apt/kubectl.sh
 $DOTFILES_DIR/software/apt/vim.sh
 $DOTFILES_DIR/software/apt/xrdp.sh
