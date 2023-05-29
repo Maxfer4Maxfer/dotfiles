@@ -19,6 +19,7 @@ APPS=(
     nmon
     ntfs-3g
     openssl
+    plantuml
     postgresql-client
     python3
     python3-pip

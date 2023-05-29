@@ -9,3 +9,4 @@ go install github.com/jesseduffield/lazydocker@latest
 go install github.com/tsenart/vegeta@latest
 go install github.com/cortesi/modd/cmd/modd@latest
 go install github.com/ktr0731/evans@latest
+go install gotest.tools/gotestsum@latest
