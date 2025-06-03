@@ -30,7 +30,8 @@ esac
 
 $DOTFILES_DIR/zsh/zsh.sh $DOTFILES_DIR
 $DOTFILES_DIR/software/software.sh $DOTFILES_DIR
-$DOTFILES_DIR/vim/vim.sh $DOTFILES_DIR
+# $DOTFILES_DIR/vim/vim.sh $DOTFILES_DIR
+$DOTFILES_DIR/nvim/nvim.sh $DOTFILES_DIR
 $DOTFILES_DIR/tmux/tmux.sh $DOTFILES_DIR
 
 echo "---------------config---------------"

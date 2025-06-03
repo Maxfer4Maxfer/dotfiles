@@ -1,4 +1,5 @@
-"-------General--------"
+" "-------General--------"
+let g:skip_defaults_vim = 1
 set nocompatible		            " Be improved, required
 set mouse=a                         " Enable mouse support
 "let mapleader = ','		        " The default leader is '\', but a comma is much better
@@ -30,7 +31,7 @@ set foldlevelstart=99
 
 set laststatus=2                    " Always show a status line on the bottom
 set mouse+=a                        " Enable a mouse 
-set ttymouse=xterm2                 " Support a mouse under a tmux sesstion
+set ttymouse=sgr                    " Support a mouse under a tmux sesstion
 
 "--------Plugins--------"
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
@@ -60,12 +61,12 @@ Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
 Plug 'junegunn/goyo.vim'
 Plug 'kristijanhusak/vim-dadbod-completion'
 Plug 'kristijanhusak/vim-dadbod-ui'
-Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/vim-lsp'
+" Plug 'mattn/vim-lsp-settings'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'plasticboy/vim-markdown'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/vim-lsp'
 Plug 'preservim/tagbar'
 Plug 'pURemourning/vimspector'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
@@ -168,6 +169,7 @@ nmap <Leader>ev :tabedit $MYVIMRC<CR>
 nmap <Leader>es :e ~/.vim/snippets<CR>
 nmap <Leader>ep :e ~/.vim/plugins<CR>
 nmap <Leader>w :set wrap!<CR>
+nnoremap <Leader>gcp :let @" = expand('%:p')<CR>
 
 nmap <Leader><space> :nohlsearch<CR> " Add simple highlight removal.
 
@@ -239,7 +241,7 @@ if executable('rust-analyzer')
 endif
 
 if executable('pylsp')
-    " pip install python-language-server
+    " pip install python-lsp-server
     au User lsp_setup call lsp#register_server({
         \ 'name': 'pylsp',
         \ 'cmd': {server_info->['pylsp']},
@@ -251,19 +253,18 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> <leader>gd <plug>(lsp-definition)
-    nmap <buffer> <leader>gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> <leader>gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> <leader>gr <plug>(lsp-references)
-    nmap <buffer> <leader>gi <plug>(lsp-implementation)
-    " nmap <buffer> <leader>gt <plug>(lsp-type-definition)
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
     nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> <leader>gw <plug>(lsp-document-diagnostics)
-    nmap <buffer> <leader>[g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> <leader>]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-j> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-k> lsp#scroll(-4)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
@@ -271,15 +272,12 @@ function! s:on_lsp_buffer_enabled() abort
     " refer to doc to add more commands
 endfunction
 
-set foldmethod=expr
-  \ foldexpr=lsp#ui#vim#folding#foldexpr()
-  \ foldtext=lsp#ui#vim#folding#foldtext()
-
 augroup lsp_install
     au!
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+
 
 "/
 "/ vim_dadbod_completion
@@ -399,8 +397,6 @@ let g:go_debug_mappings = {
             \ }
 
 " Metalinter
-" let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
-" let g:go_metalinter_command = "golangci-lint run --print-issued-lines=false --build-tags --exclude-use-default=false --enable-all"
 " let g:go_metalinter_command = "golangci-lint"
 let g:go_metalinter_autosave = 0
 
@@ -526,3 +522,4 @@ augroup END
 " ds"       delete surround "
 " S<tag>    surround text with tag
 " :%!jq .   json prettefy selected 
+" :set filetype=json

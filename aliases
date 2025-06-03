@@ -15,4 +15,31 @@ alias ktc='export KUBECONFIG=$(find ~/.kube -type f -name "config*" | sort -r | 
 alias kpc='find ~/.kube -type f -name "config*" | sort -r | fzf --height 30% | xargs -I '"'"'{}'"'"' sed -i -E '"'"'s~export KUBECONFIG.*$~export KUBECONFIG={}~g'"'"' ~/.zshrc && source ~/.zshrc'
 alias by='bat --language=yaml --theme="TwoDark" --style=plain --color=always'
 alias lg='lazygit'
+alias awslocal='aws --profile local --endpoint-url=http://localhost:4566'
 
+aws_subscriptions() {
+    filter=$1
+    region=$2
+    account_id=$3
+    echo "[sender/sns]"
+    echo "-> [receiver/sqs]"
+    echo ""
+    aws --region ${region} sns list-topics | grep ${filter} | grep -v dlq | cut -f2 | xargs -I {}  sh -c "echo {} | sed 's/arn:aws:s*.s:${region}:${account_id}://g'; aws --region ${region} sns list-subscriptions-by-topic --topic-arn {} | sed 's/arn:aws:s*.s:${region}:${account_id}://g' | awk '{print \"->\", \$2}'; echo ''"
+}
+
+aws_secrets() {
+    filter1=$1
+    filter2=$2
+    aws --output json secretsmanager list-secrets | jq '.SecretList[].Name' | grep ${filter1} | grep ${filter2} | sed 's/"//g' | xargs -I {}  sh -c "echo {}; aws --output=json secretsmanager get-secret-value --secret-id {} | jq '.SecretString'"
+}
+
+k8s_nodes_workload() {
+    kubectl get node -o custom-columns="NODE:.metadata.name,CPU:.status.allocatable.cpu,MEMORY:.status.allocatable.memory,TAINTS:.spec.taints[0]"; echo '';
+    kubectl get nodes --no-headers -o name | sed s'~node/~~' | xargs -I {} sh -c " \
+      kubectl get node -o custom-columns=\"NODE:.metadata.name,CPU:.status.allocatable.cpu,MEMORY:.status.allocatable.memory,TAINTS:.spec.taints[0]\" {}; \
+      echo '-------------'; \
+      kubectl describe node {} | grep 'Allocated resources' -A5 | grep -v 'Total'; \
+      echo '-------------'; \
+      kubectl get pods --all-namespaces --field-selector spec.nodeName={}; echo '' \
+    "
+}

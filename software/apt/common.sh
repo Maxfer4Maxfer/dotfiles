@@ -23,6 +23,8 @@ APPS=(
     postgresql-client
     python3
     python3-pip
+    rig
+    ripgrep
     silversearcher-ag
     snapd
     socat

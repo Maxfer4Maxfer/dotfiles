@@ -1,0 +1,247 @@
+"-------General--------"
+":cabbrev help tab help             " Open help in a separate tab.      
+"
+set wildmode=list:longest,full      " Show suggestions while hit <tab> in a command mode
+set path=.,**                       " Find a file in the directory of the current file or the current directory, recursively
+set directory^=~/.vim/swaps         " Set the directory where all swaps filesliv
+set textwidth=0                     " Stop wrapping text
+set wrapmargin=0                    " Stop wrapping text
+set wrap!                           " Unset wrapping lines
+
+"" folding
+set foldlevelstart=99
+
+"--------Plugins--------"
+call plug#begin()
+" Plug 'lyokha/vim-xkbswitch'
+Plug 'benmills/vimux'
+Plug 'cespare/vim-toml'
+Plug 'chrisbra/csv.vim'
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'dyng/ctrlsf.vim'
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'jez/vim-better-sml'
+Plug 'jrudess/vim-foldtext'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'mzlogin/vim-markdown-toc'
+Plug 'preservim/vim-markdown'
+Plug 'preservim/tagbar'
+Plug 'pURemourning/vimspector'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'rust-lang/rust.vim'
+Plug 'scrooloose/nerdtree' |
+            \ Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'seeamkhan/robotframework-vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tyru/open-browser.vim'
+Plug 'uarun/vim-protobuf'
+Plug 'vim-autoformat/vim-autoformat'
+Plug 'vim-ruby/vim-ruby'
+" Plug 'vim-syntastic/syntastic'
+Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'whonore/Coqtail'
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+call plug#end()
+
+nnoremap <F5> :set background=light<CR>:let g:solarized_termtrans=0<CR>:colorscheme solarized<CR>:source ~/.config/nvim/init.vim<CR>
+nnoremap <F6> :set background=dark<CR>:let g:solarized_termtrans=1<CR>:colorscheme solarized<CR>:source ~/.config/nvim/init.vim<CR>
+
+
+"--------Windows--------"
+" Position the (global) quickfix window at the very bottom of the window
+" (useful for making sure that it appears underneath splits)
+" 
+" NOTE: Using a check here to make sure that window-specific location-lists
+" aren't effected, as they use the same `FileType` as quickfix-lists.
+ autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
+
+
+"--------Mappings--------"
+" Make it easy to edit the Vimrc file.
+nmap <Leader>ev :tabedit $MYVIMRC<CR>
+nmap <Leader>es :e ~/.config/nvim/snippets<CR>
+nmap <Leader>ep :e ~/.config/nvim/plugins<CR>
+nmap <Leader>w :set wrap!<CR>
+nnoremap <Leader>gcp :let @" = expand('%:p')<CR>
+
+
+"/
+"/ vim_dadbod_completion
+"/
+autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
+
+"/
+"/ vim-auto-save
+"/
+let g:auto_save = 1         " Enable AutoSave on Vim startup
+let g:auto_save_silent = 1  " Do not display the auto-save notification
+
+"/
+"/ fzf.vim
+"/
+let g:fzf_command_prefix = "Fzf"            " Add namespace for fzf.vim exported commands
+let g:fzf_preview_window = ['right:50%:hidden', 'ctrl-/']
+let g:fzf_layout = { 'down': '33%' }
+
+"/
+"/ vimspector
+"/
+command VimspectorToggleBreakpoint call vimspector#ToggleBreakpoint()
+command VimspectorLaunch call vimspector#Launch()
+
+"/
+"/ CtrlSF
+"/
+nmap     <C-F>f <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+nmap     <C-F>p <Plug>CtrlSFPwordPath
+nnoremap <C-F>o :CtrlSFOpen<CR>
+nnoremap <C-F>t :CtrlSFToggle<CR>
+inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+
+let g:ctrlsf_mapping = {
+            \ "split"   : "<C-H>",
+            \ "vsplit"  : "<C-O>",
+            \ }
+let g:ctrlsf_auto_focus = {
+    \ "at": "start"
+    \ }
+
+"/
+"/ vim-table-mode
+"/
+let g:table_mode_corner='|'
+
+
+
+"/
+"/ vim-go
+"/
+let g:go_fmt_command = "goimports"
+let g:go_fmt_options = {
+\ 'goimports': '-local github.com/farawaygg',
+\ }
+let g:go_fmt_autosave = 1                                   " Apply fmt to the current file and go.mod
+let g:go_mod_fmt_autosave = 1                               " Apply fmt to the current file and go.mod
+let g:go_decls_mode = 'fzf'
+let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment', "comment"]
+" let g:go_decls_includes = 'func,type'
+let g:go_list_type = "quickfix"
+let g:go_auto_type_info = 1                                 " Show info of the object under the curson in status bar
+let g:go_auto_sameids = 0                                   " Highlighting the same objects
+let g:go_snippet_case_type = "camelcase"                    " Set the camelcase output for snippets
+" debug
+let g:go_updatetime=100                                     " Set update interval to 100ms
+let g:go_debug_log_output = 'debugger'                      " Set debugger output
+" let g:go_debug = ["shell-commands", "debugger-state"]
+" let g:go_debug_windows = {
+"         \ 'vars':       'leftabove 50vnew',
+"         \ 'stack':      'wincmd l | 20vnew',
+"         \ 'goroutines': '10new',
+"         \ 'out':        'botright 5new',
+"   \ }
+let g:go_debug_breakpoint_sign_text = '•'
+
+autocmd FileType go nmap g2 :GoDebugStop<CR>
+autocmd FileType go nmap <leader>g3 :GoDebugRestart<CR>
+autocmd FileType go nmap <leader>g9 :GoDebugBreakpoint<CR>
+
+let g:go_debug_mappings = {
+            \ '(go-debug-continue)':   {'key': '5'},
+            \ '(go-debug-print)':      {'key': '6'},
+            \ '(go-debug-stop)':       {'key': '2'},
+            \ '(go-debug-halt)':       {'key': '8'},
+            \ '(go-debug-breakpoint)': {'key': '9'},
+            \ '(go-debug-next)':       {'key': '0'},
+            \ '(go-debug-step)':       {'key': '-'},
+            \ '(go-debug-stepout)':    {'key': '_'},
+            \ }
+
+" Metalinter
+" let g:go_metalinter_command = "golangci-lint"
+let g:go_metalinter_autosave = 0
+
+" Syntax
+let g:go_highlight_extra_types = 1                          " Highlight commonly used library types (`io.Reader`, etc.). >
+let g:go_highlight_operators = 1                            " Highlight operators such as `:=` , `==`, `-=`, etc.
+let g:go_highlight_functions = 1                            " Highlight function and method declarations.
+let g:go_highlight_function_parameters = 1                  " Highlight the variable names in parameters (including named return parameters) in function declarations.
+let g:go_highlight_function_calls = 1                       " Highlight function and method calls.
+let g:go_highlight_types = 1                                " Highlight struct and interface names.
+let g:go_highlight_fields = 1                               " Highlight struct field names.
+let g:go_highlight_build_constraints = 1                    " Highlights build constraints.
+let g:go_highlight_generate_tags = 1                        " Highlight go:generate directives.
+let g:go_highlight_variable_declarations = 1                " Highlight variable names in variable declarations (`x` in ` x :=`).
+let g:go_highlight_variable_assignments = 1                 " Highlight variable names in variable assignments (`x` in `x =`).
+
+" Mapping
+let g:go_def_mapping_enabled = 1                             " Enable the default mapping
+autocmd FileType go nmap <leader>gb  <Plug>(go-build)<CR>
+autocmd FileType go nmap <leader>gtb  <Plug>(go-test-compile)<CR>
+autocmd FileType go nmap <leader>gr  <Plug>(go-run)<CR>
+autocmd FileType go nmap <leader>gds <Plug>(go-debug)<CR>
+autocmd FileType go nmap <leader>gdv <Plug>(go-def-vertical)<CR>
+autocmd FileType go nmap <leader>gdt <Plug>(go-def-type)<CR>
+autocmd FileType go nmap <leader>gdi <Plug>(go-implements)<CR>
+autocmd FileType go nmap <leader>gdd :GoDoc<CR>
+autocmd FileType go nmap <leader>gm  :GoDecls<CR>
+autocmd FileType go nmap <leader>gsd :GoDeclsDir<CR>
+autocmd FileType go nmap <leader>gsi :GoSameIdsAutoToggle<CR>
+autocmd FileType go nmap <C-g>si :GoSameIdsAutoToggle<CR>
+autocmd FileType go nmap <leader>] :GoDef<CR>
+autocmd FileType go nmap <leader>[ <C-t>
+" autocmd FileType go nmap <leader>[ :GoDefPop<CR>
+
+"
+" 
+" Splits
+" :sp       horisontal split
+" :vsp      vertical split
+" <C-w>|    expand current split
+" <C-w>=    normalize splits
+" <C-w>o        current buffer full screen
+" 
+" Search
+" :grep -R "" .
+"
+" Buffers
+" :bufdo bd!    close every buffer
+" <C-^>         back to a previous buffer
+" :b{i}         go to buffer i
+" :sbuffer{i}   open buffer i in split 
+"
+"
+" Completeon
+" <C-n>             suggestion dropdown 
+" set complet       show completeon settings (. current file
+"                                             w all open window
+"                                             b loaded buffer
+"                                             u unloaded buffer)
+"
+" Folds
+" zo            open current fold
+" zc            close fold
+" za            open all folds (one level)
+" zR            open all folds
+" zM            cloase all folds
+"
+"
+" Surround
+" cs'"      change surround ' to "
+" ds"       delete surround "
+" S<tag>    surround text with tag
+" :%!jq .   json prettefy selected 
+" :set filetype=json
