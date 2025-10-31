@@ -16,7 +16,7 @@ vim.opt.splitbelow = true
 vim.opt.hlsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.termguicolors = false
+vim.opt.termguicolors = true
 vim.opt.updatetime = 100
 vim.opt.swapfile = false
 vim.opt.termguicolors = true
@@ -25,6 +25,8 @@ vim.opt.undofile = false
 vim.o.signcolumn = 'yes'
 vim.o.splitright = true
 vim.o.splitbelow = true
+vim.o.exrc = true
+vim.o.secure = true
 
 vim.o.list = true
 vim.opt.listchars = {
@@ -48,7 +50,7 @@ vim.api.nvim_create_autocmd("InsertLeave", {
     end,
 })
 
-vim.o.scrolloff = 8
+vim.o.scrolloff = 4
 
 vim.api.nvim_set_hl(0, 'TabLineFill', { underline = true })
 vim.api.nvim_create_autocmd({ "CursorHold", "TextChanged", "TextChangedI" }, {

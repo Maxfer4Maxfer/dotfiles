@@ -14,7 +14,7 @@ return {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       {
-        'j-hui/fidget.nvim',
+        "j-hui/fidget.nvim",
         opts = {
           notification = {
             window = {
@@ -24,11 +24,13 @@ return {
             },
           },
         },
-      }
+      },
     },
+
     config = function()
       -- setup Mason
       require("mason").setup()
+
       require("mason-lspconfig").setup({
         ensure_installed = {
           "gopls",
@@ -38,27 +40,25 @@ return {
         },
         automatic_installation = false,
         automatic_enable = {
-          exclude = {
-            "lua_ls"
-          }
-        }
+          exclude = { "gopls", "lua_ls" },
+        },
       })
 
       -- keybindings on LSP attach
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
           local map = function(keys, func, desc, mode)
-            mode = mode or 'n'
-            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+            mode = mode or "n"
+            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
 
           -- Display hover information about the symbol under the cursor.
           -- Typically shows type, documentation, or other relevant info.
-          map('K', vim.lsp.buf.hover, '[H]over Info')
+          map("K", vim.lsp.buf.hover, "[H]over Info")
 
           -- Show diagnostics for the current line in a floating window.
           -- Useful for viewing error messages or hints inline without navigating.
-          map('gl', function()
+          map("gl", function()
             vim.diagnostic.open_float(nil, {
               focusable = false,
               border = "single",
@@ -66,56 +66,56 @@ return {
               header = "",
               prefix = "",
             })
-          end, '[G]o to [L]ine diagnostics')
+          end, "[G]o to [L]ine diagnostics")
 
           -- Rename the variable under your cursor.
-          --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          -- Most Language Servers support renaming across files, etc.
+          map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
-          map('ga', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+          map("ga", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
 
           -- Find references for the word under your cursor.
-          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 
           -- Jump to the implementation of the word under your cursor.
-          --  Useful when your language has ways of declaring types without an actual implementation.
-          map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          -- Useful when your language has ways of declaring types without an actual implementation.
+          map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 
           -- Jump to the definition of the word under your cursor.
-          --  This is where a variable was first declared, or where a function is defined, etc.
-          --  To jump back, press <C-t>.
-          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          -- This is where a variable was first declared, or where a function is defined, etc.
+          -- To jump back, press <C-t>.
+          map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
-          --  For example, in C this would take you to the header.
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          -- For example, in C this would take you to the header.
+          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
           -- Fuzzy find all the symbols in your current document.
-          --  Symbols are things like variables, functions, types, etc.
-          map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
+          -- Symbols are things like variables, functions, types, etc.
+          map("gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
 
           -- Fuzzy find all the symbols in your current workspace.
-          --  Similar to document symbols, except searches over your entire project.
-          map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
+          -- Similar to document symbols, except searches over your entire project.
+          map("gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
 
           -- Jump to the type of the word under your cursor.
-          --  Useful when you're not sure what type a variable is and you want to see
-          --  the definition of its *type*, not where it was *defined*.
-          map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+          -- Useful when you're not sure what type a variable is and you want to see
+          -- the definition of its *type*, not where it was *defined*.
+          map("grt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
 
           -- signature at the command line
           vim.api.nvim_create_autocmd("CursorHold", {
             callback = function()
-              if true then
-                -- temporary disablet that status line
+              if true then -- temporary disabled status line
                 return
               end
 
               local client = vim.lsp.get_clients({ bufnr = 0 })[1]
-              if not client then return end
-
+              if not client then
+                return
+              end
               if not client.server_capabilities.signatureHelpProvider then
                 return
               end
@@ -130,9 +130,8 @@ return {
 
                 local label = result.signatures[1].label
                 local name, args, ret = label:match("^([%w_%.]+)%s*%((.-)%)%s*(.*)")
-
                 if not name then
-                  vim.api.nvim_echo({ { "  " .. label, "Normal" } }, false, {})
+                  vim.api.nvim_echo({ { " " .. label, "Normal" } }, false, {})
                   return
                 end
 
@@ -152,9 +151,9 @@ return {
                 end
 
                 local chunks = {
-                  { "  " },
+                  { " " },
                   { name, "Function" },
-                  { "(",  "Delimiter" },
+                  { "(", "Delimiter" },
                 }
                 vim.list_extend(chunks, arg_chunks)
                 table.insert(chunks, { ")", "Delimiter" })
@@ -172,48 +171,55 @@ return {
 
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
-      vim.diagnostic.config {
+      vim.diagnostic.config({
         severity_sort = true,
-        float = { border = 'rounded', source = 'if_many' },
+        float = { border = "rounded", source = "if_many" },
         underline = { severity = vim.diagnostic.severity.ERROR },
         signs = vim.g.have_nerd_font and {
           text = {
-            [vim.diagnostic.severity.ERROR] = '󰅚 ',
-            [vim.diagnostic.severity.WARN] = '󰀪 ',
-            [vim.diagnostic.severity.INFO] = '󰋽 ',
-            [vim.diagnostic.severity.HINT] = '󰌶 ',
+            [vim.diagnostic.severity.ERROR] = "󰅚 ",
+            [vim.diagnostic.severity.WARN]  = "󰀪 ",
+            [vim.diagnostic.severity.INFO]  = "󰋽 ",
+            [vim.diagnostic.severity.HINT]  = "󰌶 ",
           },
         } or {},
         virtual_text = {
-          source = 'if_many',
+          source = "if_many",
           spacing = 2,
           format = function(diagnostic)
             local diagnostic_message = {
               [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
+              [vim.diagnostic.severity.WARN]  = diagnostic.message,
+              [vim.diagnostic.severity.INFO]  = diagnostic.message,
+              [vim.diagnostic.severity.HINT]  = diagnostic.message,
             }
             return diagnostic_message[diagnostic.severity]
           end,
         },
-      }
-
+      })
 
       -- configure servers
+      require("lspconfig").gopls.setup({
+        settings = {
+          gopls = {
+            directoryFilters = { "-.git", "-node_modules" },
+            analyses = {
+              unusedparams = true,
+              shadow = true,
+            },
+            staticcheck = true,
+          },
+        },
+        flags = { debounce_text_changes = 150 },
+      })
+
       require("lspconfig").lua_ls.setup({
         settings = {
           Lua = {
-            runtime = {
-              version = 'LuaJIT',
-            },
-            diagnostics = {
-              globals = { 'vim' },
-            },
+            runtime = { version = "LuaJIT" },
+            diagnostics = { globals = { "vim" } },
             workspace = {
-              library = {
-                [vim.fn.stdpath("config") .. "/lua"] = true,
-              },
+              library = { [vim.fn.stdpath("config") .. "/lua"] = true },
               checkThirdParty = false,
               maxPreload = 100,
               preloadFileSize = 100,
