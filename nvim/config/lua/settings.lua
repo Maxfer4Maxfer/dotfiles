@@ -52,6 +52,12 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 
 vim.o.scrolloff = 4
 
+-- Folding (nvim-ufo)
+vim.opt.foldcolumn = "0"
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
 vim.api.nvim_set_hl(0, 'TabLineFill', { underline = true })
 vim.api.nvim_create_autocmd({ "CursorHold", "TextChanged", "TextChangedI" }, {
     pattern = "*",

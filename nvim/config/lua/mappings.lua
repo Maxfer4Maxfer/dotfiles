@@ -5,8 +5,8 @@ local opts = { noremap = true, silent = true }
 keymap("n", "<leader><space>", "<cmd>nohlsearch<CR>", opts)
 
 -- Folding
--- keymap("n", "zR", require("ufo").openAllFolds, opts)
--- keymap("n", "zM", require("ufo").closeAllFolds, opts)
+keymap("n", "zR", function() require("ufo").openAllFolds() end, opts)
+keymap("n", "zM", function() require("ufo").closeAllFolds() end, opts)
 
 -- Buffers
 keymap("n", "<leader>bn", "<cmd>bnext<CR>", opts)
