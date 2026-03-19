@@ -24,3 +24,4 @@ config/dlv/.dbg_history
 config/gcloud
 tmux/tpm
 config/gedit/accels
+config/go/telemetry/local
