@@ -1,0 +1,56 @@
+#!/bin/bash
+# Auto-kill nvim in tmux sessions after inactivity timeout.
+# Called by tmux client-session-changed hook.
+#
+# When you switch away from a session, a 30-min timer starts.
+# If you return before the timer — it cancels.
+# If not — nvim gets killed, freeing RAM (gopls dies with it).
+# Unsaved changes are preserved in nvim swap files.
+
+TIMEOUT="${TMUX_NVIM_TIMEOUT:-1800}" # 30 min
+TIMER_DIR="/tmp/tmux-nvim-timers-${USER}"
+STATE_FILE="${TIMER_DIR}/.last_session"
+mkdir -p "$TIMER_DIR"
+
+NEW_SESSION="$1"
+
+# Read which session we're leaving
+OLD_SESSION=""
+if [[ -f "$STATE_FILE" ]]; then
+    OLD_SESSION=$(cat "$STATE_FILE")
+fi
+
+# Track current session
+echo "$NEW_SESSION" > "$STATE_FILE"
+
+# --- Cancel timer for the session we're entering ---
+if [[ -n "$NEW_SESSION" && -f "$TIMER_DIR/${NEW_SESSION}.pid" ]]; then
+    kill "$(cat "$TIMER_DIR/${NEW_SESSION}.pid")" 2>/dev/null
+    rm -f "$TIMER_DIR/${NEW_SESSION}.pid"
+fi
+
+# --- Start timer for the session we're leaving ---
+# Never kill nvim in faraway-tools (Claude Code workspace)
+if [[ -n "$OLD_SESSION" && "$OLD_SESSION" != "$NEW_SESSION" && "$OLD_SESSION" != "faraway-tools" ]]; then
+    # Cancel any existing timer for that session
+    if [[ -f "$TIMER_DIR/${OLD_SESSION}.pid" ]]; then
+        kill "$(cat "$TIMER_DIR/${OLD_SESSION}.pid")" 2>/dev/null
+    fi
+
+    (
+        sleep "$TIMEOUT"
+
+        # Find all pane shell PIDs in the old session
+        while IFS= read -r pane_pid; do
+            # Find nvim children of each pane's shell
+            while IFS= read -r nvim_pid; do
+                kill "$nvim_pid" 2>/dev/null
+            done < <(pgrep -P "$pane_pid" -x nvim 2>/dev/null)
+        done < <(tmux list-panes -s -t "$OLD_SESSION" -F '#{pane_pid}' 2>/dev/null)
+
+        rm -f "$TIMER_DIR/${OLD_SESSION}.pid"
+    ) &
+
+    echo $! > "$TIMER_DIR/${OLD_SESSION}.pid"
+    disown $!
+fi
