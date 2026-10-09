@@ -58,6 +58,7 @@ if tmux -L $sock -f ~/.tmux.conf new-session -d -s smoke 2>/dev/null; then
 	check "nvim-autokill hook set" bash -c "tmux -L $sock show-hooks -g | grep -q nvim-autokill"
 	check "claude tab markers in window format" bash -c "tmux -L $sock show -gv window-status-format | grep -q claude_mark"
 	tmux -L $sock kill-server 2>/dev/null
+	rm -f "${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)/$sock" # kill-server can leave the socket file behind
 else
 	fail "config loads"
 fi
