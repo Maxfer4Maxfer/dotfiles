@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Mirror tmux key bindings onto the Russian layout: every binding on a Latin key in the prefix
+# and copy-mode-vi tables gets a twin on the Cyrillic letter of the same physical key
+# (prefix s -> prefix ы, f -> а, [ -> х, …). Run from tmux.conf after tpm, so plugin bindings
+# are mirrored too. Ctrl-b itself needs nothing: the terminal sends ^B whatever the layout.
+set -euo pipefail
+
+tmux=/usr/bin/tmux
+
+# Latin key as list-keys prints it (escaped where needed) -> Cyrillic letter on the same key (ЙЦУКЕН).
+declare -A ru=(
+	[q]=й [w]=ц [e]=у [r]=к [t]=е [y]=н [u]=г [i]=ш [o]=щ [p]=з ['[']=х [']']=ъ
+	[a]=ф [s]=ы [d]=в [f]=а [g]=п [h]=р [j]=о [k]=л [l]=д ['\;']=ж ["\\'"]=э
+	[z]=я [x]=ч [c]=с [v]=м [b]=и [n]=т [m]=ь [,]=б [.]=ю ['`']=ё
+	[Q]=Й [W]=Ц [E]=У [R]=К [T]=Е [Y]=Н [U]=Г [I]=Ш [O]=Щ [P]=З ['\{']=Х ['\}']=Ъ
+	[A]=Ф [S]=Ы [D]=В [F]=А [G]=П [H]=Р [J]=О [K]=Л [L]=Д [:]=Ж ['\"']=Э
+	[Z]=Я [X]=Ч [C]=С [V]=М [B]=И [N]=Т [M]=Ь ['<']=Б ['>']=Ю ['\~']=Ё
+)
+
+re='^(bind-key +(-r +)?-T +[^ ]+ +)([^ ]+)( .*)$'
+out=$(mktemp)
+trap 'rm -f "$out"' EXIT
+
+for table in prefix copy-mode-vi; do
+	while IFS= read -r line; do
+		[[ $line =~ $re ]] || continue
+		key=${BASH_REMATCH[3]}
+		cyr=${ru[$key]:-}
+		[[ -n $cyr ]] || continue
+		printf '%s%s%s\n' "${BASH_REMATCH[1]}" "$cyr" "${BASH_REMATCH[4]}"
+	done < <($tmux list-keys -T "$table")
+done >"$out"
+
+$tmux source-file "$out"

@@ -53,9 +53,11 @@ own_halt=
 if [ ! -e $halt ]; then touch $halt && own_halt=1; fi
 if tmux -L $sock -f ~/.tmux.conf new-session -d -s smoke 2>/dev/null; then
 	ok "config loads"
-	sleep 3 # tpm loads plugins asynchronously
-	check "continuum hooked into status-right" bash -c "tmux -L $sock show -gv status-right | grep -q continuum_save"
+	# continuum autosaves only on the single tmux server: with the main one running it rightly
+	# leaves this side server alone, so check the main server when there is one.
+	check "continuum hooked into status-right" bash -c "{ tmux show -gv status-right 2>/dev/null || tmux -L $sock show -gv status-right; } | grep -q continuum_save"
 	check "nvim-autokill hook set" bash -c "tmux -L $sock show-hooks -g | grep -q nvim-autokill"
+	check "russian layout keys mirrored" bash -c "tmux -L $sock list-keys -T prefix | grep -q ' ы '"
 	check "claude tab markers in window format" bash -c "tmux -L $sock show -gv window-status-format | grep -q claude_mark"
 	tmux -L $sock kill-server 2>/dev/null
 	rm -f "${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)/$sock" # kill-server can leave the socket file behind
