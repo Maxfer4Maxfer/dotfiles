@@ -3,19 +3,27 @@
 # and copy-mode-vi tables gets a twin on the Cyrillic letter of the same physical key
 # (prefix s -> prefix ы, f -> а, [ -> х, …). Run from tmux.conf after tpm, so plugin bindings
 # are mirrored too. Ctrl-b itself needs nothing: the terminal sends ^B whatever the layout.
+# Plain bash 3.2 (macOS /bin/bash): no associative arrays.
 set -euo pipefail
 
-tmux=/usr/bin/tmux
-
 # Latin key as list-keys prints it (escaped where needed) -> Cyrillic letter on the same key (ЙЦУКЕН).
-declare -A ru=(
-	[q]=й [w]=ц [e]=у [r]=к [t]=е [y]=н [u]=г [i]=ш [o]=щ [p]=з ['[']=х [']']=ъ
-	[a]=ф [s]=ы [d]=в [f]=а [g]=п [h]=р [j]=о [k]=л [l]=д ['\;']=ж ["\\'"]=э
-	[z]=я [x]=ч [c]=с [v]=м [b]=и [n]=т [m]=ь [,]=б [.]=ю ['`']=ё
-	[Q]=Й [W]=Ц [E]=У [R]=К [T]=Е [Y]=Н [U]=Г [I]=Ш [O]=Щ [P]=З ['\{']=Х ['\}']=Ъ
-	[A]=Ф [S]=Ы [D]=В [F]=А [G]=П [H]=Р [J]=О [K]=Л [L]=Д [:]=Ж ['\"']=Э
-	[Z]=Я [X]=Ч [C]=С [V]=М [B]=И [N]=Т [M]=Ь ['<']=Б ['>']=Ю ['\~']=Ё
-)
+ru() { # sets REPLY (no subshell per binding)
+	REPLY=
+	case $1 in
+	q) REPLY=й ;; w) REPLY=ц ;; e) REPLY=у ;; r) REPLY=к ;; t) REPLY=е ;; y) REPLY=н ;;
+	u) REPLY=г ;; i) REPLY=ш ;; o) REPLY=щ ;; p) REPLY=з ;; '[') REPLY=х ;; ']') REPLY=ъ ;;
+	a) REPLY=ф ;; s) REPLY=ы ;; d) REPLY=в ;; f) REPLY=а ;; g) REPLY=п ;; h) REPLY=р ;;
+	j) REPLY=о ;; k) REPLY=л ;; l) REPLY=д ;; '\;') REPLY=ж ;; "\\'") REPLY=э ;;
+	z) REPLY=я ;; x) REPLY=ч ;; c) REPLY=с ;; v) REPLY=м ;; b) REPLY=и ;; n) REPLY=т ;;
+	m) REPLY=ь ;; ,) REPLY=б ;; .) REPLY=ю ;; '`') REPLY=ё ;;
+	Q) REPLY=Й ;; W) REPLY=Ц ;; E) REPLY=У ;; R) REPLY=К ;; T) REPLY=Е ;; Y) REPLY=Н ;;
+	U) REPLY=Г ;; I) REPLY=Ш ;; O) REPLY=Щ ;; P) REPLY=З ;; '\{') REPLY=Х ;; '\}') REPLY=Ъ ;;
+	A) REPLY=Ф ;; S) REPLY=Ы ;; D) REPLY=В ;; F) REPLY=А ;; G) REPLY=П ;; H) REPLY=Р ;;
+	J) REPLY=О ;; K) REPLY=Л ;; L) REPLY=Д ;; :) REPLY=Ж ;; '\"') REPLY=Э ;;
+	Z) REPLY=Я ;; X) REPLY=Ч ;; C) REPLY=С ;; V) REPLY=М ;; B) REPLY=И ;; N) REPLY=Т ;;
+	M) REPLY=Ь ;; '<') REPLY=Б ;; '>') REPLY=Ю ;; '\~') REPLY=Ё ;;
+	esac
+}
 
 re='^(bind-key +(-r +)?-T +[^ ]+ +)([^ ]+)( .*)$'
 out=$(mktemp)
@@ -24,11 +32,11 @@ trap 'rm -f "$out"' EXIT
 for table in prefix copy-mode-vi; do
 	while IFS= read -r line; do
 		[[ $line =~ $re ]] || continue
-		key=${BASH_REMATCH[3]}
-		cyr=${ru[$key]:-}
+		ru "${BASH_REMATCH[3]}"
+		cyr=$REPLY
 		[[ -n $cyr ]] || continue
 		printf '%s%s%s\n' "${BASH_REMATCH[1]}" "$cyr" "${BASH_REMATCH[4]}"
-	done < <($tmux list-keys -T "$table")
+	done < <(tmux list-keys -T "$table")
 done >"$out"
 
-$tmux source-file "$out"
+tmux source-file "$out"

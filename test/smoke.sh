@@ -32,8 +32,10 @@ zi() {
 log "zsh"
 err=$(zi exit 2>&1 | sed 's/\x1b\[[0-9;?]*[a-zA-Z]//g; s/\x1b\][^\a]*\a//g' | tr -d '\r' | grep -iE 'error|not found|no such|can.t')
 if [ -z "$err" ]; then ok "starts without errors"; else fail "startup errors: $err"; fi
-ms=$(zsh -c 'zmodload zsh/datetime; s=$EPOCHREALTIME; zsh -i -c exit >/dev/null 2>&1; printf "%.0f" $(((EPOCHREALTIME - s) * 1000))')
-if [ "$ms" -lt 1000 ]; then ok "startup ${ms}ms"; else fail "startup ${ms}ms (>1s)"; fi
+# best of 3 warm starts; SMOKE_ZSH_MAX_MS raises the limit on slow CI runners
+ms=$(zsh -c 'zmodload zsh/datetime; best=999999; repeat 3 { s=$EPOCHREALTIME; zsh -i -c exit >/dev/null 2>&1; t=$(((EPOCHREALTIME - s) * 1000)); ((t < best)) && best=$t }; printf "%.0f" $best')
+max=${SMOKE_ZSH_MAX_MS:-1000}
+if [ "$ms" -lt "$max" ]; then ok "startup ${ms}ms"; else fail "startup ${ms}ms (>${max}ms)"; fi
 check "powerlevel10k theme loaded" zi '(( $+functions[p10k] ))'
 check "syntax highlighting loaded" zi '(( $+functions[_zsh_highlight] ))'
 check "aliases loaded" zi 'whence kpc && whence kg'

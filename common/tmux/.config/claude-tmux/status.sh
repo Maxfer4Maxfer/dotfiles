@@ -9,7 +9,7 @@
 [[ -n ${TMUX_PANE:-} ]] || exit 0
 cat >/dev/null # drain the hook's JSON payload
 
-tmux=/usr/bin/tmux
+tmux=tmux # from PATH: /usr/bin on Linux, Homebrew on macOS
 case ${1:-} in
 off) $tmux set -wu -t "$TMUX_PANE" @claude_state 2>/dev/null ;;
 working | done | ask) $tmux set -w -t "$TMUX_PANE" @claude_state "$1" 2>/dev/null ;;

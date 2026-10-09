@@ -6,7 +6,7 @@
 # "unseen" is our own @claude_state=done from status.sh.
 set -uo pipefail
 
-tmux=/usr/bin/tmux
+tmux=tmux # from PATH: /usr/bin on Linux, Homebrew on macOS
 sessions=$HOME/.claude/sessions
 kill_key=${TMUX_CLAUDE_KILL_KEY:-ctrl-x}
 
