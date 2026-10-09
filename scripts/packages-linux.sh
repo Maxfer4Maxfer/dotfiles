@@ -26,6 +26,8 @@ sudo install -m 0755 -d /etc/apt/keyrings
 log "apt: third-party repositories"
 # Drop list files of the old layout (different key paths would conflict).
 sudo rm -f /etc/apt/sources.list.d/{google-cloud-sdk,helm-stable-debian,kubernetes,cloudflare-client}.list
+# terraform is gone (rift-iac runs OpenTofu, installed by tools.sh): drop its repo
+sudo rm -f /etc/apt/sources.list.d/hashicorp.list /etc/apt/keyrings/hashicorp.gpg
 K8S_MINOR=$(curl -fsSL https://dl.k8s.io/release/stable.txt | cut -d. -f1,2)
 apt_repo docker https://download.docker.com/linux/ubuntu/gpg \
 	"https://download.docker.com/linux/ubuntu $CODENAME stable"
@@ -37,8 +39,6 @@ apt_repo helm https://packages.buildkite.com/helm-linux/helm-debian/gpgkey \
 	"https://packages.buildkite.com/helm-linux/helm-debian/any/ any main"
 apt_repo kubernetes "https://pkgs.k8s.io/core:/stable:/$K8S_MINOR/deb/Release.key" \
 	"https://pkgs.k8s.io/core:/stable:/$K8S_MINOR/deb/ /"
-apt_repo hashicorp https://apt.releases.hashicorp.com/gpg \
-	"https://apt.releases.hashicorp.com $CODENAME main"
 apt_repo cloudflare-warp https://pkg.cloudflareclient.com/pubkey.gpg \
 	"https://pkg.cloudflareclient.com/ $CODENAME main"
 sudo rm -f /etc/apt/sources.list.d/github-cli.list # old name of githubcli.list
@@ -49,7 +49,7 @@ mapfile -t pkgs < <(list "$DOTFILES/packages/apt.txt")
 pkgs+=(
 	docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 	gh google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
-	helm kubectl terraform cloudflare-warp
+	helm kubectl cloudflare-warp
 )
 if dpkg -s ubuntu-desktop >/dev/null 2>&1; then
 	mapfile -t -O "${#pkgs[@]}" pkgs < <(list "$DOTFILES/packages/apt-desktop.txt")

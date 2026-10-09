@@ -2,20 +2,11 @@
 # Go development
 golang.org/x/tools/gopls
 golang.org/x/tools/cmd/goimports
-golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment
 github.com/go-delve/delve/cmd/dlv
-github.com/josharian/impl
 github.com/golangci/golangci-lint/v2/cmd/golangci-lint
-honnef.co/go/tools/cmd/staticcheck
-github.com/mgechev/revive
-github.com/daixiang0/gci
-gotest.tools/gotestsum
 github.com/gojuno/minimock/v3/cmd/minimock
-github.com/cortesi/modd/cmd/modd
 # protobuf / gRPC
 github.com/bufbuild/buf/cmd/buf
-google.golang.org/protobuf/cmd/protoc-gen-go
-github.com/envoyproxy/protoc-gen-validate
 github.com/ktr0731/evans
 github.com/fullstorydev/grpcurl/cmd/grpcurl
 # databases
@@ -24,10 +15,6 @@ github.com/golang-migrate/migrate/v4/cmd/migrate -tags=postgres
 github.com/GoogleCloudPlatform/cloud-sql-proxy/v2
 # work (private, needs GitHub auth)
 github.com/farawaygg/go-graphql/cmd/mrgqlgen
-github.com/ethereum/go-ethereum/cmd/abigen
 # infra / CLI
 github.com/jesseduffield/lazygit
-github.com/jesseduffield/lazydocker
 github.com/mikefarah/yq/v4
-github.com/tsenart/vegeta
-github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cli/docker-credential-ecr-login

@@ -13,7 +13,7 @@ fi
 
 # Copies of files that now come from stow packages: drop them when identical to the repo,
 # otherwise keep the local version next to it.
-for rel in nvim htop evans claude-tmux git/ignore jesseduffield/lazygit/config.yml jesseduffield/lazydocker/config.yml; do
+for rel in nvim htop evans claude-tmux git/ignore jesseduffield/lazygit/config.yml; do
 	t=~/.config/$rel
 	[ -e "$t" ] || [ -L "$t" ] || continue
 	[ -L "$t" ] && { rm "$t"; continue; }

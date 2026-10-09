@@ -57,7 +57,8 @@ if tmux -L $sock -f ~/.tmux.conf new-session -d -s smoke 2>/dev/null; then
 	# leaves this side server alone, so check the main server when there is one.
 	check "continuum hooked into status-right" bash -c "{ tmux show -gv status-right 2>/dev/null || tmux -L $sock show -gv status-right; } | grep -q continuum_save"
 	check "nvim-autokill hook set" bash -c "tmux -L $sock show-hooks -g | grep -q nvim-autokill"
-	check "russian layout keys mirrored" bash -c "tmux -L $sock list-keys -T prefix | grep -q ' ы '"
+	# -u: without a UTF-8 locale (CI container) the client prints Cyrillic keys as _
+	check "russian layout keys mirrored" bash -c "tmux -u -L $sock list-keys -T prefix | grep -q ' ы '"
 	check "claude tab markers in window format" bash -c "tmux -L $sock show -gv window-status-format | grep -q claude_mark"
 	tmux -L $sock kill-server 2>/dev/null
 	rm -f "${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)/$sock" # kill-server can leave the socket file behind
@@ -77,8 +78,8 @@ if [ -z "$missing" ]; then ok "all plugins installed"; else fail "plugins not in
 
 log "tools"
 tools=(git zsh tmux nvim stow fzf rg jq bat curl go gopls goimports dlv golangci-lint lazygit yq evans grpcurl
-	kubectl helm gh terraform cargo uv bun claude)
-[ "$OS" = linux ] && tools+=(docker gcloud aws nuclei feroxbuster)
+	kubectl helm gh tofu terragrunt tflint cargo uv claude)
+[ "$OS" = linux ] && tools+=(docker gcloud aws)
 for t in "${tools[@]}"; do
 	check "$t" zsh -i -c "whence -p $t || whence $t"
 done

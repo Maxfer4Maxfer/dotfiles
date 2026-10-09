@@ -9,10 +9,7 @@ export LC_ALL=en_US.UTF-8
 typeset -U path
 path=(
     $HOME/.local/bin
-    $HOME/bin
     $HOME/go/bin
-    ${KREW_ROOT:-$HOME/.krew}/bin
-    $HOME/.bun/bin
     $HOME/.fzf/bin
     $path
 )
@@ -52,10 +49,6 @@ if [[ $SSH_CONNECTION != "" && $TMUX == "" ]]; then
 fi
 
 export TERM=xterm-256color
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 
 # machine-local secrets & overrides (not in git)
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local

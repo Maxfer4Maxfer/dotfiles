@@ -27,10 +27,10 @@ and log in: `gh auth login`, `gcloud auth login`.
 | `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages (`~/.config/zsh/os.zsh`) |
 | `packages/apt.txt`, `apt-desktop.txt` | Ubuntu packages (desktop list only where `ubuntu-desktop` is installed) |
 | `packages/Brewfile` | macOS formulae and casks |
-| `packages/go.txt`, `go-security.txt` | `go install …@latest` (security tools: Linux only) |
+| `packages/go.txt` | `go install …@latest` |
 | `scripts/packages-{linux,macos}.sh` | system packages, third-party apt repos, Go, Neovim, AWS CLI |
 | `scripts/link.sh` | `stow` all packages into `$HOME` |
-| `scripts/tools.sh` | oh-my-zsh + p10k, tmux/nvim plugins, rust, uv, bun, claude, go tools, krew |
+| `scripts/tools.sh` | oh-my-zsh + p10k, tmux/nvim plugins, rust, uv, claude, go tools, tofu/terragrunt/tflint pinned to `rift-iac` |
 
 Every file in a package mirrors its place in `$HOME`: `common/tmux/.config/tmux/theme.conf` → `~/.config/tmux/theme.conf`.
 To add a config, move it into a package and run `./install.sh link`.

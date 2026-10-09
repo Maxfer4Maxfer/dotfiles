@@ -12,4 +12,10 @@ for brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
 done
 
 log "brew bundle"
-brew bundle --file "$DOTFILES/packages/Brewfile" ${BREW_NO_CASKS:+--no-cask}
+brewfile=$DOTFILES/packages/Brewfile
+if [ -n "${BREW_NO_CASKS:-}" ]; then
+	# formulae only (CI); brew bundle no longer has --no-cask
+	brewfile=$(mktemp)
+	grep -v '^cask ' "$DOTFILES/packages/Brewfile" >"$brewfile"
+fi
+brew bundle --file "$brewfile"
