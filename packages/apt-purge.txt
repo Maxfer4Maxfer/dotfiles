@@ -1,0 +1,30 @@
+# Purged by scripts/system-linux.sh (only those installed): a headless dev VM never uses them.
+# desktop
+ubuntu-desktop
+ubuntu-desktop-minimal
+gdm3
+gnome-shell
+xserver-xorg-core
+xwayland
+xrdp
+firefox
+# hypervisor and laptop agents that are not this VM's (UTM/QEMU)
+spice-vdagent
+open-vm-tools
+protection-domain-mapper
+switcheroo-control
+power-profiles-daemon
+upower
+fwupd
+udisks2
+gvfs
+# network services nobody configured
+open-iscsi
+openvpn
+lxd-installer
+# crash reporting, motd ads, a second sampler next to atop
+apport
+whoopsie
+motd-news-config
+sysstat
+snapd

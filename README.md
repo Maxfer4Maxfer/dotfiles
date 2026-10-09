@@ -25,11 +25,13 @@ and log in: `gh auth login`, `gcloud auth login`.
 | --- | --- |
 | `common/<pkg>/` | stow packages for both OSes: `zsh`, `git`, `tmux`, `nvim`, `apps` |
 | `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages (`~/.config/zsh/os.zsh`) |
-| `packages/apt.txt`, `apt-desktop.txt` | Ubuntu packages (desktop list only where `ubuntu-desktop` is installed) |
+| `packages/apt.txt` | Ubuntu packages |
+| `packages/apt-purge.txt` | what `install.sh system` removes from a headless VM (desktop, laptop/firmware agents, snapd, apport …) |
 | `packages/Brewfile` | macOS formulae and casks |
 | `packages/go.txt` | `go install …@latest` |
 | `scripts/packages-{linux,macos}.sh` | system packages, third-party apt repos, Go, Neovim, AWS CLI |
 | `scripts/link.sh` | `stow` all packages into `$HOME` |
+| `scripts/system-linux.sh` | opt-in dev VM tuning: zram swap, sysctl (swappiness, inotify), no I/O scheduler on virtio, docker log/cache limits, journald cap, purge |
 | `scripts/tools.sh` | oh-my-zsh + p10k, tmux/nvim plugins, rust, uv, claude, go tools, tofu/terragrunt/tflint pinned to `rift-iac` |
 
 Every file in a package mirrors its place in `$HOME`: `common/tmux/.config/tmux/theme.conf` → `~/.config/tmux/theme.conf`.
@@ -41,6 +43,7 @@ To add a config, move it into a package and run `./install.sh link`.
 ./install.sh                 # everything: packages → link → tools
 ./install.sh link            # only symlinks
 ./install.sh tools           # update plugins and user-level tools
+./install.sh system          # Linux dev VM only: tuning + purge of the desktop and other cruft (sudo)
 make smoke                   # check this machine
 make test                    # install from scratch into a clean Ubuntu container + smoke test
 make lint                    # shellcheck

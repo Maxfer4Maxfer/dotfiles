@@ -28,6 +28,10 @@ has() { command -v "$1" >/dev/null 2>&1; }
 # Package list file -> names (drops comments and blank lines).
 list() { sed -e 's/#.*//' -e '/^[[:space:]]*$/d' "$1"; }
 
+# Package names on stdin -> those installed (dpkg).
+# shellcheck disable=SC2016 # a dpkg-query format, not a shell expression
+installed() { xargs -r dpkg-query -W -f='${db:Status-Abbrev} ${Package}\n' 2>/dev/null | awk '/^ii/{print $2}'; }
+
 # pinned <bin> <version> <github-repo> <tag> <asset> <checksums-asset>: install a release binary
 # into ~/.local/bin unless `<bin> --version` already reports <version>; sha256 is verified.
 # A .zip asset holds the binary under the name <bin>; any other asset is the binary itself.

@@ -15,7 +15,6 @@ man-db
 net-tools
 nodejs
 npm
-ntfs-3g
 openssh-server
 openssl
 postgresql-client
@@ -30,5 +29,4 @@ tmux
 tree
 unzip
 wget
-xsel
 zsh

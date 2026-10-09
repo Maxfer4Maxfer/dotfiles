@@ -1,4 +1,0 @@
-# Installed only on machines with ubuntu-desktop (skipped on servers and in tests).
-dbus-x11
-gnome-shell-extension-prefs
-xrdp

@@ -51,9 +51,6 @@ pkgs+=(
 	gh google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
 	helm kubectl cloudflare-warp
 )
-if dpkg -s ubuntu-desktop >/dev/null 2>&1; then
-	mapfile -t -O "${#pkgs[@]}" pkgs < <(list "$DOTFILES/packages/apt-desktop.txt")
-fi
 sudo apt-get install -y -qq "${pkgs[@]}"
 sudo apt-get autoremove -y -qq
 

@@ -78,6 +78,17 @@ check "starts and loads lazy.nvim" nvim --headless "+lua assert(require('lazy'))
 missing=$(nvim --headless "+lua for _, p in ipairs(require('lazy').plugins()) do if not p._.installed then io.stdout:write(p.name, ' ') end end" +qa 2>/dev/null)
 if [ -z "$missing" ]; then ok "all plugins installed"; else fail "plugins not installed: $missing"; fi
 
+# only where `install.sh system` ran (not in the test container or on macOS)
+if [ -f /etc/sysctl.d/99-devstation.conf ]; then
+	log "system"
+	check "zram swap on" grep -q '^/dev/zram' /proc/swaps
+	check "swappiness 150" test "$(cat /proc/sys/vm/swappiness)" = 150
+	check "inotify watches raised" test "$(cat /proc/sys/fs/inotify/max_user_watches)" -ge 524288
+	check "virtio disks without I/O scheduler" bash -c '! grep -L "\[none\]" /sys/block/vd*/queue/scheduler | grep -q .'
+	left=$(list "$DOTFILES/packages/apt-purge.txt" | installed | tr '\n' ' ')
+	if [ -z "$left" ]; then ok "nothing from apt-purge.txt installed"; else fail "installed again: $left"; fi
+fi
+
 log "tools"
 tools=(git zsh tmux nvim stow fzf rg jq bat curl go gopls goimports dlv golangci-lint lazygit yq evans grpcurl
 	kubectl helm gh tofu terragrunt tflint cargo uv claude)
