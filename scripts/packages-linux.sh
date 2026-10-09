@@ -22,11 +22,12 @@ log "apt: base"
 # Drop list files of the old layout first: their keys and hosts are gone, and apt-get update
 # would fail on them (different key paths would also conflict with the new lists).
 sudo rm -f /etc/apt/sources.list.d/{google-cloud-sdk,helm-stable-debian,cloudflare-client,github-cli}.list
+sudo rm -f /etc/apt/keyrings/{docker.asc,githubcli-archive-keyring.gpg}
 # terraform is gone (rift-iac runs OpenTofu, installed by tools.sh): drop its repo
 sudo rm -f /etc/apt/sources.list.d/hashicorp.list /etc/apt/keyrings/hashicorp.gpg
 # kubectl comes from google-cloud-cli (a dispatcher that runs the kubectl matching the cluster);
 # the pkgs.k8s.io package of the same name lost to it on version anyway
-sudo rm -f /etc/apt/sources.list.d/kubernetes.list /etc/apt/keyrings/kubernetes.gpg
+sudo rm -f /etc/apt/sources.list.d/kubernetes.list /etc/apt/keyrings/kubernetes{,-apt-keyring}.gpg
 sudo apt-get update -qq
 sudo apt-get install -y -qq ca-certificates curl gnupg lsb-release
 sudo install -m 0755 -d /etc/apt/keyrings
