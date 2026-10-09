@@ -1,0 +1,4 @@
+source-path=SCRIPTDIR
+external-sources=true
+# "~/..." in log messages is intentional
+disable=SC2088

@@ -1,0 +1,11 @@
+# Shared git config (stow package common/git).
+# Machine-local settings (safe.directory, overrides) go to ~/.gitconfig, which wins over this file.
+[user]
+	name = Maxim Ferapontov
+	email = maxim.ferapontov@faraway.gg
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential

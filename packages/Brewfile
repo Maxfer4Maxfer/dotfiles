@@ -1,0 +1,48 @@
+# DRAFT: CLI parity with Linux. To be replaced with the real list from the Mac (`brew bundle dump`).
+tap "hashicorp/tap"
+
+# shell & editors
+brew "zsh"
+brew "tmux"
+brew "neovim"
+brew "stow"
+brew "fzf"
+brew "fd"
+brew "ripgrep"
+brew "bat"
+brew "tree"
+brew "watch"
+brew "wget"
+brew "htop"
+brew "tldr"
+brew "moreutils"
+brew "jq"
+brew "shellcheck"
+
+# GNU userland (put first in PATH by macos/zsh)
+brew "coreutils"
+brew "findutils"
+brew "gnu-sed"
+brew "gnu-tar"
+brew "grep"
+
+# dev
+brew "git"
+brew "gh"
+brew "go"
+brew "node"
+brew "protobuf"
+brew "graphviz"
+brew "libpq"
+brew "nmap"
+
+# infra
+brew "kubernetes-cli"
+brew "terragrunt"
+brew "logcli"
+brew "rclone"
+brew "helm"
+brew "awscli"
+brew "hashicorp/tap/terraform"
+cask "google-cloud-sdk"
+cask "docker"

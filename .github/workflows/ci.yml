@@ -1,0 +1,27 @@
+name: ci
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck -x install.sh scripts/*.sh test/*.sh common/tmux/.config/tmux/nvim-autokill common/tmux/.config/claude-tmux/*.sh
+
+  linux:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: .dotfiles }
+      - run: mv .dotfiles ~/.dotfiles
+      # casks (GUI apps) are skipped to keep the run short
+      - run: BREW_NO_CASKS=1 ~/.dotfiles/install.sh packages
+      - run: ~/.dotfiles/install.sh link
+      - run: GO_EXCLUDE=farawaygg ~/.dotfiles/install.sh tools
+      - run: ~/.dotfiles/test/smoke.sh

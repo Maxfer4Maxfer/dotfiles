@@ -1,0 +1,12 @@
+# Security / recon tools (Linux only). naabu needs libpcap-dev.
+github.com/owasp-amass/amass/v4/cmd/amass
+github.com/hahwul/dalfox/v2
+github.com/projectdiscovery/dnsx/cmd/dnsx
+github.com/projectdiscovery/httpx/cmd/httpx
+github.com/projectdiscovery/katana/cmd/katana
+github.com/projectdiscovery/naabu/v2/cmd/naabu
+github.com/projectdiscovery/nuclei/v3/cmd/nuclei
+github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+github.com/ffuf/ffuf/v2
+github.com/OJ/gobuster/v3
+github.com/tomnomnom/waybackurls
