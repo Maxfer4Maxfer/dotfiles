@@ -1,5 +1,5 @@
 # Ubuntu packages from the default archive (installed by scripts/packages-linux.sh).
-# Third-party repos (docker, gh, gcloud, helm, kubectl, warp) are set up in that script.
+# Third-party repos (docker, gh, gcloud with kubectl, helm, warp) are set up in that script.
 atop
 bat
 build-essential
