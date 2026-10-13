@@ -34,6 +34,7 @@ fi
 log "uv, claude"
 has uv || curl -LsSf https://astral.sh/uv/install.sh | env UV_NO_MODIFY_PATH=1 sh >/dev/null
 has claude || curl -fsSL https://claude.ai/install.sh | bash >/dev/null
+"$DOTFILES/scripts/claude.sh" || failed+=(claude-settings)
 # Claude state markers in tmux tabs (theme.conf @claude_mark)
 ~/.config/claude-tmux/install-hooks.sh || failed+=(claude-tmux-hooks)
 

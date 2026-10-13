@@ -1,0 +1,20 @@
+{
+  "model": "opus[1m]",
+  "availableModels": [
+    "opus"
+  ],
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  },
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "voiceEnabled": false
+}

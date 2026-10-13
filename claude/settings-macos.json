@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(utmctl list *)",
+      "Bash(utmctl status *)",
+      "Bash(arp -a *)",
+      "Bash(mdfind *)",
+      "Bash(brew list *)",
+      "Bash(log stream *)",
+      "Bash(log show *)",
+      "Bash(plutil -p *)",
+      "Bash(qemu-img --version)"
+    ]
+  },
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true
+  }
+}

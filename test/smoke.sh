@@ -82,6 +82,13 @@ for p in tpm tmux-resurrect tmux-continuum tmux-yank tmux-thumbs tmux-claude; do
 	check "plugin $p installed" test -d ~/.tmux/plugins/$p
 done
 
+log "claude"
+# shellcheck disable=SC2016 # expands in the child bash (DOTFILES is exported)
+check "settings from claude/settings.json applied" bash -c 'jq -e --slurpfile r "$DOTFILES/claude/settings.json" "contains(\$r[0])" ~/.claude/settings.json'
+for id in $(jq -r '.enabledPlugins // {} | to_entries[] | select(.value) | .key' ~/.claude/settings.json 2>/dev/null); do
+	check "plugin $id installed" bash -c "claude plugin list --json | jq -e --arg id $id 'any(.id == \$id)'"
+done
+
 log "neovim"
 # nv <lua expr>: true when the expression holds in a headless nvim (a failed assert would still exit 0)
 nv() { nvim --headless "+lua local ok, r = pcall(function() return $1 end) if not (ok and r) then vim.cmd('cquit 1') end" +qa; }

@@ -8,7 +8,8 @@ if [ -L ~/.config ]; then
 	warn "~/.config is a symlink (old layout) — run scripts/migrate-config.sh first"
 	exit 1
 fi
-mkdir -p ~/.config ~/.local/bin
+# ~/.claude holds Claude Code's own state: stow must link files into it, never fold it
+mkdir -p ~/.config ~/.local/bin ~/.claude
 
 # Dirs used by OS packages are shared with common ones (e.g. ~/.config/zsh): keep them real
 # directories, so stow does not fold them into a symlink owned by a single package.

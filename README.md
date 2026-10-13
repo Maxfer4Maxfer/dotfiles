@@ -32,19 +32,20 @@ ArchiCAD (Graphisoft, CodeMeter, WIBUKEY), the PF Fusion Sans font. Then log in 
 
 | path | what |
 | --- | --- |
-| `common/<pkg>/` | stow packages for both OSes: `zsh`, `git`, `tmux`, `nvim`, `apps` |
-| `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages: `zsh` (`~/.config/zsh/os.zsh`); macOS `ssh` (`~/.ssh/config`), `bin` (`~/.local/bin` scripts) |
+| `common/<pkg>/` | stow packages for both OSes: `zsh`, `git`, `tmux`, `nvim`, `apps`, `claude` (`~/.claude/CLAUDE.md`) |
+| `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages: `zsh` (`~/.config/zsh/os.zsh`); macOS `ssh` (`~/.ssh/config`), `bin` (`~/.local/bin` scripts), `claude` (skills `/tts`, `/english-lesson`) |
 | `packages/apt.txt` | Ubuntu packages |
 | `packages/apt-purge.txt` | what `install.sh system` removes from a headless VM (desktop, laptop/firmware agents, snapd, apport …) |
 | `packages/Brewfile` | everything on the Mac: formulae, casks, App Store apps (`mas`) |
 | `iterm2/` | iTerm2 preferences; iTerm2 loads and saves them here (`PrefsCustomFolder`), commit what you change |
+| `claude/` | Claude Code settings (common + `settings-<os>.json`), merged into `~/.claude/settings.json` by `scripts/claude.sh` |
 | `launchd/` | launch agent templates (`$HOME` is filled in by `system-macos.sh`) |
 | `packages/go.txt` | `go install …@latest` |
 | `scripts/packages-{linux,macos}.sh` | system packages, third-party apt repos, Go, Neovim, AWS CLI |
 | `scripts/link.sh` | `stow` all packages into `$HOME` |
 | `scripts/system-macos.sh` | macOS defaults (Dock, Finder, keyboard, trackpad, screenshots), iTerm2 prefs folder, launch agents |
 | `scripts/system-linux.sh` | opt-in dev VM tuning: zram swap, sysctl (swappiness, inotify), no I/O scheduler on virtio, docker log/cache limits, journald cap, purge |
-| `scripts/tools.sh` | oh-my-zsh + p10k, tmux/nvim plugins, rust, uv, claude, go tools, tofu/terragrunt/tflint at pinned versions |
+| `scripts/tools.sh` | oh-my-zsh + p10k, tmux/nvim plugins, rust, uv, claude (+ its settings and plugins), go tools, tofu/terragrunt/tflint at pinned versions |
 
 Every file in a package mirrors its place in `$HOME`: `common/tmux/.config/tmux/theme.conf` → `~/.config/tmux/theme.conf`.
 To add a config, move it into a package and run `./install.sh link`.
@@ -69,4 +70,7 @@ CI (`.github/workflows/ci.yml`) runs lint, the container test on arm64 and a mac
 - LSP servers and formatters come from Mason (`mason-tool-installer` list in `lua/plugins/lsp.lua`), installed by `install.sh tools`; `gopls`/`goimports` come from `packages/go.txt`.
 - `~/.gitconfig` stays local (`safe.directory`, a work `user.email` and other overrides); the shared part is `~/.config/git/config`.
 - tmux reads machine-local settings from `~/.tmux.conf.local` (e.g. extra `@nvim-autokill-keep` sessions).
+- Claude Code: `~/.claude/settings.json` is merged, not linked — Claude Code writes it itself. On `install.sh tools` repo keys win and
+  `permissions.allow` is a union; a setting changed in Claude (`/model`, "always allow") stays local until you copy it into `claude/`.
+  Hooks are registered by `claude-tmux/install-hooks.sh` and the tmux-claude plugin. Machine-local: `settings.local.json`, memory, history.
 - tmux starts on boot via tmux-continuum (`@continuum-boot`), which creates the systemd unit / launchd agent itself.
