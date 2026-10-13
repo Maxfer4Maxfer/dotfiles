@@ -86,7 +86,9 @@ log "claude"
 # shellcheck disable=SC2016 # expands in the child bash (DOTFILES is exported)
 check "settings from claude/settings.json applied" bash -c 'jq -e --slurpfile r "$DOTFILES/claude/settings.json" "contains(\$r[0])" ~/.claude/settings.json'
 for id in $(jq -r '.enabledPlugins // {} | to_entries[] | select(.value) | .key' ~/.claude/settings.json 2>/dev/null); do
-	check "plugin $id installed" bash -c "claude plugin list --json | jq -e --arg id $id 'any(.id == \$id)'"
+	# from the plugin registry: `claude` itself is not on this script's PATH in the container
+	# shellcheck disable=SC2016 # a jq variable
+	check "plugin $id installed" jq -e --arg id "$id" '.plugins[$id] | length > 0' ~/.claude/plugins/installed_plugins.json
 done
 
 log "neovim"
