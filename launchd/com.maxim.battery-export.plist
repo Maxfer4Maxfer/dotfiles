@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template: scripts/system-macos.sh replaces $HOME and installs it into ~/Library/LaunchAgents. -->
+<!-- The Mac's battery for tmux in the dev VM (it reads /mnt/vm_shared/.host-battery). -->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.maxim.battery-export</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$HOME/.config/tmux/battery</string>
+        <string>--export</string>
+        <string>$HOME/vm_shared/.host-battery</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>60</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>StandardErrorPath</key>
+    <string>$HOME/Library/Logs/battery-export.err.log</string>
+</dict>
+</plist>

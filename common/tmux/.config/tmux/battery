@@ -1,20 +1,41 @@
 #!/usr/bin/env bash
 # Battery charge for the tmux status bar: "87%" coloured by level, "⚡" while on power.
-# Prints nothing without a battery (desktops, the dev VM).
-pct='' state=''
-if command -v pmset >/dev/null; then
-	line=$(pmset -g batt | grep -m1 InternalBattery) || exit 0
-	pct=$(grep -oE '[0-9]+%' <<<"$line" | tr -d %)
-	[[ $line == *discharging* ]] && state=discharging || state=ac
-else
+#   battery                  status-bar segment; without a battery of its own (the dev VM) it shows
+#                            the host Mac's, exported to $HOST_BATTERY (fresh for 5 min), else nothing
+#   battery --export <file>  write "<pct> <ac|discharging>" to <file> when it changed
+#                            (macOS launch agent launchd/com.maxim.battery-export.plist)
+HOST_BATTERY=${HOST_BATTERY:-/mnt/vm_shared/.host-battery}
+
+# local battery -> "<pct> <state>", or nothing
+local_battery() {
+	if command -v pmset >/dev/null; then
+		local line
+		line=$(pmset -g batt | grep -m1 InternalBattery) || return 0
+		printf '%s %s\n' "$(grep -oE '[0-9]+%' <<<"$line" | tr -d %)" \
+			"$([[ $line == *discharging* ]] && echo discharging || echo ac)"
+		return 0
+	fi
+	local b
 	for b in /sys/class/power_supply/BAT*; do
 		[ -r "$b/capacity" ] || continue
-		pct=$(<"$b/capacity")
-		[ "$(<"$b/status")" = Discharging ] && state=discharging || state=ac
-		break
+		printf '%s %s\n' "$(<"$b/capacity")" "$([ "$(<"$b/status")" = Discharging ] && echo discharging || echo ac)"
+		return 0
 	done
+}
+
+if [ "${1:-}" = --export ]; then
+	out=$(local_battery)
+	[ -n "$out" ] && [ "$out" != "$(cat "$2" 2>/dev/null)" ] && printf '%s\n' "$out" >"$2"
+	exit 0
 fi
-[ -n "$pct" ] || exit 0
+
+bat=$(local_battery)
+if [ -z "$bat" ] && [ -r "$HOST_BATTERY" ] &&
+	[ $(($(date +%s) - $(stat -c %Y "$HOST_BATTERY" 2>/dev/null || stat -f %m "$HOST_BATTERY"))) -lt 300 ]; then
+	bat=$(<"$HOST_BATTERY")
+fi
+read -r pct state <<<"$bat"
+[[ $pct =~ ^[0-9]+$ ]] || exit 0
 if [ "$pct" -le 20 ]; then color=red; elif [ "$pct" -le 50 ]; then color=yellow; else color=green; fi
 [ "$state" = ac ] && icon=⚡ || icon=
 printf '#[fg=%s]%s%s%% ' "$color" "$icon" "$pct"

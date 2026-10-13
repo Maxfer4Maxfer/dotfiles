@@ -39,7 +39,7 @@ ArchiCAD (Graphisoft, CodeMeter, WIBUKEY), the PF Fusion Sans font. Then log in 
 | `packages/Brewfile` | everything on the Mac: formulae, casks, App Store apps (`mas`) |
 | `iterm2/` | iTerm2 preferences; iTerm2 loads and saves them here (`PrefsCustomFolder`), commit what you change |
 | `claude/` | Claude Code settings (common + `settings-<os>.json`), merged into `~/.claude/settings.json` by `scripts/claude.sh` |
-| `launchd/` | launch agent templates (`$HOME` is filled in by `system-macos.sh`) |
+| `launchd/` | launch agent templates (screenshot path to clipboard; Mac battery for tmux in the VM) (`$HOME` is filled in by `system-macos.sh`) |
 | `packages/go.txt` | `go install …@latest` |
 | `scripts/packages-{linux,macos}.sh` | system packages, third-party apt repos, Go, Neovim, AWS CLI |
 | `scripts/link.sh` | `stow` all packages into `$HOME` |
