@@ -2,10 +2,28 @@ return {
   {
     "williamboman/mason.nvim",
     build = ":MasonUpdate",
+    opts = {},
   },
 
   {
     "williamboman/mason-lspconfig.nvim",
+  },
+
+  -- LSP servers and formatters (conform.lua) from Mason; scripts/tools.sh runs
+  -- :MasonToolsInstallSync. gopls and goimports come from packages/go.txt instead.
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+    opts = {
+      ensure_installed = {
+        "pyright",
+        "lua-language-server",
+        "bash-language-server",
+        "stylua",
+        "prettier",
+        "clang-format",
+      },
+    },
   },
 
   {
@@ -28,13 +46,7 @@ return {
     },
 
     config = function()
-      -- Mason for installing LSP servers
-      require("mason").setup()
-
-      require("mason-lspconfig").setup({
-        ensure_installed = { "gopls", "pyright", "lua_ls", "bashls" },
-        automatic_installation = false,
-      })
+      require("mason-lspconfig").setup()
 
       -- LSP keymaps bound on attach
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -59,51 +71,6 @@ return {
           map("gO",  require("telescope.builtin").lsp_document_symbols,  "Document Symbols")
           map("gW",  require("telescope.builtin").lsp_dynamic_workspace_symbols, "Workspace Symbols")
           map("grt", require("telescope.builtin").lsp_type_definitions,  "Type Definition")
-
-          -- Signature help in command line (disabled by default)
-          vim.api.nvim_create_autocmd("CursorHold", {
-            callback = function()
-              if true then return end -- flip to false to enable
-
-              local client = vim.lsp.get_clients({ bufnr = 0 })[1]
-              if not client or not client.server_capabilities.signatureHelpProvider then
-                return
-              end
-
-              local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
-              vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result)
-                if err or not result or not result.signatures or #result.signatures == 0 then
-                  return
-                end
-
-                local label = result.signatures[1].label
-                local name, args, ret = label:match("^([%w_%.]+)%s*%((.-)%)%s*(.*)")
-                if not name then
-                  vim.api.nvim_echo({ { " " .. label, "Normal" } }, false, {})
-                  return
-                end
-
-                local arg_chunks = {}
-                for arg in args:gmatch("[^,]+") do
-                  local arg_name, arg_type = arg:match("^%s*(.-)%s+(.+)%s*$")
-                  if arg_name and arg_type then
-                    table.insert(arg_chunks, { arg_name, "Identifier" })
-                    table.insert(arg_chunks, { " " .. arg_type, "Type" })
-                  else
-                    table.insert(arg_chunks, { arg, "Type" })
-                  end
-                  table.insert(arg_chunks, { ", ", "Normal" })
-                end
-                if #arg_chunks > 0 then table.remove(arg_chunks) end
-
-                local chunks = { { " " }, { name, "Function" }, { "(", "Delimiter" } }
-                vim.list_extend(chunks, arg_chunks)
-                table.insert(chunks, { ")", "Delimiter" })
-                if ret and ret ~= "" then table.insert(chunks, { " " .. ret, "Return" }) end
-                vim.api.nvim_echo(chunks, false, {})
-              end)
-            end,
-          })
         end,
       })
 

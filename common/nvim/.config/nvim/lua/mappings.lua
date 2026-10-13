@@ -13,13 +13,6 @@ keymap("n", "<leader>bn", "<cmd>bnext<CR>", opts)
 keymap("n", "<leader>bp", "<cmd>bprevious<CR>", opts)
 keymap("n", "<leader>bd", "<cmd>bd<CR>", opts)
 
--- Formatting
-keymap("n", "<leader>fm", function() vim.lsp.buf.format { async = true } end, opts)
-
--- Scrolls
-keymap("n", "<C-l>", "zl", opts)
-keymap("n", "<C-h>", "zh", opts)
-
 -- Reload config
 keymap("n", "<leader>sv", "<cmd>source $MYVIMRC<CR>", opts)
 

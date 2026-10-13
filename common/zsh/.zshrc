@@ -40,12 +40,10 @@ source ~/.config/zsh/aliases.zsh
 # fzf (key bindings + completion)
 command -v fzf >/dev/null && source <(fzf --zsh)
 
-# tmux: attach automatically over ssh
+# tmux: over ssh, attach to the last session (or start one) instead of a new session per login
 if [[ $SSH_CONNECTION != "" && $TMUX == "" ]]; then
-    tmux
+    tmux attach-session 2>/dev/null || tmux new-session
 fi
-
-export TERM=xterm-256color
 
 # machine-local secrets & overrides (not in git)
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local

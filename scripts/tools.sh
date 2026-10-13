@@ -66,9 +66,9 @@ pinned terragrunt "$TERRAGRUNT_VERSION" gruntwork-io/terragrunt "v$TERRAGRUNT_VE
 pinned tflint "$TFLINT_VERSION" terraform-linters/tflint "v$TFLINT_VERSION" \
 	"tflint_${OS/macos/darwin}_$ARCH.zip" checksums.txt || failed+=(tflint)
 
-log "neovim plugins (pinned by lazy-lock.json)"
-# Mason's LSP servers / debuggers install on the first interactive start
+log "neovim plugins (pinned by lazy-lock.json), LSP servers and formatters (Mason)"
 nvim --headless "+Lazy! restore" +qa >/dev/null 2>&1 || failed+=(nvim-plugins)
+nvim --headless "+MasonToolsInstallSync" +qa >/dev/null 2>&1 || failed+=(mason-tools)
 
 log "tldr cache"
 tldr --update >/dev/null 2>&1 || true

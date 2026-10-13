@@ -41,6 +41,8 @@ check "syntax highlighting loaded" zi '(( $+functions[_zsh_highlight] ))'
 check "aliases loaded" zi 'whence kpc && whence kg'
 check "fzf key bindings" zi '(( $+widgets[fzf-history-widget] ))'
 check "os-specific config loaded" test -f ~/.config/zsh/os.zsh
+# inside tmux TERM must stay tmux's own (zshrc used to force xterm-256color)
+check "TERM not overridden" bash -c "$(declare -f zi); TERM=tmux-256color zi 'echo \$TERM' | grep -q tmux-256color"
 
 log "git"
 check "user identity" test -n "$(git config user.email)"
@@ -62,19 +64,28 @@ if tmux -L $sock -f ~/.tmux.conf new-session -d -s smoke 2>/dev/null; then
 	# -u: without a UTF-8 locale (CI container) the client prints Cyrillic keys as _
 	check "russian layout keys mirrored" bash -c "tmux -u -L $sock list-keys -T prefix | grep -q ' ы '"
 	check "claude tab markers in window format" bash -c "tmux -L $sock show -gv window-status-format | grep -q claude_mark"
+	check "default-terminal tmux-256color" bash -c "tmux -L $sock show -gv default-terminal | grep -qx tmux-256color"
+	check "truecolor + clipboard of the outer terminal" bash -c "tmux -L $sock show -g terminal-features | grep -q 'xterm\*:RGB:clipboard'"
 	tmux -L $sock kill-server 2>/dev/null
 	rm -f "${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)/$sock" # kill-server can leave the socket file behind
 else
 	fail "config loads"
 fi
 if [ -n "$own_halt" ]; then rm -f $halt; fi
+check "tmux-256color terminfo" infocmp tmux-256color
 check "claude tmux hooks registered" bash -c "jq -e '.hooks.Stop[]?.hooks[]? | select(.command | contains(\"claude-tmux/status.sh\"))' ~/.claude/settings.json >/dev/null"
 for p in tpm tmux-resurrect tmux-continuum tmux-yank tmux-thumbs tmux-claude; do
 	check "plugin $p installed" test -d ~/.tmux/plugins/$p
 done
 
 log "neovim"
-check "starts and loads lazy.nvim" nvim --headless "+lua assert(require('lazy'))" +qa
+# nv <lua expr>: true when the expression holds in a headless nvim (a failed assert would still exit 0)
+nv() { nvim --headless "+lua local ok, r = pcall(function() return $1 end) if not (ok and r) then vim.cmd('cquit 1') end" +qa; }
+check "starts and loads lazy.nvim" nv "require('lazy')"
+check "Ctrl-h/l move between splits (smart-splits)" nv "vim.fn.maparg('<C-h>', 'n', false, true).callback and vim.fn.maparg('<C-l>', 'n', false, true).callback"
+for t in stylua prettier clang-format lua-language-server pyright bash-language-server; do
+	check "mason: $t" test -x ~/.local/share/nvim/mason/bin/$t
+done
 missing=$(nvim --headless "+lua for _, p in ipairs(require('lazy').plugins()) do if not p._.installed then io.stdout:write(p.name, ' ') end end" +qa 2>/dev/null)
 if [ -z "$missing" ]; then ok "all plugins installed"; else fail "plugins not installed: $missing"; fi
 

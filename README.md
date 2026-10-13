@@ -54,6 +54,7 @@ CI (`.github/workflows/ci.yml`) runs lint, the container test on arm64 and a mac
 ## Notes
 
 - Neovim plugins are pinned by `lazy-lock.json` (`Lazy! restore`); update them in nvim with `:Lazy update` and commit the lock file.
+- LSP servers and formatters come from Mason (`mason-tool-installer` list in `lua/plugins/lsp.lua`), installed by `install.sh tools`; `gopls`/`goimports` come from `packages/go.txt`.
 - `~/.gitconfig` stays local (`safe.directory`, a work `user.email` and other overrides); the shared part is `~/.config/git/config`.
 - tmux reads machine-local settings from `~/.tmux.conf.local` (e.g. extra `@nvim-autokill-keep` sessions).
 - tmux starts on boot via tmux-continuum (`@continuum-boot`), which creates the systemd unit / launchd agent itself.

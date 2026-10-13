@@ -19,12 +19,9 @@ vim.opt.smartcase = true
 vim.opt.termguicolors = true
 vim.opt.updatetime = 100
 vim.opt.swapfile = false
-vim.opt.termguicolors = true
 vim.opt.laststatus = 2
 vim.opt.undofile = false
 vim.o.signcolumn = 'yes'
-vim.o.splitright = true
-vim.o.splitbelow = true
 vim.o.exrc = true
 vim.o.secure = true
 
