@@ -1,4 +1,4 @@
-SHELL_SCRIPTS := install.sh scripts/*.sh test/*.sh common/tmux/.config/tmux/nvim-autokill common/tmux/.config/tmux/ru-keys common/tmux/.config/claude-tmux/*.sh
+SHELL_SCRIPTS := install.sh scripts/*.sh test/*.sh common/tmux/.config/tmux/nvim-autokill common/tmux/.config/tmux/ru-keys common/tmux/.config/tmux/battery common/tmux/.config/claude-tmux/*.sh
 
 .PHONY: install link test smoke lint
 

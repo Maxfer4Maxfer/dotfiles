@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Battery charge for the tmux status bar: "87%" coloured by level, "⚡" while on power.
+# Prints nothing without a battery (desktops, the dev VM).
+pct='' state=''
+if command -v pmset >/dev/null; then
+	line=$(pmset -g batt | grep -m1 InternalBattery) || exit 0
+	pct=$(grep -oE '[0-9]+%' <<<"$line" | tr -d %)
+	[[ $line == *discharging* ]] && state=discharging || state=ac
+else
+	for b in /sys/class/power_supply/BAT*; do
+		[ -r "$b/capacity" ] || continue
+		pct=$(<"$b/capacity")
+		[ "$(<"$b/status")" = Discharging ] && state=discharging || state=ac
+		break
+	done
+fi
+[ -n "$pct" ] || exit 0
+if [ "$pct" -le 20 ]; then color=red; elif [ "$pct" -le 50 ]; then color=yellow; else color=green; fi
+[ "$state" = ac ] && icon=⚡ || icon=
+printf '#[fg=%s]%s%s%% ' "$color" "$icon" "$pct"
