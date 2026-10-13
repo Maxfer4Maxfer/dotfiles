@@ -1,0 +1,21 @@
+#!/bin/bash
+# Called by launchd (launchd/com.maxim.screenshot-clipboard.plist) whenever ~/vm_shared/screenshots
+# changes: puts the path of the latest screenshot into the clipboard.
+#
+# - Triggers ONLY on file changes (Cmd+Shift+4 saves a file to disk).
+# - Does NOT trigger for Ctrl+Cmd+Shift+4 (image-to-clipboard, no file created) —
+#   so image-paste workflows into apps like Claude Desktop are unaffected.
+# - Puts the Mac path. VM-side symlink /Users/maxim/vm_shared -> /mnt/vm_shared
+#   makes the same path resolve inside the VM.
+
+SCREENSHOTS_DIR="$HOME/vm_shared/screenshots"
+
+# Small delay — macOS creates a temp file first and renames.
+sleep 0.3
+
+LATEST=$(ls -t "$SCREENSHOTS_DIR"/*.png 2>/dev/null | head -1)
+[ -z "$LATEST" ] && exit 0
+
+printf '%s' "$LATEST" | pbcopy
+
+echo "$(date '+%Y-%m-%d %H:%M:%S') → $LATEST" >>"$HOME/Library/Logs/screenshot-clipboard.log"

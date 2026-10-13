@@ -12,10 +12,17 @@ for brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
 done
 
 log "brew bundle"
-brewfile=$DOTFILES/packages/Brewfile
-if [ -n "${BREW_NO_CASKS:-}" ]; then
-	# formulae only (CI); brew bundle no longer has --no-cask
-	brewfile=$(mktemp)
-	grep -v '^cask ' "$DOTFILES/packages/Brewfile" >"$brewfile"
+# brew bundle has no --no-cask: filter the Brewfile instead. App Store apps go separately:
+# without an App Store login they fail, which must not stop the rest.
+tmp=$(mktemp -d)
+skip='^mas '
+[ -n "${BREW_NO_CASKS:-}" ] && skip='^(cask|mas) ' # formulae only (CI)
+grep -Ev "$skip" "$DOTFILES/packages/Brewfile" >"$tmp/Brewfile"
+brew bundle --file "$tmp/Brewfile"
+if [ -z "${BREW_NO_CASKS:-}" ]; then
+	log "brew bundle: App Store"
+	grep -E '^mas ' "$DOTFILES/packages/Brewfile" >"$tmp/Brewfile.mas"
+	brew bundle --file "$tmp/Brewfile.mas" ||
+		warn "App Store apps not installed: sign in to the App Store, then ./install.sh packages"
 fi
-brew bundle --file "$brewfile"
+rm -rf "$tmp"

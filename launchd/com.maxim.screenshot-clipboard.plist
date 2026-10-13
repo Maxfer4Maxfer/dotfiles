@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template: scripts/system-macos.sh replaces $HOME and installs it into ~/Library/LaunchAgents. -->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.maxim.screenshot-clipboard</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$HOME/.local/bin/screenshot-path-to-clipboard</string>
+    </array>
+    <key>WatchPaths</key>
+    <array>
+        <string>$HOME/vm_shared/screenshots</string>
+    </array>
+    <key>StandardErrorPath</key>
+    <string>$HOME/Library/Logs/screenshot-clipboard.err.log</string>
+</dict>
+</plist>

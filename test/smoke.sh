@@ -20,18 +20,22 @@ done
 [ "$fails" -eq 0 ] && ok "all package files are linked into \$HOME"
 
 # zi <cmd>: run cmd in an interactive zsh inside a pseudo-terminal, like a real terminal window
-# (without a tty zsh disables job control/zle and p10k does not load)
+# (without a tty zsh disables job control/zle and p10k does not load).
+# stdin from /dev/null: macOS script fails with "tcgetattr/ioctl: Operation not supported on socket"
+# before starting zsh when its stdin is a socket (e.g. under an agent or some CI shells).
 zi() {
 	if [ "$OS" = macos ]; then
-		script -q /dev/null zsh -i -c "$1"
+		script -q /dev/null zsh -i -c "$1" </dev/null
 	else
-		script -qec "zsh -i -c $(printf %q "$1")" /dev/null
+		script -qec "zsh -i -c $(printf %q "$1")" /dev/null </dev/null
 	fi
 }
 
 log "zsh"
-err=$(zi exit 2>&1 | sed 's/\x1b\[[0-9;?]*[a-zA-Z]//g; s/\x1b\][^\a]*\a//g' | tr -d '\r' | grep -iE 'error|not found|no such|can.t')
-if [ -z "$err" ]; then ok "starts without errors"; else fail "startup errors: $err"; fi
+out=$(zi exit 2>&1)
+rc=$?
+err=$(sed 's/\x1b\[[0-9;?]*[a-zA-Z]//g; s/\x1b\][^\a]*\a//g' <<<"$out" | tr -d '\r' | grep -iE 'error|not found|no such|can.t')
+if [ $rc -eq 0 ] && [ -z "$err" ]; then ok "starts without errors"; else fail "startup errors (exit $rc): ${err:-$out}"; fi
 # best of 3 warm starts; SMOKE_ZSH_MAX_MS raises the limit on slow CI runners
 ms=$(zsh -c 'zmodload zsh/datetime; best=999999; repeat 3 { s=$EPOCHREALTIME; zsh -i -c exit >/dev/null 2>&1; t=$(((EPOCHREALTIME - s) * 1000)); ((t < best)) && best=$t }; printf "%.0f" $best')
 max=${SMOKE_ZSH_MAX_MS:-1000}
@@ -89,7 +93,7 @@ done
 missing=$(nvim --headless "+lua for _, p in ipairs(require('lazy').plugins()) do if not p._.installed then io.stdout:write(p.name, ' ') end end" +qa 2>/dev/null)
 if [ -z "$missing" ]; then ok "all plugins installed"; else fail "plugins not installed: $missing"; fi
 
-# only where `install.sh system` ran (not in the test container or on macOS)
+# only where the Linux `install.sh system` ran (not in the test container)
 if [ -f /etc/sysctl.d/99-devstation.conf ]; then
 	log "system"
 	check "zram swap on" grep -q '^/dev/zram' /proc/swaps
@@ -98,6 +102,19 @@ if [ -f /etc/sysctl.d/99-devstation.conf ]; then
 	check "virtio disks without I/O scheduler" bash -c '! grep -L "\[none\]" /sys/block/vd*/queue/scheduler | grep -q .'
 	left=$(list "$DOTFILES/packages/apt-purge.txt" | installed | tr '\n' ' ')
 	if [ -z "$left" ]; then ok "nothing from apt-purge.txt installed"; else fail "installed again: $left"; fi
+fi
+
+if [ "$OS" = macos ]; then
+	log "macos"
+	# formulae only: casks and App Store apps are skipped in CI
+	# shellcheck disable=SC2016 # expands in the child bash (DOTFILES is exported)
+	check "Brewfile formulae installed" bash -c 'brew bundle check --no-upgrade --file <(grep "^brew " "$DOTFILES/packages/Brewfile")'
+	check "dock autohide" test "$(defaults read com.apple.dock autohide 2>/dev/null)" = 1
+	check "screenshots go to ~/vm_shared/screenshots" test "$(defaults read com.apple.screencapture location 2>/dev/null)" = "$HOME/vm_shared/screenshots"
+	check "iTerm2 reads preferences from the repo" test "$(defaults read com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null)" = "$DOTFILES/iterm2"
+	check "screenshot-clipboard agent loaded" launchctl print "gui/$(id -u)/com.maxim.screenshot-clipboard"
+	# usage exit code 1, but only after uv resolved numpy/pillow/scipy
+	check "crop-doc-scan dependencies" bash -c '~/.local/bin/crop-doc-scan 2>&1 | grep -q Usage'
 fi
 
 log "tools"

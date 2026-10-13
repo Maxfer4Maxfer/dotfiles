@@ -1,0 +1,85 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["numpy", "pillow", "scipy"]
+# ///
+"""Crop a photographed sheet of paper out of its background, deskew it to A4.
+
+Usage: crop-doc-scan <photo> <out.jpg>
+"""
+import sys
+import numpy as np
+from PIL import Image
+from scipy import ndimage
+
+A4 = (1654, 2339)  # 200 dpi
+
+
+def paper_mask(rgb):
+    """Paper is smooth and neutral; the cloth underneath is textured and green."""
+    gray = rgb.astype(np.float32) @ np.array([0.299, 0.587, 0.114], np.float32)
+    energy = ndimage.uniform_filter(np.abs(gray - ndimage.uniform_filter(gray, 3)), 15)
+    r, g, b = (rgb[..., i].astype(np.float32) for i in range(3))
+    green = (g - (r + b) / 2) / np.maximum(gray, 1)
+    m = (energy < 0.6) & (green < 0.06)
+    m = ndimage.binary_closing(m, np.ones((41, 41)))   # bridge the text
+    m = ndimage.binary_fill_holes(m)
+    m = ndimage.binary_opening(m, np.ones((21, 21)))   # drop stray cloth patches
+    lab, n = ndimage.label(m)
+    if n == 0:
+        raise SystemExit("no paper found")
+    sizes = ndimage.sum(m, lab, range(1, n + 1))
+    return ndimage.binary_fill_holes(lab == (int(np.argmax(sizes)) + 1))
+
+
+def corners(mask):
+    ys, xs = np.nonzero(mask)
+    pts = np.stack([xs, ys], 1).astype(np.float32)
+    s, d = pts[:, 0] + pts[:, 1], pts[:, 0] - pts[:, 1]
+    return np.stack([pts[np.argmin(s)],   # top-left
+                     pts[np.argmax(d)],   # top-right
+                     pts[np.argmax(s)],   # bottom-right
+                     pts[np.argmin(d)]])  # bottom-left
+
+
+def coeffs(dst, src):
+    """PIL PERSPECTIVE coefficients mapping dst (output) -> src (input)."""
+    A, B = [], []
+    for (x, y), (u, v) in zip(dst, src):
+        A += [[x, y, 1, 0, 0, 0, -x * u, -y * u],
+              [0, 0, 0, x, y, 1, -x * v, -y * v]]
+        B += [u, v]
+    return np.linalg.solve(np.array(A, float), np.array(B, float))
+
+
+def whiten(im):
+    a = np.asarray(im).astype(np.float32)
+    # shading correction: divide by a heavily blurred copy of the page
+    bg = np.stack([ndimage.uniform_filter(a[..., i], 151) for i in range(3)], -1)
+    bg = np.maximum(bg, 1)
+    out = a / bg
+    hi = np.percentile(out, 92)
+    out = np.clip(out / hi * 0.99, 0, 1)
+    # gentle contrast so text stays black
+    out = np.clip((out - 0.12) / 0.86, 0, 1)
+    return Image.fromarray((out * 255).astype(np.uint8))
+
+
+def process(path, out, inset=6):
+    im = Image.open(path).convert("RGB")
+    a = np.asarray(im)
+    c = corners(paper_mask(a))
+    # pull the quad in slightly so no background pixels survive at the edge
+    ctr = c.mean(0)
+    c = c + (ctr - c) / np.linalg.norm(c - ctr, axis=1, keepdims=True) * inset
+    W, H = A4
+    dst = np.array([[0, 0], [W, 0], [W, H], [0, H]], float)
+    warped = im.transform((W, H), Image.PERSPECTIVE, coeffs(dst, c), Image.BICUBIC)
+    whiten(warped).save(out, quality=88, dpi=(200, 200))
+    return c
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        raise SystemExit(__doc__.strip())
+    print(process(sys.argv[1], sys.argv[2]))

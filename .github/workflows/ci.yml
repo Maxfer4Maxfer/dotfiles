@@ -24,4 +24,5 @@ jobs:
       - run: BREW_NO_CASKS=1 ~/.dotfiles/install.sh packages
       - run: ~/.dotfiles/install.sh link
       - run: ~/.dotfiles/install.sh tools
+      - run: ~/.dotfiles/install.sh system
       - run: SMOKE_ZSH_MAX_MS=3000 ~/.dotfiles/test/smoke.sh # hosted macOS runners are slow

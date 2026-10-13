@@ -1,5 +1,7 @@
-# DRAFT: CLI parity with Linux. To be replaced with the real list from the Mac (`brew bundle dump`).
+# Everything on the Mac: `brew bundle` installs it, scripts/packages-macos.sh runs it.
+# `mas` apps need an App Store login; without one they are skipped with a warning.
 # tofu, terragrunt and tflint are pinned release binaries from scripts/tools.sh, not brew.
+# Snapshot of what is installed: `brew leaves --installed-on-request`, `brew list --cask`, `mas list`.
 
 # shell & editors
 brew "zsh"
@@ -17,6 +19,7 @@ brew "htop"
 brew "tldr"
 brew "jq"
 brew "shellcheck"
+brew "unar"
 
 # GNU userland (put first in PATH by macos/zsh)
 brew "coreutils"
@@ -27,15 +30,80 @@ brew "grep"
 
 # dev
 brew "git"
+brew "git-lfs"
 brew "gh"
 brew "go"
 brew "node"
+brew "python@3.12"
+brew "uv"
+brew "cmake"
 brew "libpq"
+brew "xcodes"
+brew "mas"
 
 # infra
 brew "kubernetes-cli"
-brew "rclone"
 brew "helm"
 brew "awscli"
-cask "google-cloud-sdk"
-cask "docker"
+brew "rclone"
+brew "sshpass"
+brew "qemu"
+
+# media, scanning, ML
+brew "ffmpeg"
+brew "yt-dlp"
+brew "portaudio"
+brew "zbar"
+brew "dcm2niix"
+brew "llmfit"
+
+# terminal & fonts
+cask "iterm2"
+cask "font-fira-code-nerd-font"
+
+# dev & work
+cask "claude"
+cask "chatgpt"
+cask "utm"
+cask "mitmproxy"
+cask "figma"
+cask "inkscape"
+cask "slack"
+cask "zoom"
+cask "clickup"
+cask "okta-verify"
+cask "windows-app"
+cask "amneziavpn"
+
+# office & notes
+cask "microsoft-word"
+cask "microsoft-excel"
+cask "microsoft-powerpoint"
+cask "obsidian"
+cask "macpass"
+
+# browsers, cloud storage, messengers
+cask "google-chrome"
+cask "google-drive"
+cask "dropbox"
+cask "telegram-desktop"
+cask "whatsapp"
+
+# utilities
+cask "caffeine"
+cask "displaperture"
+cask "keyboard-cleaner"
+cask "pearcleaner"
+cask "the-unarchiver"
+cask "voiceink"
+
+# media & reading
+cask "vlc"
+cask "transmission"
+cask "fbreader"
+
+# App Store
+mas "Xcode", id: 497799835
+mas "Numbers", id: 361304891
+mas "TestFlight", id: 899247664
+mas "Userscripts", id: 1463298887

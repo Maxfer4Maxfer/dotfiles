@@ -46,4 +46,5 @@ if [[ $SSH_CONNECTION != "" && $TMUX == "" ]]; then
 fi
 
 # machine-local secrets & overrides (not in git)
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+# (if, not &&: without the file the shell would start with exit status 1)
+if [ -f ~/.zshrc.local ]; then source ~/.zshrc.local; fi

@@ -1,0 +1,23 @@
+#!/bin/bash
+# Send text to KokoroTTS and save for replay
+TEXT_FILE="$HOME/.kokoro_last_text"
+
+if [ "$1" = "--replay" ]; then
+    if [ -f "$TEXT_FILE" ]; then
+        TEXT=$(cat "$TEXT_FILE")
+    else
+        echo "Nothing to replay"
+        exit 1
+    fi
+else
+    TEXT=$(cat)
+    echo "$TEXT" > "$TEXT_FILE"
+fi
+
+osascript -l JavaScript -e "
+ObjC.import('AppKit');
+var pb = \$.NSPasteboard.pasteboardWithUniqueName;
+pb.clearContents;
+pb.setStringForType(\$('$( echo "$TEXT" | sed "s/'/\\\\'/g" )'), \$.NSPasteboardTypeString);
+\$.NSPerformService(\$('Speak with Kokoro'), pb);
+"
