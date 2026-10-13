@@ -30,8 +30,9 @@ if [[ -n "$NEW_SESSION" && -f "$TIMER_DIR/${NEW_SESSION}.pid" ]]; then
 fi
 
 # --- Start timer for the session we're leaving ---
-# Never kill nvim in faraway-tools (Claude Code workspace) or education
-if [[ -n "$OLD_SESSION" && "$OLD_SESSION" != "$NEW_SESSION" && "$OLD_SESSION" != "faraway-tools" && "$OLD_SESSION" != "education" ]]; then
+# Never kill nvim in the sessions listed in @nvim-autokill-keep (space-separated)
+KEEP=" $(tmux show -gqv @nvim-autokill-keep) "
+if [[ -n "$OLD_SESSION" && "$OLD_SESSION" != "$NEW_SESSION" && "$KEEP" != *" $OLD_SESSION "* ]]; then
     # Cancel any existing timer for that session
     if [[ -f "$TIMER_DIR/${OLD_SESSION}.pid" ]]; then
         kill "$(cat "$TIMER_DIR/${OLD_SESSION}.pid")" 2>/dev/null

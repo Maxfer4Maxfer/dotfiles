@@ -15,9 +15,6 @@ path=(
 )
 export PATH
 
-# golang
-export GOPRIVATE="github.com/farawaygg/*"
-
 # oh-my-zsh
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"

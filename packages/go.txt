@@ -13,8 +13,6 @@ github.com/fullstorydev/grpcurl/cmd/grpcurl
 github.com/sqlc-dev/sqlc/cmd/sqlc
 github.com/golang-migrate/migrate/v4/cmd/migrate -tags=postgres
 github.com/GoogleCloudPlatform/cloud-sql-proxy/v2
-# work (private, needs GitHub auth)
-github.com/farawaygg/go-graphql/cmd/mrgqlgen
 # infra / CLI
 github.com/jesseduffield/lazygit
 github.com/mikefarah/yq/v4

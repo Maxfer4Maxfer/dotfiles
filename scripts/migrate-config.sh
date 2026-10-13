@@ -32,10 +32,4 @@ for f in ~/.aliases ~/.vimrc; do
 	if [ -L "$f" ] && [[ $(readlink "$f") == "$DOTFILES"/* ]]; then rm "$f"; fi
 done
 
-# KUBECONFIG used to be hardcoded in zshrc; it is machine-specific now.
-if [ -f ~/.kube/config.faraway ] && ! grep -q '^export KUBECONFIG=' ~/.zshrc.local 2>/dev/null; then
-	# shellcheck disable=SC2016 # $HOME must expand at shell startup, not now
-	echo 'export KUBECONFIG="$HOME/.kube/config.faraway"' >>~/.zshrc.local
-fi
-
 log "migration done, now run: ./install.sh link"

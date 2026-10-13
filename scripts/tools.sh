@@ -38,10 +38,7 @@ has claude || curl -fsSL https://claude.ai/install.sh | bash >/dev/null
 ~/.config/claude-tmux/install-hooks.sh || failed+=(claude-tmux-hooks)
 
 log "go tools"
-export GOPRIVATE="github.com/farawaygg/*"
 while read -r pkg flags; do
-	# GO_EXCLUDE: regex of modules to skip (e.g. private ones in CI)
-	[[ -n ${GO_EXCLUDE:-} && $pkg =~ $GO_EXCLUDE ]] && continue
 	# shellcheck disable=SC2086 # flags are intentionally word-split
 	go install $flags "$pkg@latest" 2>/dev/null || failed+=("$pkg")
 	# GO_CLEAN=1: drop build/module caches after each tool (low-disk containers)
@@ -58,7 +55,7 @@ if [ "$OS" = linux ]; then
 fi
 
 log "IaC: tofu, terragrunt, tflint"
-# Exactly the versions of FarawayGG/rift-iac/.tool-versions — bump together with it.
+# Pinned on purpose: bump deliberately, together with the IaC repos that use them.
 TOFU_VERSION=1.12.6
 TERRAGRUNT_VERSION=1.1.5
 TFLINT_VERSION=0.64.0

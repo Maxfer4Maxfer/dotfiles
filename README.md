@@ -14,7 +14,7 @@ Then put secrets and machine-specific settings into `~/.zshrc.local` (never comm
 
 ```sh
 export GITHUB_TOKEN=...
-export KUBECONFIG="$HOME/.kube/config.faraway"
+export KUBECONFIG="$HOME/.kube/config.work"
 ```
 
 and log in: `gh auth login`, `gcloud auth login`.
@@ -32,7 +32,7 @@ and log in: `gh auth login`, `gcloud auth login`.
 | `scripts/packages-{linux,macos}.sh` | system packages, third-party apt repos, Go, Neovim, AWS CLI |
 | `scripts/link.sh` | `stow` all packages into `$HOME` |
 | `scripts/system-linux.sh` | opt-in dev VM tuning: zram swap, sysctl (swappiness, inotify), no I/O scheduler on virtio, docker log/cache limits, journald cap, purge |
-| `scripts/tools.sh` | oh-my-zsh + p10k, tmux/nvim plugins, rust, uv, claude, go tools, tofu/terragrunt/tflint pinned to `rift-iac` |
+| `scripts/tools.sh` | oh-my-zsh + p10k, tmux/nvim plugins, rust, uv, claude, go tools, tofu/terragrunt/tflint at pinned versions |
 
 Every file in a package mirrors its place in `$HOME`: `common/tmux/.config/tmux/theme.conf` → `~/.config/tmux/theme.conf`.
 To add a config, move it into a package and run `./install.sh link`.
@@ -54,5 +54,6 @@ CI (`.github/workflows/ci.yml`) runs lint, the container test on arm64 and a mac
 ## Notes
 
 - Neovim plugins are pinned by `lazy-lock.json` (`Lazy! restore`); update them in nvim with `:Lazy update` and commit the lock file.
-- `~/.gitconfig` stays local (`safe.directory` and other overrides); the shared part is `~/.config/git/config`.
+- `~/.gitconfig` stays local (`safe.directory`, a work `user.email` and other overrides); the shared part is `~/.config/git/config`.
+- tmux reads machine-local settings from `~/.tmux.conf.local` (e.g. extra `@nvim-autokill-keep` sessions).
 - tmux starts on boot via tmux-continuum (`@continuum-boot`), which creates the systemd unit / launchd agent itself.

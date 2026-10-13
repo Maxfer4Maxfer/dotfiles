@@ -23,5 +23,5 @@ jobs:
       # casks (GUI apps) are skipped to keep the run short
       - run: BREW_NO_CASKS=1 ~/.dotfiles/install.sh packages
       - run: ~/.dotfiles/install.sh link
-      - run: GO_EXCLUDE=farawaygg ~/.dotfiles/install.sh tools
+      - run: ~/.dotfiles/install.sh tools
       - run: SMOKE_ZSH_MAX_MS=3000 ~/.dotfiles/test/smoke.sh # hosted macOS runners are slow

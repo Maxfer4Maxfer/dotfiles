@@ -23,7 +23,7 @@ log "apt: base"
 # would fail on them (different key paths would also conflict with the new lists).
 sudo rm -f /etc/apt/sources.list.d/{google-cloud-sdk,helm-stable-debian,cloudflare-client,github-cli}.list
 sudo rm -f /etc/apt/keyrings/{docker.asc,githubcli-archive-keyring.gpg}
-# terraform is gone (rift-iac runs OpenTofu, installed by tools.sh): drop its repo
+# terraform is gone (replaced by OpenTofu, installed by tools.sh): drop its repo
 sudo rm -f /etc/apt/sources.list.d/hashicorp.list /etc/apt/keyrings/hashicorp.gpg
 # kubectl comes from google-cloud-cli (a dispatcher that runs the kubectl matching the cluster);
 # the pkgs.k8s.io package of the same name lost to it on version anyway

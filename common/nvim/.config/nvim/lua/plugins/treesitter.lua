@@ -1,6 +1,8 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    -- main is an incompatible rewrite (no nvim-treesitter.configs)
+    branch = "master",
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
