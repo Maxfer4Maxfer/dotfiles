@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# The window menu (tmux's own right-click menu on a tab), bound twice with one list of items:
+#   right click on a tab  stays open after the button is released (-O), so an item can be clicked
+#   prefix+W              the same menu for the current window
+# Run from tmux.conf before ru-keys, so prefix+W gets its Cyrillic twin.
+set -euo pipefail
+
+title='#[align=centre]#{window_index}:#{window_name}'
+items=(
+	'#{?#{>:#{session_windows},1},,-}Swap Left' l 'swap-window -t :-1'
+	'#{?#{>:#{session_windows},1},,-}Swap Right' r 'swap-window -t :+1'
+	'#{?pane_marked_set,,-}Swap Marked' s 'swap-window'
+	''
+	Kill X 'kill-window'
+	Respawn R 'respawn-window -k'
+	'#{?pane_marked,Unmark,Mark}' m 'select-pane -m'
+	Rename n "command-prompt -F -I '#W' { rename-window -t '#{window_id}' '%%' }"
+	''
+	'New After' w 'new-window -a'
+	'New At End' W 'new-window'
+)
+
+tmux bind -n MouseDown3Status display-menu -O -t = -T "$title" -x W -y W "${items[@]}"
+tmux bind W display-menu -T "$title" -x W -y W "${items[@]}"
