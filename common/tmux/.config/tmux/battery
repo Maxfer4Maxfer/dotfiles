@@ -2,7 +2,8 @@
 # Battery charge for the tmux status bar: "87%" coloured by level, "⚡" while on power.
 #   battery                  status-bar segment; without a battery of its own (the dev VM) it shows
 #                            the host Mac's, exported to $HOST_BATTERY (fresh for 5 min), else nothing
-#   battery --export <file>  write "<pct> <ac|discharging>" to <file> when it changed
+#   battery --export <file>  write "<pct> <ac|discharging>" to <file>; an unchanged value is only
+#                            touched, which keeps it fresh for the reader above
 #                            (macOS launch agent launchd/com.maxim.battery-export.plist)
 HOST_BATTERY=${HOST_BATTERY:-/mnt/vm_shared/.host-battery}
 
@@ -25,7 +26,8 @@ local_battery() {
 
 if [ "${1:-}" = --export ]; then
 	out=$(local_battery)
-	[ -n "$out" ] && [ "$out" != "$(cat "$2" 2>/dev/null)" ] && printf '%s\n' "$out" >"$2"
+	[ -n "$out" ] || exit 0
+	if [ "$out" = "$(cat "$2" 2>/dev/null)" ]; then touch "$2"; else printf '%s\n' "$out" >"$2"; fi
 	exit 0
 fi
 
