@@ -48,6 +48,11 @@ log "iTerm2: preferences from $DOTFILES/iterm2"
 def com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES/iterm2"
 def com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
 
+log "UTM: menu bar icon only, not in the Dock and Cmd+Tab"
+# Takes effect on the next UTM launch; never restarted here, that would stop the dev VM
+def com.utmapp.UTM ShowMenuIcon -bool true
+def com.utmapp.UTM HideDockIcon -bool true
+
 log "launch agents"
 mkdir -p ~/Library/LaunchAgents ~/Library/Logs
 for tpl in "$DOTFILES"/launchd/*.plist; do
