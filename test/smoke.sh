@@ -121,6 +121,8 @@ if [ "$OS" = macos ]; then
 	check "dock autohide" test "$(defaults read com.apple.dock autohide 2>/dev/null)" = 1
 	check "screenshots go to ~/vm_shared/screenshots" test "$(defaults read com.apple.screencapture location 2>/dev/null)" = "$HOME/vm_shared/screenshots"
 	check "iTerm2 reads preferences from the repo" test "$(defaults read com.googlecode.iterm2 PrefsCustomFolder 2>/dev/null)" = "$DOTFILES/iterm2"
+	check "UTM only in the menu bar" test "$(defaults read com.utmapp.UTM HideDockIcon 2>/dev/null)" = 1
+	check "Caffeine on at launch" test "$(defaults read com.intelliscapesolutions.caffeine ActivateOnLaunch 2>/dev/null)" = 1
 	check "screenshot-clipboard agent loaded" launchctl print "gui/$(id -u)/com.maxim.screenshot-clipboard"
 	# usage exit code 1, but only after uv resolved numpy/pillow/scipy
 	check "crop-doc-scan dependencies" bash -c '~/.local/bin/crop-doc-scan 2>&1 | grep -q Usage'

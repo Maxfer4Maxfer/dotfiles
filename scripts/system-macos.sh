@@ -52,6 +52,27 @@ log "UTM: menu bar icon only, not in the Dock and Cmd+Tab"
 # Takes effect on the next UTM launch; never restarted here, that would stop the dev VM
 def com.utmapp.UTM ShowMenuIcon -bool true
 def com.utmapp.UTM HideDockIcon -bool true
+def com.utmapp.UTM KeepRunningAfterLastWindowClosed -bool true
+
+log "Caffeine: keeps the Mac awake, on from login"
+def com.intelliscapesolutions.caffeine ActivateOnLaunch -bool true
+def com.intelliscapesolutions.caffeine SuppressLaunchMessage -bool true
+
+# Only with the apps installed (casks are skipped in CI); System Events asks once for the Automation permission
+if [ -d /Applications/Caffeine.app ] || [ -d /Applications/Figma.app ]; then
+	log "login items: Caffeine on, FigmaAgent off"
+	login_items=$(osascript -e 'tell application "System Events" to get the name of every login item') ||
+		warn "could not read login items (Automation permission for System Events?)"
+	if [ -d /Applications/Caffeine.app ] && [[ ", $login_items, " != *", Caffeine, "* ]]; then
+		osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/Caffeine.app", hidden:false}' >/dev/null ||
+			warn "could not add Caffeine to login items"
+	fi
+	# Figma re-adds its agent on launch; it is only needed for local fonts in the browser
+	if [[ ", $login_items, " == *", FigmaAgent, "* ]]; then
+		osascript -e 'tell application "System Events" to delete login item "FigmaAgent"' ||
+			warn "could not remove FigmaAgent from login items"
+	fi
+fi
 
 log "launch agents"
 mkdir -p ~/Library/LaunchAgents ~/Library/Logs
