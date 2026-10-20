@@ -312,26 +312,6 @@
 			<key>Text</key>
 			<string></string>
 		</dict>
-		<key>0x64-0x1c0000</key>
-		<dict>
-			<key>Action</key>
-			<integer>40</integer>
-			<key>Text</key>
-			<string>Solarized Dark</string>
-		</dict>
-		<key>0x6c-0x1c0000</key>
-		<dict>
-			<key>Action</key>
-			<integer>40</integer>
-			<key>Apply Mode</key>
-			<integer>0</integer>
-			<key>Escaping</key>
-			<integer>1</integer>
-			<key>Text</key>
-			<string>Solarized Light Inverted</string>
-			<key>Version</key>
-			<integer>2</integer>
-		</dict>
 		<key>0x7b-0x120000-0x21</key>
 		<dict>
 			<key>Action</key>
@@ -406,6 +386,19 @@
 			<integer>34</integer>
 			<key>Text</key>
 			<string></string>
+		</dict>
+		<key>0xf704-0x0-0x7a</key>
+		<dict>
+			<key>Action</key>
+			<integer>60</integer>
+			<key>Apply Mode</key>
+			<integer>1</integer>
+			<key>Escaping</key>
+			<integer>2</integer>
+			<key>Text</key>
+			<string>toggle_colors()</string>
+			<key>Version</key>
+			<integer>2</integer>
 		</dict>
 		<key>0xf729-0x100000</key>
 		<dict>

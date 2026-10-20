@@ -26,14 +26,15 @@ Before it, sign in to the App Store (the `mas` apps of the Brewfile are skipped 
 casks that ship a `.pkg` ask for the sudo password. After it, log out and in once (keyboard layouts, key repeat).
 
 Not in the Brewfile — install by hand: nekoray, Max, KokoroTTS (+ its "Speak with Kokoro" service for `kokoro-say`),
-ArchiCAD (Graphisoft, CodeMeter, WIBUKEY), the PF Fusion Sans font. Then log in to Dropbox, Google Drive, Slack, Okta Verify.
+ArchiCAD (Graphisoft, CodeMeter, WIBUKEY), the PF Fusion Sans font. Then log in to Dropbox, Google Drive, Slack, Okta Verify,
+and in iTerm2 run Scripts → Manage → Install Python Runtime (F1, the light/dark toggle, needs it).
 
 ## Layout
 
 | path | what |
 | --- | --- |
 | `common/<pkg>/` | stow packages for both OSes: `zsh`, `git`, `tmux`, `nvim`, `apps`, `claude` (`~/.claude/CLAUDE.md`) |
-| `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages: `zsh` (`~/.config/zsh/os.zsh`); macOS `ssh` (`~/.ssh/config`), `bin` (`~/.local/bin` scripts), `claude` (skills `/tts`, `/english-lesson`) |
+| `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages: `zsh` (`~/.config/zsh/os.zsh`); macOS `ssh` (`~/.ssh/config`), `bin` (`~/.local/bin` scripts), `claude` (skills `/tts`, `/english-lesson`), `iterm2` (AutoLaunch `toggle_colors.py`: F1 flips light/dark) |
 | `packages/apt.txt` | Ubuntu packages |
 | `packages/apt-purge.txt` | what `install.sh system` removes from a headless VM (desktop, laptop/firmware agents, snapd, apport …) |
 | `packages/Brewfile` | everything on the Mac: formulae, casks, App Store apps (`mas`) |
