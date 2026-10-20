@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Battery charge for the tmux status bar: "87%" coloured by level, "⚡" while on power.
+# Battery charge for the tmux status bar: "87%" coloured by level, "⚡" while on power, "▮▮▮▯ " on battery.
 #   battery                  status-bar segment; without a battery of its own (the dev VM) it shows
 #                            the host Mac's, exported to $HOST_BATTERY (fresh for 5 min), else nothing
 #   battery --export <file>  write "<pct> <ac|discharging>" to <file>; an unchanged value is only
@@ -39,5 +39,11 @@ fi
 read -r pct state <<<"$bat"
 [[ $pct =~ ^[0-9]+$ ]] || exit 0
 if [ "$pct" -le 20 ]; then color=red; elif [ "$pct" -le 50 ]; then color=yellow; else color=green; fi
-[ "$state" = ac ] && icon=⚡ || icon=
+# discharging: four cells, one per started quarter of charge
+if [ "$state" = ac ]; then icon=⚡
+else
+	icon=
+	for i in 1 2 3 4; do [ $(((pct + 24) / 25)) -ge "$i" ] && icon+=▮ || icon+=▯; done
+	icon+=" "
+fi
 printf '#[fg=%s]%s%s%%' "$color" "$icon" "$pct"
