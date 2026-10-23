@@ -1,10 +1,35 @@
 #!/usr/bin/env bash
 # Current keyboard layout for the tmux status bar: "EN" / "RU", other layouts by their name.
-# macOS only (the dev VM has no layout of its own to show), elsewhere prints nothing.
-command -v defaults >/dev/null || exit 0
-id=$(defaults read com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID 2>/dev/null) || exit 0
+#   keyboard-layout                  status-bar segment; without a layout of its own (the dev VM) it shows
+#                                    the host Mac's, exported to $HOST_KEYBOARD_LAYOUT (fresh for 5 min),
+#                                    else nothing
+#   keyboard-layout --export <file>  write the layout id to <file>; an unchanged value is only touched,
+#                                    which keeps it fresh for the reader above
+#                                    (macOS launch agent launchd/com.maxim.keyboard-layout-export.plist,
+#                                    run on every switch)
+HOST_KEYBOARD_LAYOUT=${HOST_KEYBOARD_LAYOUT:-/mnt/vm_shared/.host-keyboard-layout}
+
+# local layout id, e.g. com.apple.keylayout.Russian, or nothing
+local_layout() {
+	command -v defaults >/dev/null || return 0
+	defaults read com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID 2>/dev/null || true
+}
+
+if [ "${1:-}" = --export ]; then
+	out=$(local_layout)
+	[ -n "$out" ] || exit 0
+	if [ "$out" = "$(cat "$2" 2>/dev/null)" ]; then touch "$2"; else printf '%s\n' "$out" >"$2"; fi
+	exit 0
+fi
+
+id=$(local_layout)
+if [ -z "$id" ] && [ -r "$HOST_KEYBOARD_LAYOUT" ] &&
+	[ $(($(date +%s) - $(stat -c %Y "$HOST_KEYBOARD_LAYOUT" 2>/dev/null || stat -f %m "$HOST_KEYBOARD_LAYOUT"))) -lt 300 ]; then
+	id=$(<"$HOST_KEYBOARD_LAYOUT")
+fi
+[ -n "$id" ] || exit 0
 case ${id##*.} in
 ABC | US | British) printf '#[fg=cyan]EN' ;;
-Russian* ) printf '#[fg=magenta]RU' ;;
+Russian*) printf '#[fg=magenta]RU' ;;
 *) printf '#[fg=cyan]%s' "${id##*.}" ;;
 esac

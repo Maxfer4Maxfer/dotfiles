@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template: scripts/system-macos.sh replaces $HOME and installs it into ~/Library/LaunchAgents. -->
+<!-- The Mac's keyboard layout for tmux in the dev VM (it reads /mnt/vm_shared/.host-keyboard-layout). -->
+<!-- macOS rewrites HIToolbox.plist on every layout switch; the interval only keeps the file fresh. -->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.maxim.keyboard-layout-export</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$HOME/.config/tmux/keyboard-layout</string>
+        <string>--export</string>
+        <string>$HOME/vm_shared/.host-keyboard-layout</string>
+    </array>
+    <key>WatchPaths</key>
+    <array>
+        <string>$HOME/Library/Preferences/com.apple.HIToolbox.plist</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>60</integer>
+    <key>ThrottleInterval</key>
+    <integer>1</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>StandardErrorPath</key>
+    <string>$HOME/Library/Logs/keyboard-layout-export.err.log</string>
+</dict>
+</plist>
