@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Current keyboard layout for the tmux status bar: "EN" / "RU", other layouts by their name.
+# macOS only (the dev VM has no layout of its own to show), elsewhere prints nothing.
+command -v defaults >/dev/null || exit 0
+id=$(defaults read com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID 2>/dev/null) || exit 0
+case ${id##*.} in
+ABC | US | British) printf '#[fg=cyan]EN' ;;
+Russian* ) printf '#[fg=magenta]RU' ;;
+*) printf '#[fg=cyan]%s' "${id##*.}" ;;
+esac
