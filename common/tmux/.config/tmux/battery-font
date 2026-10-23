@@ -1,0 +1,126 @@
+#!/usr/bin/env -S uv run -q --script
+# /// script
+# dependencies = ["fonttools"]
+# ///
+"""Mac-style battery for the tmux status bar (~/.config/tmux/battery).
+
+Copies FiraCode Nerd Font Mono as "FiraCode Nerd Font Mono Battery" with a horizontal battery
+(rounded outline, nub, solid fill) at 0, 10 … 100%. A battery is CELLS cells wide, so it is drawn as
+that many one-cell pieces: level n is U+F5F00+CELLS*n, then the next CELLS-1 code points. Each piece
+reaches a little into its neighbours' cells, so they join whatever the terminal's exact cell width.
+
+  battery-font [out.ttf]    default ~/Library/Fonts/FiraCodeNerdFontMonoBattery-Regular.ttf
+Then pick "FiraCode Nerd Font Mono Battery" as iTerm2's Non-ASCII font.
+"""
+import math
+import sys
+from pathlib import Path
+
+from fontTools.pens.ttGlyphPen import TTGlyphPen
+from fontTools.ttLib import TTFont
+
+SRC = Path.home() / "Library/Fonts/FiraCodeNerdFontMono-Regular.ttf"
+OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.home() / "Library/Fonts/FiraCodeNerdFontMonoBattery-Regular.ttf"
+FAMILY, PS_NAME = "FiraCode Nerd Font Mono Battery", "FiraCodeNFMBattery-Reg"
+BASE = 0xF5F00
+
+# Font units (1950/em, advance 1200). The terminal cell is a little narrower than the advance
+# (Monaco 14 sets it, about 1100-1170 units here): pieces meet every CELL and overlap by OVERLAP.
+CELLS, CELL, OVERLAP = 3, 1130, 90
+BODY_X0, BODY_X1 = 680, 3045            # battery body, across all the cells; the left margin
+BODY_Y0, BODY_Y1 = 30, 1352             # stands for a space after the "%", centred on Monaco's digits
+STROKE, RADIUS, GAP = 138, 390, 125      # outline, outer corner, outline-to-fill gap
+NUB_X0, NUB_X1, NUB_H = 3137, 3267, 495  # the terminal on the right
+
+
+def rounded_rect(x0, y0, x1, y1, r, steps=8):
+    """Clockwise polygon (a TrueType outer contour) of a rectangle with rounded corners."""
+    r = min(r, (x1 - x0) / 2, (y1 - y0) / 2)
+    pts = []
+    for cx, cy, a0 in ((x0 + r, y1 - r, 180), (x1 - r, y1 - r, 90), (x1 - r, y0 + r, 0), (x0 + r, y0 + r, 270)):
+        for i in range(steps + 1):
+            a = math.radians(a0 - 90 * i / steps)
+            pts.append((cx + r * math.cos(a), cy + r * math.sin(a)))
+    return pts
+
+
+def clip(poly, x, keep_left):
+    """Sutherland-Hodgman clip of one contour to x' <= x (keep_left) or x' >= x."""
+    inside = (lambda p: p[0] <= x) if keep_left else (lambda p: p[0] >= x)
+    out = []
+    for i, cur in enumerate(poly):
+        prev = poly[i - 1]
+        if inside(cur) != inside(prev):
+            t = (x - prev[0]) / (cur[0] - prev[0])
+            out.append((x, prev[1] + t * (cur[1] - prev[1])))
+        if inside(cur):
+            out.append(cur)
+    return out
+
+
+def battery(level):
+    """Contours of the whole battery at level/10 charge."""
+    contours = [
+        rounded_rect(BODY_X0, BODY_Y0, BODY_X1, BODY_Y1, RADIUS),
+        rounded_rect(BODY_X0 + STROKE, BODY_Y0 + STROKE, BODY_X1 - STROKE, BODY_Y1 - STROKE, RADIUS - STROKE)[::-1],
+    ]
+    mid = (BODY_Y0 + BODY_Y1) / 2
+    contours.append(rounded_rect(NUB_X0, mid - NUB_H / 2, NUB_X1, mid + NUB_H / 2, 70))
+    if level:
+        x0, x1 = BODY_X0 + STROKE + GAP, BODY_X1 - STROKE - GAP
+        contours.append(rounded_rect(x0, BODY_Y0 + STROKE + GAP, x0 + (x1 - x0) * level / 10,
+                                     BODY_Y1 - STROKE - GAP, RADIUS - STROKE - GAP))
+    return contours
+
+
+def glyph(contours):
+    pen = TTGlyphPen(None)
+    for c in contours:
+        pts = [(round(x), round(y)) for x, y in c]
+        pts = [p for i, p in enumerate(pts) if p != pts[i - 1]]
+        if len(pts) < 3:
+            continue
+        pen.moveTo(pts[0])
+        for p in pts[1:]:
+            pen.lineTo(p)
+        pen.closePath()
+    return pen.glyph()
+
+
+font = TTFont(SRC)
+for tag in ("hdmx", "LTSH", "VDMX"):  # per-glyph caches that would go stale
+    if tag in font:
+        del font[tag]
+adv = font["hmtx"][font.getBestCmap()[ord("0")]][0]
+new = {BASE + CELLS * level + k: f"battery{level * 10}.{k}" for level in range(11) for k in range(CELLS)}
+order = font.getGlyphOrder() + list(new.values())
+font.setGlyphOrder(order)
+font["glyf"].setGlyphOrder(order)
+for level in range(11):
+    whole = battery(level)
+    for k in range(CELLS):
+        contours = whole
+        if k:
+            contours = [clip(c, k * CELL - OVERLAP, False) for c in contours]
+        if k < CELLS - 1:
+            contours = [clip(c, (k + 1) * CELL + OVERLAP, True) for c in contours if c]
+        contours = [[(x - k * CELL, y) for x, y in c] for c in contours]
+        name = new[BASE + CELLS * level + k]
+        g = glyph([c for c in contours if c])
+        font["glyf"][name] = g
+        g.recalcBounds(font["glyf"])
+        font["hmtx"][name] = (adv, getattr(g, "xMin", 0))
+for table in font["cmap"].tables:
+    if table.format == 12:
+        table.cmap.update(new)
+
+names = font["name"]
+for rec in names.names:
+    if rec.nameID in (1, 16):
+        names.setName(FAMILY, rec.nameID, rec.platformID, rec.platEncID, rec.langID)
+    elif rec.nameID in (3, 4):
+        names.setName(f"{FAMILY} Regular", rec.nameID, rec.platformID, rec.platEncID, rec.langID)
+    elif rec.nameID == 6:
+        names.setName(PS_NAME, rec.nameID, rec.platformID, rec.platEncID, rec.langID)
+font.save(OUT)
+print(OUT)
