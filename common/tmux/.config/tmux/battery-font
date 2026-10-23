@@ -8,6 +8,8 @@ Copies FiraCode Nerd Font Mono as "FiraCode Nerd Font Mono Battery" with a horiz
 (rounded outline, nub, solid fill) at 0, 10 … 100%. A battery is CELLS cells wide, so it is drawn as
 that many one-cell pieces: level n is U+F5F00+CELLS*n, then the next CELLS-1 code points. Each piece
 reaches a little into its neighbours' cells, so they join whatever the terminal's exact cell width.
+The font's own "⚡" (oct-zap) is also mapped to U+F5F21 (BOLT): tmux counts U+26A1 two cells wide
+while the terminal draws it in one, which leaves a gap after it.
 
   battery-font [out.ttf]    default ~/Library/Fonts/FiraCodeNerdFontMonoBattery-Regular.ttf
 Then pick "FiraCode Nerd Font Mono Battery" as iTerm2's Non-ASCII font.
@@ -27,6 +29,7 @@ BASE = 0xF5F00
 # Font units (1950/em, advance 1200). The terminal cell is a little narrower than the advance
 # (Monaco 14 sets it, about 1100-1170 units here): pieces meet every CELL and overlap by OVERLAP.
 CELLS, CELL, OVERLAP = 3, 1130, 90
+BOLT = BASE + CELLS * 11
 BODY_X0, BODY_X1 = 680, 3045            # battery body, across all the cells; the left margin
 BODY_Y0, BODY_Y1 = 30, 1352             # stands for a space after the "%", centred on Monaco's digits
 STROKE, RADIUS, GAP = 138, 390, 125      # outline, outer corner, outline-to-fill gap
@@ -113,6 +116,7 @@ for level in range(11):
 for table in font["cmap"].tables:
     if table.format == 12:
         table.cmap.update(new)
+        table.cmap[BOLT] = table.cmap[ord("⚡")]
 
 names = font["name"]
 for rec in names.names:
