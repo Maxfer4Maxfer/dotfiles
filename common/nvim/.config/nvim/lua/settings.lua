@@ -68,3 +68,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
         vim.hl.on_yank()
     end,
 })
+
+-- A plain `y` also goes to the system clipboard over OSC 52: through tmux (set-clipboard on) and ssh to iTerm2.
+-- Neovim's own OSC 52, not a clipboard tool, so a yank in the dev VM lands on the Mac too.
+vim.api.nvim_create_autocmd('TextYankPost', {
+    desc = 'Copy yanks to the system clipboard',
+    callback = function()
+        if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
+            require('vim.ui.clipboard.osc52').copy('+')(vim.v.event.regcontents)
+        end
+    end,
+})
