@@ -4,6 +4,7 @@
 #                            the host Mac's, exported to $HOST_BATTERY (fresh for 5 min), else nothing
 #   battery --export <file>  write "<pct> <ac|discharging>" to <file>; an unchanged value is only
 #                            touched, which keeps it fresh for the reader above
+#   battery --watch <file>   --export on every plug/unplug and percent change, and every minute
 #                            (macOS launch agent launchd/com.maxim.battery-export.plist)
 HOST_BATTERY=${HOST_BATTERY:-/mnt/vm_shared/.host-battery}
 
@@ -24,10 +25,28 @@ local_battery() {
 	done
 }
 
-if [ "${1:-}" = --export ]; then
+export_to() {
+	local out
 	out=$(local_battery)
-	[ -n "$out" ] || exit 0
-	if [ "$out" = "$(cat "$2" 2>/dev/null)" ]; then touch "$2"; else printf '%s\n' "$out" >"$2"; fi
+	[ -n "$out" ] || return 0
+	if [ "$out" = "$(cat "$1" 2>/dev/null)" ]; then touch "$1"; else printf '%s\n' "$out" >"$1"; fi
+}
+
+if [ "${1:-}" = --export ]; then
+	export_to "$2"
+	exit 0
+fi
+
+# notifyutil prints a line per notification; read -t 60 also returns on the minute. bash 3.2 gives
+# a timeout and an EOF the same status, so a read that failed early means notifyutil is gone:
+# exit and let launchd (KeepAlive) start it again.
+if [ "${1:-}" = --watch ]; then
+	notifyutil -w com.apple.system.powersources.source -w com.apple.system.powersources.percent |
+		while :; do
+			export_to "$2"
+			start=$SECONDS
+			read -r -t 60 _ || [ $((SECONDS - start)) -ge 50 ] || exit 0
+		done
 	exit 0
 fi
 
