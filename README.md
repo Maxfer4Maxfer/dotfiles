@@ -34,7 +34,7 @@ and in iTerm2 run Scripts → Manage → Install Python Runtime (F1, the light/d
 | path | what |
 | --- | --- |
 | `common/<pkg>/` | stow packages for both OSes: `zsh`, `git`, `tmux`, `nvim`, `apps`, `claude` (`~/.claude/CLAUDE.md`) |
-| `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages: `zsh` (`~/.config/zsh/os.zsh`); macOS `ssh` (`~/.ssh/config`), `bin` (`~/.local/bin` scripts), `claude` (skills `/tts`, `/english-lesson`), `iterm2` (AutoLaunch `toggle_colors.py`: F1 flips light/dark) |
+| `linux/<pkg>/`, `macos/<pkg>/` | OS-specific packages: `zsh` (`~/.config/zsh/os.zsh`); macOS `bin` (`~/.local/bin` scripts), `claude` (skills `/tts`, `/english-lesson`), `iterm2` (AutoLaunch `toggle_colors.py`: F1 flips light/dark) |
 | `packages/apt.txt` | Ubuntu packages |
 | `packages/apt-purge.txt` | what `install.sh system` removes from a headless VM (desktop, laptop/firmware agents, snapd, apport …) |
 | `packages/Brewfile` | everything on the Mac: formulae, casks, App Store apps (`mas`) |
@@ -69,6 +69,7 @@ CI (`.github/workflows/ci.yml`) runs lint, the container test on arm64 and a mac
 
 - Neovim plugins are pinned by `lazy-lock.json` (`Lazy! restore`); update them in nvim with `:Lazy update` and commit the lock file.
 - LSP servers and formatters come from Mason (`mason-tool-installer` list in `lua/plugins/lsp.lua`), installed by `install.sh tools`; `gopls`/`goimports` come from `packages/go.txt`.
+- `~/.ssh/config` is per machine (hosts, jumps and paths differ), not in the repo.
 - `~/.gitconfig` stays local (`safe.directory`, a work `user.email` and other overrides); the shared part is `~/.config/git/config`.
 - tmux reads machine-local settings from `~/.tmux.conf.local` (e.g. extra `@nvim-autokill-keep` sessions).
 - Claude Code: `~/.claude/settings.json` is merged, not linked — Claude Code writes it itself. On `install.sh tools` repo keys win and
