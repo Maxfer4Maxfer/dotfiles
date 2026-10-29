@@ -3,13 +3,18 @@
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
+# brew may be installed but not on PATH (a non-login shell over ssh): look in its prefixes first
+shellenv() {
+	for brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+		[ -x $brew ] && eval "$($brew shellenv)" && return
+	done
+}
+shellenv
 if ! has brew; then
 	log "homebrew"
 	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	shellenv
 fi
-for brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
-	[ -x $brew ] && eval "$($brew shellenv)" && break
-done
 
 log "brew bundle"
 # brew bundle has no --no-cask: filter the Brewfile instead. App Store apps go separately:
